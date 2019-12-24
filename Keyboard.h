@@ -86,6 +86,11 @@ public:
 		return (it != s_keyNames.end());
 	}
 
+	////////////////////////////////////////////////////////////
+	bool isKeyDown(const sf::Keyboard::Key& t_key) {
+
+	}
+
 private:
 	static const KeyNames s_keyNames;
 	KeyContainer m_keyContainer;
