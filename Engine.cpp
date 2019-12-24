@@ -13,20 +13,6 @@ bool Binding::isActive() {
 ////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////
-const ActionNames Engine::s_actionNames{
-	{"Pause",			Action::Pause},
-	{"MoveViewUp",		Action::MoveViewUp},
-	{"MoveViewDown",	Action::MoveViewDown},
-	{"MoveViewLeft",	Action::MoveViewLeft},
-	{"MoveViewRight",	Action::MoveViewRight},
-	{"ResetView",		Action::ResetView},
-	{"ZoomIn",			Action::ZoomIn},
-	{"ZoomOut",			Action::ZoomOut},
-	{"ResetZoom",		Action::ResetZoom},
-	{"Save",			Action::Save},
-	{"Quit",			Action::Quit}
-};
 
 ////////////////////////////////////////////////////////////
 Action Engine::getActionId(const std::string& t_actionName) {

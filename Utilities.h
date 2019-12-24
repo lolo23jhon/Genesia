@@ -14,7 +14,6 @@ namespace utilities {
 #include <Windows.h>
 #include <Shlwapi.h>
 
-
 	////////////////////////////////////////////////////////////
 	inline std::string getWorkingDirectory() {
 		HMODULE hModule{ DrvGetModuleHandle(nullptr) };
@@ -44,6 +43,8 @@ namespace utilities {
 	}
 
 #endif // WINDOWS 
+
+	const std::string EMPTY_STR{ "" };
 
 	////////////////////////////////////////////////////////////
 	inline void readQuotedString(std::stringstream& t_stream, std::string& t_string) {

@@ -4,20 +4,19 @@
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
+#include <algorithm>
 #include <SFML/Window/Event.hpp>
 
 // Stores tehe string names of all the existing keys in the keyboard for file writting, parsing and HUI purposes
 // Also serves as a list of all potentially mapable keys (its a subset of the SFML keys)
 using KeyNames = std::unordered_map<std::string, sf::Keyboard::Key>;
 
-// Contains all the keys currently pressed (used as bacl box output)
-// Non-owning poiners
-using PressedKeys = std::unordered_set<const sf::Keyboard::Key*>;
-
 struct KeyInfo;
 
 // Contains the information for ALL the keys that sould be listened to (whether they're pressed or not; just for internal usage)
 using KeyContainer = std::unordered_map<sf::Keyboard::Key, KeyInfo >;
+
+static const std::string S_EMPTY_STR{ "" };
 
 class KeyInfo {
 	friend class Keyboard;
@@ -46,12 +45,12 @@ public:
 		auto it{ m_keyContainer.find(t_e.key.code) };
 		if (it == m_keyContainer.end()) { return; }
 		switch (t_e.type) {
-			case sf::Event::KeyPressed:
-				if (!it->second.m_isPressed) { it->second.m_isPressed = true; }
-				break;
-			case sf::Event::KeyReleased:
-				if (it->second.m_isPressed) { it->second.m_isPressed = false; };
-				break;
+		case sf::Event::KeyPressed:
+			if (!it->second.m_isPressed) { it->second.m_isPressed = true; }
+			break;
+		case sf::Event::KeyReleased:
+			if (it->second.m_isPressed) { it->second.m_isPressed = false; };
+			break;
 		}
 	}
 
@@ -70,13 +69,11 @@ public:
 	}
 
 	////////////////////////////////////////////////////////////
-	const PressedKeys& seeKeyboard() {
-		for (auto it{ m_keyContainer.begin() }; it != m_keyContainer.end(); it++) {
-			if (it->second.m_listened && it->second.m_isPressed) {
-				m_pressedKeys.emplace(&it->first);
-			}
-		}
-		return m_pressedKeys;
+	bool isKeyDown(const sf::Keyboard::Key& t_key) {
+		auto it{ m_keyContainer.find(t_key) };
+		if (it == m_keyContainer.end()) { return false; }
+		if (!it->second.m_listened) { return false; }
+		return it->second.m_isPressed;
 	}
 
 	////////////////////////////////////////////////////////////
@@ -87,14 +84,22 @@ public:
 	}
 
 	////////////////////////////////////////////////////////////
-	bool isKeyDown(const sf::Keyboard::Key& t_key) {
-
+	static const std::string& getKeyStr(const sf::Keyboard::Key& t_key) {
+		auto it{ std::find_if(s_keyNames.cbegin(),s_keyNames.cend(),
+			[&t_key](const std::pair<std::string,sf::Keyboard::Key>& t_p) {return t_p.second == t_key; }) };
+		return  (it == s_keyNames.cend() ? S_EMPTY_STR : it->first);
 	}
+
+	////////////////////////////////////////////////////////////
+	static sf::Keyboard::Key getKeyId(const std::string& t_name) {
+		auto it{ s_keyNames.find(t_name) };
+		return (it == s_keyNames.cend() ? sf::Keyboard::Unknown : it->second);
+	}
+
 
 private:
 	static const KeyNames s_keyNames;
 	KeyContainer m_keyContainer;
-	PressedKeys m_pressedKeys;
 
 
 };
