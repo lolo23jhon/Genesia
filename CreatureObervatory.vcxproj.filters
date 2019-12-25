@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
@@ -13,66 +9,100 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="src\PerlinNoise">
+      <UniqueIdentifier>{f2b0373a-af87-42ba-9b5f-ca27bc79e4c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Types">
+      <UniqueIdentifier>{3abd5161-d5bf-49d0-8f1d-dd45844c5f5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\InputSystem">
+      <UniqueIdentifier>{9bf7143e-e1f5-44d4-91f1-71a3fbb3d853}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\EngineSystem">
+      <UniqueIdentifier>{a40d7180-c60f-416d-aa8f-ad0449b2783a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Utitlities">
+      <UniqueIdentifier>{3cc8c446-ecf3-4c3e-a54c-09669002d9f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\EngineSystem\EventProcessing">
+      <UniqueIdentifier>{ad4c2479-511a-4c5b-aaa4-eb67dfb9de87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src\PerlinNoise</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp">
+      <Filter>src\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp">
+      <Filter>src\EngineSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.cpp">
+      <Filter>src\Types</Filter>
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>src\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Action,h.cpp">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.cpp">
+      <Filter>src\Utitlities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp">
+      <Filter>src\InputSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundKeys.cpp">
+      <Filter>src\InputSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.cpp">
+      <Filter>src\EngineSystem\EventProcessing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Actor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\RandomGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Utilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMap.h">
-      <Filter>Header Files</Filter>
+      <Filter>src\PerlinNoise</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h">
-      <Filter>Header Files</Filter>
+      <Filter>src\InputSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>src\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.h">
+      <Filter>src\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h">
+      <Filter>src\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Actor.h">
+      <Filter>src\EngineSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h">
+      <Filter>src\EngineSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\RandomGenerator.h">
+      <Filter>src\Utitlities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.h">
+      <Filter>src\Utitlities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Utilities.h">
+      <Filter>src\Utitlities</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundKeys.h">
+      <Filter>src\InputSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h">
+      <Filter>src\EngineSystem\EventProcessing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
