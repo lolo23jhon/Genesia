@@ -104,5 +104,8 @@
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h">
       <Filter>src\EngineSystem\EventProcessing</Filter>
     </ClInclude>
+    <ClInclude Include="PreprocessorDirectves.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

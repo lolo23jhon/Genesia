@@ -2,9 +2,12 @@
 #define UTILITIES_H
 
 #include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
 #include <SFML/Graphics/Text.hpp>
 
 
@@ -92,15 +95,32 @@ namespace utilities {
 
 	}
 
-	inline void sortFileList(std::vector<std::pair<std::string, bool >> &t_list) {
-		std::sort(t_list.begin(),t_list.end(),
-			[](std::pair<std::string,bool>& t_1, std::pair<std::string, bool>& t_2) {
+	inline void sortFileList(std::vector<std::pair<std::string, bool >>& t_list) {
+		std::sort(t_list.begin(), t_list.end(),
+			[](std::pair<std::string, bool>& t_1, std::pair<std::string, bool>& t_2) {
 				if (t_1.second && !t_2.second) { return true; }
 				return false;
 			}
-		
+
 		);
 	}
+
+	////////////////////////////////////////////////////////////
+	inline bool readFile(const std::string& t_fileNameWithPath, std::stringstream& t_out_stream, bool t_printError = false) {
+		std::ifstream file;
+		file.open(t_fileNameWithPath);
+		if (!file.is_open()) {
+			if (t_printError) {
+				std::cerr << "@ ERROR: Cannot open input file: \"" << t_fileNameWithPath << '\"' << std::endl;
+			}
+			return false;
+		}
+		t_out_stream.clear();
+		t_out_stream << file.rdbuf();
+		file.close();
+		return true;		
+	}
+
 
 };
 #endif // ! UTILITIES_H

@@ -1,3 +1,5 @@
+#include "PreprocessorDirectves.h"
+#include "Utilities.h"
 #include "Engine.h"
 
 
@@ -5,19 +7,19 @@
 //                                                 ACTIONS
 // ------------------------------------------------------------------------------------------------------------
 
-////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 const ActionNames Engine::s_actionNames{
-	{"Pause",			Engine::ActionId::Pause},
-	{"MoveViewUp",		Engine::ActionId::MoveViewUp},
-	{"MoveViewDown",	Engine::ActionId::MoveViewDown},
-	{"MoveViewLeft",	Engine::ActionId::MoveViewLeft},
-	{"MoveViewRight",	Engine::ActionId::MoveViewRight},
-	{"ResetView",		Engine::ActionId::ResetView},
-	{"ZoomIn",			Engine::ActionId::ZoomIn},
-	{"ZoomOut",			Engine::ActionId::ZoomOut},
-	{"ResetZoom",		Engine::ActionId::ResetZoom},
-	{"Save",			Engine::ActionId::Save},
-	{"Quit",			Engine::ActionId::Quit}
+	{"Pause",			ActionId::Pause},
+	{"MoveViewUp",		ActionId::MoveViewUp},
+	{"MoveViewDown",	ActionId::MoveViewDown},
+	{"MoveViewLeft",	ActionId::MoveViewLeft},
+	{"MoveViewRight",	ActionId::MoveViewRight},
+	{"ResetView",		ActionId::ResetView},
+	{"ZoomIn",			ActionId::ZoomIn},
+	{"ZoomOut",			ActionId::ZoomOut},
+	{"ResetZoom",		ActionId::ResetZoom},
+	{"Save",			ActionId::Save},
+	{"Quit",			ActionId::Quit}
 };
 
 static const std::string S_EMPTY_STR{ "" };
@@ -41,44 +43,105 @@ bool Engine::executeAction(const ActionId& t_id, const EventInfo& t_info) {
 	return m_eventHandler.executeAction(t_id, t_info);
 }
 
+////////////////////////////////////////////////////////////
+sf::Time Engine::getElapsed()const { return m_elapsed; }
 
-//void Engine::Action_Pause(const EventInfo& t_info);
-//void Engine::Action_MoveViewLeft(const EventInfo& t_info);
-//void Engine::Action_MoveViewRight(const EventInfo& t_info);
-//void Engine::Action_MoveViewUp(const EventInfo& t_info);
-//void Engine::Action_MoveViewDown(const EventInfo& t_info);
-//void Engine::Action_ResetView(const EventInfo& t_info);
-//void Engine::Action_ZoomIn(const EventInfo& t_info);
-//void Engine::Action_ZoomOut(const EventInfo& t_info);
-//void Engine::Action_ResetZoom(const EventInfo& t_info);
-//void Engine::Action_Save(const EventInfo& t_info);
-//void Engine::Action_Quit(const EventInfo& t_info);
-
-#ifdef _DEBUG
+#if defined(_DEBUG) && SHOW_ACTIONS_IN_CONSOLE == 1
 #include <iostream>
+
 static const std::string ACTION{ "Action_" };
-void Engine::Action_Pause			(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Pause)		 << std::endl; }
-void Engine::Action_MoveViewLeft	(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewLeft)  << std::endl; }
-void Engine::Action_MoveViewRight	(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewRight) << std::endl; }
-void Engine::Action_MoveViewUp		(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewUp)	 << std::endl; }
-void Engine::Action_MoveViewDown	(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewDown)  << std::endl; }
-void Engine::Action_ResetView		(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ResetView)	 << std::endl; }
-void Engine::Action_ZoomIn			(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ZoomIn)		 << std::endl; }
-void Engine::Action_ZoomOut			(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ZoomOut)		 << std::endl; }
-void Engine::Action_ResetZoom		(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ResetZoom)	 << std::endl; }
-void Engine::Action_Save			(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Save)			 << std::endl; }
-void Engine::Action_Quit			(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Quit)			 << std::endl; }
+void Engine::Action_Pause(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Pause) << std::endl; }
+void Engine::Action_MoveViewLeft(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewLeft) << std::endl; }
+void Engine::Action_MoveViewRight(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewRight) << std::endl; }
+void Engine::Action_MoveViewUp(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewUp) << std::endl; }
+void Engine::Action_MoveViewDown(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewDown) << std::endl; }
+void Engine::Action_ResetView(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ResetView) << std::endl; }
+void Engine::Action_ZoomIn(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ZoomIn) << std::endl; }
+void Engine::Action_ZoomOut(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ZoomOut) << std::endl; }
+void Engine::Action_ResetZoom(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ResetZoom) << std::endl; }
+void Engine::Action_Save(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Save) << std::endl; }
+void Engine::Action_Quit(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Quit) << std::endl; }
 
 #else
+void Engine::Action_Pause(const EventInfo& t_info) {}
+void Engine::Action_MoveViewLeft(const EventInfo& t_info) {}
+void Engine::Action_MoveViewRight(const EventInfo& t_info) {}
+void Engine::Action_MoveViewUp(const EventInfo& t_info) {}
+void Engine::Action_MoveViewDown(const EventInfo& t_info) {}
+void Engine::Action_ResetView(const EventInfo& t_info) {}
+void Engine::Action_ZoomIn(const EventInfo& t_info) {}
+void Engine::Action_ZoomOut(const EventInfo& t_info) {}
+void Engine::Action_ResetZoom(const EventInfo& t_info) {}
+void Engine::Action_Save(const EventInfo& t_info) {}
+void Engine::Action_Quit(const EventInfo& t_info) {}
+
 
 #endif
+void Engine::Action_INVALID_ACTION(const EventInfo& t_info) { std::cout << "Action_" << "INVALID_ACTION" << std::endl; }
 
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
-	m_window{ sf::VideoMode(t_windowSize.x,t_windowSize.y),t_windowName }
+	m_window{ sf::VideoMode(t_windowSize.x,t_windowSize.y),t_windowName },
+	m_keyboard{ Keyboard() },
+	m_eventHandler{ EventHandler() }
 {
+	for (const auto& p : s_actionNames) {
+		const auto& actionId{ p.second };
+		m_eventHandler.addCallback(actionId, getActionCallback(actionId), this);
+	}
+	if (!parseBindings("keybindings.txt")) {
+		std::cout << "Press Enter to exit.\n";
+		std::cin.get();
+		std::exit(1);
+	}
 }
+
+////////////////////////////////////////////////////////////
+ActionCallback Engine::getActionCallback(const ActionId& t_id) {
+	using ActionFunctor = void(Engine::*)(const EventInfo&);
+	ActionFunctor functorPtr;
+	switch (t_id) {
+	case ActionId::Pause:
+		functorPtr = Action_Pause; break;
+	case ActionId::MoveViewUp:
+		functorPtr = Action_MoveViewUp; break;
+	case ActionId::MoveViewDown:
+		functorPtr = Action_MoveViewDown; break;
+	case ActionId::MoveViewLeft:
+		functorPtr = Action_MoveViewLeft; break;
+	case ActionId::MoveViewRight:
+		functorPtr = Action_MoveViewRight; break;
+	case ActionId::ResetView:
+		functorPtr = Action_ResetView; break;
+	case ActionId::ZoomIn:
+		functorPtr = Action_ZoomIn; break;
+	case ActionId::ZoomOut:
+		functorPtr = Action_ZoomOut; break;
+	case ActionId::ResetZoom:
+		functorPtr = Action_ResetZoom; break;
+	case ActionId::Save:
+		functorPtr = Action_Save; break;
+	case ActionId::Quit:
+		functorPtr = Action_Quit; break;
+	default:
+		functorPtr = Action_INVALID_ACTION; break;
+	}
+
+	return std::bind(&Action_INVALID_ACTION, this, std::placeholders::_1); 
+	// We can do this because the engine owns the event handler.
+	// Regularly a class doesnt pass callbacks of its members without dynamic binding
+	// else it risks the functor being called with a dangling this pointer.
+}
+
+
+
+
+
+
+
+
+
 
 
 ////////////////////////////////////////////////////////////
@@ -93,13 +156,25 @@ void Engine::run() {
 		// Restar the clock and capture elapsed time
 		m_elapsed = m_clock.restart();
 
+		//                   ##%
+		//                 #%%#   
+		//				  %#
+		//               | |
+		//              _| |\|\|\|\
+		// sf::Event -> |   __     | -> EventInfo
+		//				|__|  |____|
+
 		sf::Event e;
+		while (m_window.pollEvent(e)) {
 
+			m_keyboard.handleKeyboardInput(e);
+			auto pressedKeys{ m_keyboard.getPressedKeys() };
+			EventInfo eventInfo(m_state, pressedKeys, m_elapsed.asSeconds());
 
+			m_eventHandler.handleEvent(eventInfo);
 
-
+		}
 	}
-
 	m_window.close();
 }
 
@@ -110,17 +185,6 @@ const sf::RenderWindow& Engine::getWindow()const {
 }
 
 
-
-
-
-////////////////////////////////////////////////////////////
-void handleInput(const sf::Keyboard::Key& t_key, const float& s_dt, bool t_pressed) {
-
-
-}
-
-
-
 ////////////////////////////////////////////////////////////
 void Engine::render() {
 
@@ -128,32 +192,40 @@ void Engine::render() {
 
 }
 
-
 ////////////////////////////////////////////////////////////
-void Engine::resetView() {
+bool Engine::parseBindings(const std::string& t_fileNameWithPath, const std::string& t_bindingIdentifier) {
+	std::stringstream stream;
 
-}
+	if (!utilities::readFile(t_fileNameWithPath, stream, false)) {
+		std::cerr << "@ ERROR: Cannot parse keyboard bindings file \"" << t_fileNameWithPath << '\"' << std::endl;
+		return false;
+	}
 
-////////////////////////////////////////////////////////////
-void Engine::processEvents() {
-	sf::Event e;
+	std::string token;
+	while (stream >> token) {
 
-	while (m_window.pollEvent(e)) {
-		switch (e.type) {
-		case sf::Event::KeyPressed:
+		if (token == t_bindingIdentifier) {
+			std::string action;
+			std::string key;
 
+			stream >> action >> key;
 
-			break;
+			auto actionId{ getActionId(action) };
+			if (actionId == ActionId::INVALID_ACTION) {
+				std::cerr << "! WARNING: Invalid action \"" << action << "\" in file \"" << t_fileNameWithPath << '\"' << std::endl;
+				continue;
+			} // Invalid action; try to read a new binding
 
+			auto keyId{ Keyboard::getKeyId(key) };
+			if (m_keyboard.getKeyId(key) == sf::Keyboard::Unknown) {
+				std::cout << "! WARNING: Invalid key \"" << key << "\" in file \"" << t_fileNameWithPath << '\"' << std::endl;
+				continue;
+			}// Invalid key; try to read a new binding
 
-
-		case sf::Event::KeyReleased:
-
-			break;
-
-		case sf::Event::Closed:
-			m_window.close();
-			break;
+			if (!m_eventHandler.addKey(actionId, keyId)) {
+				std::cerr << "! WARNING: Failed to add key \"" << key << "\" to action  \"" << action << '\"' << std::endl;
+			}
 		}
+		else { continue; }// The token wasn't the line identifier; skip it
 	}
 }

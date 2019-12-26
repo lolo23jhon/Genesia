@@ -114,10 +114,15 @@ bool Keyboard::isKeyDown(const sf::Keyboard::Key& t_key) {
 }
 
 ////////////////////////////////////////////////////////////
-bool Keyboard::isKeySupported(const sf::Keyboard::Key& t_key) {
+bool Keyboard::isKeySupported(const sf::Keyboard::Key& t_keyId) {
 	auto it{ std::find_if(s_keyNames.begin(),s_keyNames.end(),
-		[&t_key](std::pair<std::string, sf::Keyboard::Key> t_p) {return t_p.second == t_key; }) };
+		[&t_keyId](std::pair<std::string, sf::Keyboard::Key> t_p) {return t_p.second == t_keyId; }) };
 	return (it != s_keyNames.end());
+}
+
+////////////////////////////////////////////////////////////
+bool Keyboard::isKeySupported(const std::string& t_keyName) {
+	return (s_keyNames.find(t_keyName) != s_keyNames.cend());
 }
 
 ////////////////////////////////////////////////////////////

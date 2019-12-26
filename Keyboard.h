@@ -11,7 +11,7 @@
 using KeyNames = std::unordered_map<std::string, sf::Keyboard::Key>;// Stores tehe string names of all the existing keys in the keyboard for file writting, parsing and HUI purposes
 // Also serves as a list of all potentially mapable keys (its a subset of the SFML keys)
 
-struct KeyInfo;
+class KeyInfo;
 																			
 using KeyContainer = std::unordered_map<sf::Keyboard::Key, KeyInfo >; // Contains the information for ALL the keys that sould be listened to (whether they're pressed or not; just for internal usage)
 
@@ -36,7 +36,8 @@ public:
 	bool isKeyDown(const sf::Keyboard::Key& t_key);
 	const PressedKeys& getPressedKeys();
 
-	static bool isKeySupported(const sf::Keyboard::Key& t_key);
+	static bool isKeySupported(const sf::Keyboard::Key& t_keyId);
+	static bool isKeySupported(const std::string& t_keyName);
 	static const std::string& getKeyStr(const sf::Keyboard::Key& t_key);
 	static sf::Keyboard::Key getKeyId(const std::string& t_name);
 

@@ -5,7 +5,6 @@
 
 class Actor : public sf::Drawable {
 
-	sf::Vector2f m_position;
 };
 
 
