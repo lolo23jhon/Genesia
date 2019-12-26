@@ -70,15 +70,16 @@ namespace utilities {
 			((t_end_val - t_begin_val) / (t_end - t_begin)) * (t_x - t_begin) + t_begin_val));
 	}
 
+	////////////////////////////////////////////////////////////
 	inline float getSFMLTextMaxHeight(const sf::Text& t_text) {
 		auto charSize{ t_text.getCharacterSize() };
 		auto font{ t_text.getFont() };
 		auto string{ t_text.getString().toAnsiString() };
-		bool bold{ (t_text.getStyle & sf::Text::Bold) };
+		bool bold{ (bool)(t_text.getStyle() & sf::Text::Bold) };
 		float max{ 0.f };
-		for (size_t i{ 0 }; i < string.length; i++) {
+		for (size_t i{ 0 }; i < string.length(); i++) {
 
-			sf::Uint32 character{ string[i] };
+			auto character{ static_cast<sf::Uint32>(string[i]) };
 			auto glyph{ font->getGlyph(character, charSize, bold) };
 			auto height{ glyph.bounds.height };
 			if (height <= max) { continue; }
@@ -86,6 +87,7 @@ namespace utilities {
 		return max;
 	}
 
+	////////////////////////////////////////////////////////////
 	inline void centerSFMLText(sf::Text& t_text) {
 		sf::FloatRect rect{ t_text.getLocalBounds() };
 		auto maxHeight{ getSFMLTextMaxHeight(t_text) };
@@ -95,6 +97,7 @@ namespace utilities {
 
 	}
 
+	////////////////////////////////////////////////////////////
 	inline void sortFileList(std::vector<std::pair<std::string, bool >>& t_list) {
 		std::sort(t_list.begin(), t_list.end(),
 			[](std::pair<std::string, bool>& t_1, std::pair<std::string, bool>& t_2) {
@@ -118,7 +121,7 @@ namespace utilities {
 		t_out_stream.clear();
 		t_out_stream << file.rdbuf();
 		file.close();
-		return true;		
+		return true;
 	}
 
 

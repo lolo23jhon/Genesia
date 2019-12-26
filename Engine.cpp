@@ -88,7 +88,7 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 {
 	for (const auto& p : s_actionNames) {
 		const auto& actionId{ p.second };
-		m_eventHandler.addCallback(actionId, getActionCallback(actionId), this);
+		m_eventHandler.addCallback(actionId, getActionCallback(actionId));
 	}
 	if (!parseBindings("keybindings.txt")) {
 		std::cout << "Press Enter to exit.\n";
@@ -99,36 +99,35 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 
 ////////////////////////////////////////////////////////////
 ActionCallback Engine::getActionCallback(const ActionId& t_id) {
-	using ActionFunctor = void(Engine::*)(const EventInfo&);
 	ActionFunctor functorPtr;
 	switch (t_id) {
 	case ActionId::Pause:
-		functorPtr = Action_Pause; break;
+		functorPtr = &Engine::Action_Pause; break;
 	case ActionId::MoveViewUp:
-		functorPtr = Action_MoveViewUp; break;
+		functorPtr = &Engine::Action_MoveViewUp; break;
 	case ActionId::MoveViewDown:
-		functorPtr = Action_MoveViewDown; break;
+		functorPtr = &Engine::Action_MoveViewDown; break;
 	case ActionId::MoveViewLeft:
-		functorPtr = Action_MoveViewLeft; break;
+		functorPtr = &Engine::Action_MoveViewLeft; break;
 	case ActionId::MoveViewRight:
-		functorPtr = Action_MoveViewRight; break;
+		functorPtr = &Engine::Action_MoveViewRight; break;
 	case ActionId::ResetView:
-		functorPtr = Action_ResetView; break;
+		functorPtr = &Engine::Action_ResetView; break;
 	case ActionId::ZoomIn:
-		functorPtr = Action_ZoomIn; break;
+		functorPtr = &Engine::Action_ZoomIn; break;
 	case ActionId::ZoomOut:
-		functorPtr = Action_ZoomOut; break;
+		functorPtr = &Engine::Action_ZoomOut; break;
 	case ActionId::ResetZoom:
-		functorPtr = Action_ResetZoom; break;
+		functorPtr = &Engine::Action_ResetZoom; break;
 	case ActionId::Save:
-		functorPtr = Action_Save; break;
+		functorPtr = &Engine::Action_Save; break;
 	case ActionId::Quit:
-		functorPtr = Action_Quit; break;
+		functorPtr = &Engine::Action_Quit; break;
 	default:
-		functorPtr = Action_INVALID_ACTION; break;
+		functorPtr = &Engine::Action_INVALID_ACTION; break;
 	}
 
-	return std::bind(&Action_INVALID_ACTION, this, std::placeholders::_1); 
+	return std::bind(functorPtr, this, std::placeholders::_1);
 	// We can do this because the engine owns the event handler.
 	// Regularly a class doesnt pass callbacks of its members without dynamic binding
 	// else it risks the functor being called with a dangling this pointer.
@@ -228,4 +227,5 @@ bool Engine::parseBindings(const std::string& t_fileNameWithPath, const std::str
 		}
 		else { continue; }// The token wasn't the line identifier; skip it
 	}
+	return true;
 }

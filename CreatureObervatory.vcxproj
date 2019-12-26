@@ -37,6 +37,7 @@
     <ClInclude Include="BoundKeys.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h" />
+    <ClInclude Include="EngineTypes.h" />
     <ClInclude Include="PreprocessorDirectves.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h" />

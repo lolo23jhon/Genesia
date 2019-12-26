@@ -8,36 +8,20 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Keyboard.h"
-#include "EventHandler.h"
 #include "Actor.h"
+#include "EngineTypes.h"
+#include "EventHandler.h"
 
-
-enum class EngineState {
-	PAUSED,
-	RUNNING
-};
-
-enum class ActionId {
-	INVALID_ACTION = -1,
-	Pause,
-	MoveViewUp,
-	MoveViewDown,
-	MoveViewLeft,
-	MoveViewRight,
-	ResetView,
-	ZoomIn,
-	ZoomOut,
-	ResetZoom,
-	Save,
-	Quit,
-	ACTION_COUNT
-};
-class Engine;
 using Actors = std::vector<std::unique_ptr<Actor>>; // contains all the actors in the current simulation
 using ActionNames = std::unordered_map<std::string, ActionId>;
+struct EventInfo;
+class Engine;
+using ActionFunctor = void (Engine::*)(const EventInfo&);
 using ActionCallback = std::function<void(const EventInfo&)>;
 
-class Engine {private:
+
+class Engine {
+private:
 	sf::RenderWindow m_window;
 	sf::Text m_guiText;
 	sf::View m_view;
@@ -50,6 +34,12 @@ class Engine {private:
 
 	sf::Clock m_clock;
 	sf::Time m_elapsed;
+
+	Keyboard m_keyboard;
+
+	EventHandler m_eventHandler;
+
+	static const ActionNames s_actionNames; // Map for action string names and ids
 
 public:
 	Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName);
@@ -64,17 +54,6 @@ public:
 
 private:
 
-
-
-	void processEvents(const sf::Event& t_e);
-	void render();
-
-	// ------------------------------------------------------------------------------------------------------------
-	//                                               KEY BINDINGS
-	// ------------------------------------------------------------------------------------------------------------
-
-	Keyboard m_keyboard;
-
 	// ------------------------------------------------------------------------------------------------------------
 	//                                                 ACTIONS
 	// ------------------------------------------------------------------------------------------------------------
@@ -87,9 +66,7 @@ public:
 
 private:
 
-	static const ActionNames s_actionNames; // Map for action string names and ids
 
-	EventHandler m_eventHandler;
 
 	bool parseBindings(const std::string& t_fileNameWithPath, const std::string& t_bindingIdentifier = "BIND");
 	bool executeAction(const ActionId& t_id, const EventInfo& t_info); // Umbrella for all the actions

@@ -23,7 +23,7 @@ class KeyInfo {
 	const std::string& m_name;		// Reference to the KeyContainer which has all key strings
 	bool m_listened;				// Should the key be listened to?
 	bool m_isPressed;				// Is the key currently presed (pressed event and no release event yet)?
-
+public:
 	KeyInfo(const std::string& t_name, bool t_listened = false, bool t_isPressed = false);
 };
 

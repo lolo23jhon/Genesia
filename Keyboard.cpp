@@ -145,5 +145,5 @@ const PressedKeys& Keyboard::getPressedKeys() {
 			m_pressedKeys.emplace(k.first);
 		}
 	}
-
+	return m_pressedKeys;
 }

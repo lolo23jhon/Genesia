@@ -1,7 +1,7 @@
 #include "EventHandler.h"
 
 ////////////////////////////////////////////////////////////
-void EventHandler::deleteCallback(const Engine::ActionId& t_id) {
+void EventHandler::deleteCallback(const ActionId& t_id) {
 	auto it{ m_bindings.find(t_id) };
 	if (it == m_bindings.end()) {
 		m_bindings.erase(it);
@@ -9,22 +9,15 @@ void EventHandler::deleteCallback(const Engine::ActionId& t_id) {
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::executeAction(const Engine::ActionId& t_id, const EventInfo& t_info) {
+bool EventHandler::executeAction(const ActionId& t_id, const EventInfo& t_info) {
 	auto it{ m_bindings.find(t_id) };
 	if (it == m_bindings.end()) { return false; }
-	it->second(t_info); // Call parens operator on the functor
+	it->second.first(t_info); // Call parens operator on the functor
 	return true;
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::hasKey(const Engine::ActionId& t_id, const sf::Keyboard::Key& t_key) {
-	auto it{ m_bindings.find(t_id) };
-	if (it == m_bindings.end()) { return false; }
-	return true;
-}
-
-////////////////////////////////////////////////////////////
-bool EventHandler::hasKey(const Engine::ActionId& t_id, const sf::Keyboard::Key& t_key) {
+bool EventHandler::hasKey(const ActionId& t_id, const sf::Keyboard::Key& t_key) {
 	auto id_it{ m_bindings.find(t_id) };
 	if (id_it == m_bindings.end()) { return false; }	// No action id found
 	auto& key_ptr{ id_it->second.second };
@@ -33,7 +26,7 @@ bool EventHandler::hasKey(const Engine::ActionId& t_id, const sf::Keyboard::Key&
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::addKey(const Engine::ActionId& t_id, const sf::Keyboard::Key& t_key) {
+bool EventHandler::addKey(const ActionId& t_id, const sf::Keyboard::Key& t_key) {
 	auto id_it{ m_bindings.find(t_id) };
 	if (id_it == m_bindings.end()) { return false; }	// No action id found; cannot try to build binding since we don't have callbacks
 	auto& key_ptr{ id_it->second.second };
@@ -46,7 +39,7 @@ bool EventHandler::addKey(const Engine::ActionId& t_id, const sf::Keyboard::Key&
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::removeKey(const Engine::ActionId& t_id, const sf::Keyboard::Key& t_key) {
+bool EventHandler::removeKey(const ActionId& t_id, const sf::Keyboard::Key& t_key) {
 	auto id_it{ m_bindings.find(t_id) };
 	if (id_it == m_bindings.end()) { return false; }
 	auto& key_ptr{ id_it->second.second };
@@ -55,6 +48,17 @@ bool EventHandler::removeKey(const Engine::ActionId& t_id, const sf::Keyboard::K
 	return true;
 }
 
+////////////////////////////////////////////////////////////
+void EventHandler::addCallback(const ActionId& t_id, ActionCallback t_cb) {
+
+	auto it{ m_bindings.find(t_id) };
+	if (it == m_bindings.end()) {
+		m_bindings.emplace(t_id, std::make_pair( t_cb , std::make_unique<BoundKeys>() )); // Add the callback with no keybindings (yet)
+	}
+	else {
+		it->second = std::make_pair( t_cb, std::make_unique<BoundKeys>() ); // If action was already bound to id (somehow...), replace it
+	}
+}
 
 
 
@@ -71,7 +75,7 @@ const ActiveActions& EventHandler::getActiveActions(const PressedKeys& t_pressed
 
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::handleEvent(const EventInfo& t_info) {
+void EventHandler::handleEvent(const EventInfo& t_info) {
 	getActiveActions(t_info.m_keysCurrentlyPresssed);
 	for (auto& action : m_active) {
 		executeAction(action, t_info);

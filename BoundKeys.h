@@ -6,7 +6,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "Keyboard.h"
 
-using KeySet = std::unordered_set <const sf::Keyboard::Key> ; // Non owning pointsrs to the supported key list in keyboard class
+using KeySet = std::unordered_set <sf::Keyboard::Key>; // Non owning pointsrs to the supported key list in keyboard class
 
 class BoundKeys {
 	KeySet m_keys; // Contains all the possible keys that can trigger that action
