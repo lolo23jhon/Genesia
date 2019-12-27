@@ -3,10 +3,6 @@
 #include "Engine.h"
 
 
-// ------------------------------------------------------------------------------------------------------------
-//                                                 ACTIONS
-// ------------------------------------------------------------------------------------------------------------
-
 //////////////////////////////////////////////////////////
 const ActionNames Engine::s_actionNames{
 	{"Pause",			ActionId::Pause},
@@ -39,48 +35,6 @@ ActionId Engine::getActionId(const std::string& t_name) {
 
 
 ////////////////////////////////////////////////////////////
-bool Engine::executeAction(const ActionId& t_id, const EventInfo& t_info) {
-	return m_eventHandler.executeAction(t_id, t_info);
-}
-
-////////////////////////////////////////////////////////////
-sf::Time Engine::getElapsed()const { return m_elapsed; }
-
-#if defined(_DEBUG) && SHOW_ACTIONS_IN_CONSOLE == 1
-#include <iostream>
-
-static const std::string ACTION{ "Action_" };
-void Engine::Action_Pause(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Pause) << std::endl; }
-void Engine::Action_MoveViewLeft(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewLeft) << std::endl; }
-void Engine::Action_MoveViewRight(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewRight) << std::endl; }
-void Engine::Action_MoveViewUp(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewUp) << std::endl; }
-void Engine::Action_MoveViewDown(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::MoveViewDown) << std::endl; }
-void Engine::Action_ResetView(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ResetView) << std::endl; }
-void Engine::Action_ZoomIn(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ZoomIn) << std::endl; }
-void Engine::Action_ZoomOut(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ZoomOut) << std::endl; }
-void Engine::Action_ResetZoom(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::ResetZoom) << std::endl; }
-void Engine::Action_Save(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Save) << std::endl; }
-void Engine::Action_Quit(const EventInfo& t_info) { std::cout << ACTION << getActionStr(ActionId::Quit) << std::endl; }
-
-#else
-void Engine::Action_Pause(const EventInfo& t_info) {}
-void Engine::Action_MoveViewLeft(const EventInfo& t_info) {}
-void Engine::Action_MoveViewRight(const EventInfo& t_info) {}
-void Engine::Action_MoveViewUp(const EventInfo& t_info) {}
-void Engine::Action_MoveViewDown(const EventInfo& t_info) {}
-void Engine::Action_ResetView(const EventInfo& t_info) {}
-void Engine::Action_ZoomIn(const EventInfo& t_info) {}
-void Engine::Action_ZoomOut(const EventInfo& t_info) {}
-void Engine::Action_ResetZoom(const EventInfo& t_info) {}
-void Engine::Action_Save(const EventInfo& t_info) {}
-void Engine::Action_Quit(const EventInfo& t_info) {}
-
-
-#endif
-void Engine::Action_INVALID_ACTION(const EventInfo& t_info) { std::cout << "Action_" << "INVALID_ACTION" << std::endl; }
-
-
-////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
 	m_window{ sf::VideoMode(t_windowSize.x,t_windowSize.y),t_windowName },
 	m_keyboard{ Keyboard() },
@@ -96,6 +50,49 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 		std::exit(1);
 	}
 }
+
+
+////////////////////////////////////////////////////////////
+bool Engine::executeAction(const ActionId& t_id, const EventInfo& t_info) {
+	return m_eventHandler.executeAction(t_id, t_info);
+}
+
+////////////////////////////////////////////////////////////
+sf::Time Engine::getElapsed()const { return m_elapsed; }
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 2
+#include <iostream>
+
+static const std::string ACTION_MESSAGE_IDENTIFER{ "> ACTION\t" };
+void Engine::Action_Pause(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::Pause) << std::endl; }
+void Engine::Action_MoveViewLeft(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::MoveViewLeft) << std::endl; }
+void Engine::Action_MoveViewRight(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::MoveViewRight) << std::endl; }
+void Engine::Action_MoveViewUp(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::MoveViewUp) << std::endl; }
+void Engine::Action_MoveViewDown(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::MoveViewDown) << std::endl; }
+void Engine::Action_ResetView(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::ResetView) << std::endl; }
+void Engine::Action_ZoomIn(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::ZoomIn) << std::endl; }
+void Engine::Action_ZoomOut(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::ZoomOut) << std::endl; }
+void Engine::Action_ResetZoom(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::ResetZoom) << std::endl; }
+void Engine::Action_Save(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::Save) << std::endl; }
+void Engine::Action_Quit(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::Quit) << std::endl; }
+void Engine::Action_INVALID_ACTION(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << "INVALID_ACTION" << std::endl; }
+
+#else
+void Engine::Action_Pause(const EventInfo& t_info) {}
+void Engine::Action_MoveViewLeft(const EventInfo& t_info) {}
+void Engine::Action_MoveViewRight(const EventInfo& t_info) {}
+void Engine::Action_MoveViewUp(const EventInfo& t_info) {}
+void Engine::Action_MoveViewDown(const EventInfo& t_info) {}
+void Engine::Action_ResetView(const EventInfo& t_info) {}
+void Engine::Action_ZoomIn(const EventInfo& t_info) {}
+void Engine::Action_ZoomOut(const EventInfo& t_info) {}
+void Engine::Action_ResetZoom(const EventInfo& t_info) {}
+void Engine::Action_Save(const EventInfo& t_info) {}
+void Engine::Action_Quit(const EventInfo& t_info) {}
+void Engine::Action_INVALID_ACTION(const EventInfo& t_info) {}
+
+#endif
+
 
 ////////////////////////////////////////////////////////////
 ActionCallback Engine::getActionCallback(const ActionId& t_id) {
@@ -134,17 +131,9 @@ ActionCallback Engine::getActionCallback(const ActionId& t_id) {
 }
 
 
-
-
-
-
-
-
-
-
-
 ////////////////////////////////////////////////////////////
 void Engine::init() {}
+
 
 ////////////////////////////////////////////////////////////
 void Engine::run() {
@@ -155,16 +144,16 @@ void Engine::run() {
 		// Restar the clock and capture elapsed time
 		m_elapsed = m_clock.restart();
 
-		//                   ##%
-		//                 #%%#   
-		//				  %#
-		//               | |
-		//              _| |\|\|\|\
-		// sf::Event -> |   __     | -> EventInfo
-		//				|__|  |____|
+		//                 #%#
+		//               #%%#   
+		//				 %#
+		//              | |
+		//              | |\|\|\|\|\
+		// sf::Event -> |   __      | -> EventInfo
+		//				|__|  |_____|
 
 		sf::Event e;
-		while (m_window.pollEvent(e)) {
+		if (m_window.pollEvent(e)) {
 			if (e.type == sf::Event::Closed) { m_window.close(); }
 			m_keyboard.handleKeyboardInput(e);
 			auto pressedKeys{ m_keyboard.getPressedKeys() };
@@ -174,7 +163,6 @@ void Engine::run() {
 
 		}
 	}
-	
 }
 
 

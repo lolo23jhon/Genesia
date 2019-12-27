@@ -31,6 +31,7 @@ class EventHandler {
 	Bindings m_bindings;
 	ActiveActions m_active;
 
+	EventHandler();
 	void addCallback(const ActionId& t_id, ActionCallback t_cb);
 	const ActiveActions& getActiveActions(const PressedKeys& t_pressedKeys);
 	void deleteCallback(const ActionId& t_id);

@@ -2,6 +2,7 @@
 #include "PreprocessorDirectves.h"
 #include "Keyboard.h"
 
+////////////////////////////////////////////////////////////
 static const std::string S_EMPTY_STR{ "" }; // Used to hand out a reference of this
 
 
@@ -71,6 +72,7 @@ const KeyNames Keyboard::s_keyNames{
 	{"Right",	sf::Keyboard::Key::Right}
 };
 
+
 ////////////////////////////////////////////////////////////
 Keyboard::Keyboard() {
 	for (auto& it : s_keyNames) {
@@ -86,14 +88,14 @@ void Keyboard::handleKeyboardInput(const sf::Event& t_e) {
 	switch (t_e.type) {
 	case sf::Event::KeyPressed:
 		if (!it->second.m_isPressed) { it->second.m_isPressed = true; }
-#if defined(_DEBUG) && IS_PRINT_KEY_ACTIONS_TO_CONSOLE == 1
-		std::cout << "KEY_PRESS\t" << getKeyStr(it->first) << std::endl;
+#if defined(_DEBUG) && IS_PRINT_KEYBOARD_EVENTS_TO_CONSOLE == 1
+		std::cout << "> KEY_PRESS\t" << getKeyStr(it->first) << std::endl;
 #endif
 		break;
 	case sf::Event::KeyReleased:
 		if (it->second.m_isPressed) { it->second.m_isPressed = false; };
-#if defined(_DEBUG) && IS_PRINT_KEY_ACTIONS_TO_CONSOLE == 1
-		std::cout << "KEY_RELEASE\t" << getKeyStr(it->first) << std::endl;
+#if defined(_DEBUG) && IS_PRINT_KEYBOARD_EVENTS_TO_CONSOLE == 1
+		std::cout << "> KEY_RELEASE\t" << getKeyStr(it->first) << std::endl;
 #endif
 		break;
 	}
@@ -148,10 +150,15 @@ sf::Keyboard::Key Keyboard::getKeyId(const std::string& t_name) {
 
 ////////////////////////////////////////////////////////////
 const PressedKeys& Keyboard::getPressedKeys() {
-	for (auto k : m_keyContainer) {
-		if (k.second.m_listened && k.second.m_isPressed) {
-			m_pressedKeys.emplace(k.first);
+	PressedKeys pressedKeys;
+	for (auto& it : m_keyContainer) {
+		if (it.second.m_listened) {
+			if (it.second.m_isPressed) { pressedKeys.emplace(it.first); }
+			else { m_pressedKeys.erase(it.first); }
 		}
+	}
+	for (auto&& k : pressedKeys) {
+		m_pressedKeys.emplace(k);
 	}
 	return m_pressedKeys;
 }
