@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.cpp">
       <Filter>src\EngineSystem\EventProcessing</Filter>
     </ClCompile>
+    <ClCompile Include="dep_main.cpp">
+      <Filter>src\Utitlities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">

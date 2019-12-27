@@ -1,1 +1,6 @@
-BIND MoveViewUp Space
+BIND MoveViewUp    Up
+BIND MoveViewDown  Down
+BIND MoveViewLeft  Left
+BIND MoveViewRight Right
+BIND Pause         P
+BIND Save          S

@@ -1,3 +1,5 @@
+#include <iostream>
+#include "PreprocessorDirectves.h"
 #include "Keyboard.h"
 
 static const std::string S_EMPTY_STR{ "" }; // Used to hand out a reference of this
@@ -84,9 +86,15 @@ void Keyboard::handleKeyboardInput(const sf::Event& t_e) {
 	switch (t_e.type) {
 	case sf::Event::KeyPressed:
 		if (!it->second.m_isPressed) { it->second.m_isPressed = true; }
+#if defined(_DEBUG) && IS_PRINT_KEY_ACTIONS_TO_CONSOLE == 1
+		std::cout << "KEY_PRESS\t" << getKeyStr(it->first) << std::endl;
+#endif
 		break;
 	case sf::Event::KeyReleased:
 		if (it->second.m_isPressed) { it->second.m_isPressed = false; };
+#if defined(_DEBUG) && IS_PRINT_KEY_ACTIONS_TO_CONSOLE == 1
+		std::cout << "KEY_RELEASE\t" << getKeyStr(it->first) << std::endl;
+#endif
 		break;
 	}
 }

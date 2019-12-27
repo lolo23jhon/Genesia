@@ -165,7 +165,7 @@ void Engine::run() {
 
 		sf::Event e;
 		while (m_window.pollEvent(e)) {
-
+			if (e.type == sf::Event::Closed) { m_window.close(); }
 			m_keyboard.handleKeyboardInput(e);
 			auto pressedKeys{ m_keyboard.getPressedKeys() };
 			EventInfo eventInfo(m_state, pressedKeys, m_elapsed.asSeconds());
@@ -174,7 +174,7 @@ void Engine::run() {
 
 		}
 	}
-	m_window.close();
+	
 }
 
 
@@ -224,8 +224,11 @@ bool Engine::parseBindings(const std::string& t_fileNameWithPath, const std::str
 			if (!m_eventHandler.addKey(actionId, keyId)) {
 				std::cerr << "! WARNING: Failed to add key \"" << key << "\" to action  \"" << action << '\"' << std::endl;
 			}
+
+			m_keyboard.listenToKey(keyId); // Tell the keyboard to listen to the key
 		}
 		else { continue; }// The token wasn't the line identifier; skip it
 	}
+
 	return true;
 }
