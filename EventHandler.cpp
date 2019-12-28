@@ -11,84 +11,100 @@
 EventHandler::EventHandler() : m_active{}, m_bindings{} {}
 
 ////////////////////////////////////////////////////////////
-void EventHandler::deleteCallback(const ActionId& t_id) {
-	auto it{ m_bindings.find(t_id) };
-	if (it == m_bindings.end()) {
-		m_bindings.erase(it);
-	}
+void EventHandler::deleteCallback(const EngineState& t_state, const ActionId& t_id) {
+	auto state_it{ m_bindings.find(t_state) };
+	if (state_it == m_bindings.cend()) { return; }
+	auto action_it{ state_it->second.find(t_id) };
+	if (action_it == state_it->second.cend()) { return; }
+	state_it->second.erase(action_it);
 }
 
 ////////////////////////////////////////////////////////////
 bool EventHandler::executeAction(const ActionId& t_id, const EventInfo& t_info) {
-	auto it{ m_bindings.find(t_id) };
-	if (it == m_bindings.end()) { return false; }
-	it->second.first(t_info); // Call parens operator on the functor
+	auto state_it{ m_bindings.find(t_info.m_engineState) };
+	if (state_it == m_bindings.cend()) { return false; }
+	auto action_it{ state_it->second.find(t_id) };
+	if (action_it == state_it->second.cend()) { return false; }
+	action_it->second.execute(t_info);
 	return true;
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::hasKey(const ActionId& t_id, const sf::Keyboard::Key& t_key) {
-	auto id_it{ m_bindings.find(t_id) };
-	if (id_it == m_bindings.end()) { return false; }	// No action id found
-	auto& key_ptr{ id_it->second.second };
-	if (!key_ptr) { return false; }		// ptr is null
-	return key_ptr->hasKey(t_key);
+bool EventHandler::hasKey(const EngineState& t_state, const ActionId& t_id, const sf::Keyboard::Key& t_key) {
+	auto state_it{ m_bindings.find(t_state) };
+	if (state_it == m_bindings.cend()) { return false; }
+	auto action_it{ state_it->second.find(t_id) };
+	if (action_it == state_it->second.cend()) { return false; }
+	return action_it->second.keys().hasKey(t_key);
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::addKey(const ActionId& t_id, const sf::Keyboard::Key& t_key) {
-	auto id_it{ m_bindings.find(t_id) };
-	if (id_it == m_bindings.end()) { return false; }	// No action id found; cannot try to build binding since we don't have callbacks
-	auto& key_ptr{ id_it->second.second };
-	if (!key_ptr) {
-		key_ptr = std::make_unique<BoundKeys>();  // Make new BoundKeys object
-	}
-
-	key_ptr->addKey(t_key);
+bool EventHandler::addKey(const EngineState& t_state, const ActionId& t_id, const sf::Keyboard::Key& t_key) {
+	auto state_it{ m_bindings.find(t_state) };
+	if (state_it == m_bindings.cend()) { return false; }
+	auto action_it{ state_it->second.find(t_id) };
+	if (action_it == state_it->second.cend()) { return false; }
+	action_it->second.keys().addKey(t_key);
 	return true;
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::removeKey(const ActionId& t_id, const sf::Keyboard::Key& t_key) {
-	auto id_it{ m_bindings.find(t_id) };
-	if (id_it == m_bindings.end()) { return false; }
-	auto& key_ptr{ id_it->second.second };
-	if (!key_ptr) { key_ptr = std::make_unique<BoundKeys>(); }
-	key_ptr->removeKey(t_key);
+bool EventHandler::removeKey(const EngineState& t_state, const ActionId& t_id, const sf::Keyboard::Key& t_key) {
+	auto state_it{ m_bindings.find(t_state) };
+	if (state_it == m_bindings.cend()) { return false; }
+	auto action_it{ state_it->second.find(t_id) };
+	if (action_it == state_it->second.cend()) { return false; }
+	action_it->second.keys().removeKey(t_key);
 	return true;
 }
 
 ////////////////////////////////////////////////////////////
-void EventHandler::addCallback(const ActionId& t_id, ActionCallback t_cb) {
+void EventHandler::addCallback(const EngineState& t_state, const ActionId& t_id, const ActionCallback& t_cb) {
+	auto state_it{ m_bindings.find(t_state) };
+	if (state_it == m_bindings.cend()) {
+		// Register state, action and callback
+		
+		CallbackBinding temp_callbackBinding{ t_cb };
+		std::unordered_map<ActionId, CallbackBinding> temp_subMap;
+		temp_subMap.emplace(t_id, std::move(temp_callbackBinding));
 
-	auto it{ m_bindings.find(t_id) };
-	if (it == m_bindings.end()) {
-		m_bindings.emplace(t_id, std::make_pair(t_cb, std::make_unique<BoundKeys>())); // Add the callback with no keybindings (yet)
+		m_bindings.emplace(t_state,std::move(temp_subMap));
+		return;
 	}
-	else {
-		it->second = std::make_pair(t_cb, std::make_unique<BoundKeys>()); // If action was already bound to id (somehow...), replace it
+	auto action_it{ state_it->second.find(t_id) };
+	if (action_it == state_it->second.cend()) {
+		// Register action and callback
+		state_it->second.emplace(t_id, std::move(CallbackBinding(t_cb)));
+		return;
 	}
+
+	// Replace current callback binding
+	action_it->second = CallbackBinding(t_cb);
 }
 
 
 ////////////////////////////////////////////////////////////
-const ActiveActions& EventHandler::getActiveActions(const PressedKeys& t_pressedKeys) {
-	for (const auto& bind : m_bindings) {
-		auto& keys{ bind.second.second };
-		if (!keys) { continue; }
-		if (keys->checkMatch(t_pressedKeys)) {
-			m_active.emplace(bind.first);
-		} // Match found, add to active envent list
+const ActiveActions& EventHandler::getActiveActions(const EngineState& t_state, const PressedKeys& t_pressedKeys) {
+	auto state_it{ m_bindings.find(t_state) };
+	if (state_it == m_bindings.cend()) {
+		// The engine entered an unexistent state... somehow
+		m_active.clear();
+		return m_active;
+	}
+	for (auto& action_it : state_it->second) {
+		if (action_it.second.keys().checkMatch(t_pressedKeys)) {
+			m_active.emplace(action_it.first);
+		}
 		else {
-			m_active.erase(bind.first);
-		} // No match found, erase the item (if present)
+			m_active.erase(action_it.first);
+		}
 	}
 	return m_active;
 }
 
 ////////////////////////////////////////////////////////////
 void EventHandler::handleEvent(const EventInfo& t_info) {
-	getActiveActions(t_info.m_keysCurrentlyPresssed);
+	getActiveActions(t_info.m_engineState, t_info.m_keysCurrentlyPresssed);
 
 #if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
 	size_t counter{ 0 };

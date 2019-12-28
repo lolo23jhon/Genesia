@@ -31,6 +31,12 @@
     <Filter Include="src\EngineSystem\EventProcessing">
       <UniqueIdentifier>{ad4c2479-511a-4c5b-aaa4-eb67dfb9de87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\MapSystem">
+      <UniqueIdentifier>{d0919efc-85b4-4611-89f0-ed2a9813710b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ActorSystem">
+      <UniqueIdentifier>{b039cd95-3f31-45e1-891a-c78a27c435fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -42,17 +48,8 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.cpp">
       <Filter>src\PerlinNoise</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp">
-      <Filter>src\Types</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp">
       <Filter>src\EngineSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.cpp">
-      <Filter>src\Types</Filter>
-    </ClCompile>
-    <ClCompile Include="TileMap.cpp">
-      <Filter>src\Types</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.cpp">
       <Filter>src\Utitlities</Filter>
@@ -69,6 +66,15 @@
     <ClCompile Include="dep_main.cpp">
       <Filter>src\Utitlities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp">
+      <Filter>src\MapSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.cpp">
+      <Filter>src\MapSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>src\MapSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">
@@ -76,18 +82,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h">
       <Filter>src\InputSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMap.h">
-      <Filter>src\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.h">
-      <Filter>src\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h">
-      <Filter>src\Types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Actor.h">
-      <Filter>src\EngineSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h">
       <Filter>src\EngineSystem</Filter>
@@ -112,6 +106,18 @@
     </ClInclude>
     <ClInclude Include="EngineTypes.h">
       <Filter>src\EngineSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h">
+      <Filter>src\MapSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.h">
+      <Filter>src\MapSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>src\MapSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Actor.h">
+      <Filter>src\ActorSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

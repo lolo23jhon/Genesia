@@ -2,13 +2,17 @@
 #define ENGINE_TYPES_H
 
 enum class EngineState {
-	PAUSED,
-	RUNNING
+	INVALID_STATE = -1,
+	Loading,
+	Paused,
+	Running,
+	STATE_COUNT
 };
 
 enum class ActionId {
 	INVALID_ACTION = -1,
 	Pause,
+	Unpause,
 	MoveViewUp,
 	MoveViewDown,
 	MoveViewLeft,

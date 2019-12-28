@@ -3,4 +3,5 @@ BIND MoveViewDown  Down
 BIND MoveViewLeft  Left
 BIND MoveViewRight Right
 BIND Pause         P
+BIND Unpause	   P
 BIND Save          S

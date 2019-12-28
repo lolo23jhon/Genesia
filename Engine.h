@@ -13,6 +13,7 @@
 #include "EventHandler.h"
 
 using Actors = std::vector<std::unique_ptr<Actor>>; // contains all the actors in the current simulation
+using StateNames = std::map<std::string, EngineState>;
 using ActionNames = std::unordered_map<std::string, ActionId>;
 struct EventInfo;
 class Engine;
@@ -25,12 +26,16 @@ private:
 	sf::RenderWindow m_window;
 	sf::Text m_guiText;
 	sf::View m_view;
+	sf::Vector2u m_windowSize;
 
 	EngineState m_state;
 	unsigned m_fpsLimit;
 
 	Actors  m_actors;
 
+	float m_viewSpeed;
+	float m_viewZoom;
+	unsigned m_maxFramerate;
 
 	sf::Clock m_clock;
 	sf::Time m_elapsed;
@@ -40,50 +45,51 @@ private:
 	EventHandler m_eventHandler;
 
 	static const ActionNames s_actionNames; // Map for action string names and ids
+	static const StateNames s_stateNames; // Map for engine states string names and ids
 
 public:
 	Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName);
 	void init();
-	void run(); // Contains the main loop
 
+	// Contains the main loop
+	void run();
+private:
+	bool parseBindings(const std::string& t_fileNameWithPath, const std::string& t_bindingIdentifier = "BIND");
+
+public:
+	// View change settings
+	float getViewChangeSpeed()const;
+	void setViewChangeSpeed(const float& t_speed);
+	float getZoom()const;
+	void setZoom(const float& t_zoom);
+	unsigned getMaxFramerate()const;
+	void setMaxFramerate(const unsigned& t_fps);
+	sf::Time getElapsed()const;
+	void resetView();
+
+	const sf::RenderWindow& getWindow()const;
+	const EngineState& getState()const;
+
+	void pollEvents();
 	void render();
 	void update();
 	void lateUpdate();
-	const sf::RenderWindow& getWindow()const;
-	sf::Time getElapsed()const;
 
-private:
+	bool executeAction(const ActionId& t_id, const EventInfo& t_info); // Umbrella for all the actions
+	ActionCallback getActionCallback(const EngineState& t_state, const ActionId& t_id); // * See coment bellow
 
-	// ------------------------------------------------------------------------------------------------------------
-	//                                                 ACTIONS
-	// ------------------------------------------------------------------------------------------------------------
-
-public:
-
-
+	// Actions strings-ids
 	static const std::string& getActionStr(const ActionId& t_id);
 	static ActionId getActionId(const std::string& t_name);
 
+	// States strings-ids
+	static const std::string& getStateStr(const EngineState& t_stateId);
+	static const EngineState getStateId(const std::string& t_stateName);
+
 private:
-
-
-
-	bool parseBindings(const std::string& t_fileNameWithPath, const std::string& t_bindingIdentifier = "BIND");
-	bool executeAction(const ActionId& t_id, const EventInfo& t_info); // Umbrella for all the actions
-	ActionCallback getActionCallback(const ActionId& t_id);
-	// Hold on... are we searching callbacks by hash (unordered map with callbacks) or switch?
-	//	The answer is BOTH: the switch for binding of the the action ids to their fn ptrs in the map at construction
-	//		and the hash for general usage. This is to allow for dynamic keybindings:
-	//		Lets say we have an action id, which we can exchange for the function ptr and for the key bindings
-	//		If we use switch and hash every time (switch for fn ptrs and hash only for bindingd) we're doing a double
-	//		lookup on each action. For this we give the hash the functionality of the switch by mapping the action
-	//		callbacks even if we're never going to change them. Using only a switch wouldn't allow to change keybindings
-	//		dinamically, and using only hash would require a sort of horrible Lovecraftian metaprogram to write functions 
-	//		with code somehow which will cause your compiler to speak in tongues on the smallest mistake.
-
-
 	// Inout actions that can be queued by user inputs (real time actions take in delta time)
 	void Action_Pause(const EventInfo& t_info);
+	void Action_Unpause(const EventInfo& t_info);
 	void Action_MoveViewLeft(const EventInfo& t_info);
 	void Action_MoveViewRight(const EventInfo& t_info);
 	void Action_MoveViewUp(const EventInfo& t_info);
@@ -96,5 +102,16 @@ private:
 	void Action_Quit(const EventInfo& t_info);
 	void Action_INVALID_ACTION(const EventInfo& t_info);
 };
+
+
+//* Hold on... are we searching callbacks by hash (unordered map with callbacks) or switch?
+	//	The answer is BOTH: the switch for binding of the the action ids to their fn ptrs in the map at construction
+	//		and the hash for general usage. This is to allow for dynamic keybindings:
+	//		Lets say we have an action id, which we can exchange for the function ptr and for the key bindings
+	//		If we use switch and hash every time (switch for fn ptrs and hash only for bindingd) we're doing a double
+	//		lookup on each action. For this we give the hash the functionality of the switch by mapping the action
+	//		callbacks even if we're never going to change them. Using only a switch wouldn't allow to change keybindings
+	//		dinamically, and using only hash would require a sort of horrible Lovecraftian metaprogram to write functions 
+	//		with code somehow which will cause your compiler to speak in tongues on the smallest mistake.
 
 #endif // ! ENGINE_H
