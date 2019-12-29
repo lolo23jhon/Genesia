@@ -1,3 +1,4 @@
+#include <tuple>
 #include "PreprocessorDirectves.h"
 #include "Utilities.h"
 #include "Engine.h"
@@ -22,13 +23,12 @@ void Engine::init() {
 	m_viewZoom = 0.05f;
 	resetView();
 
-	for (const auto& state_it : s_stateNames) {
-		if (state_it.second == EngineState::Loading) { continue; }
-		for (const auto& action_it : s_actionNames) {
-			m_eventHandler.addCallback(state_it.second, action_it.second, getActionCallback(state_it.second, action_it.second));
-		}
+	// Initialize all actions with empty kebindings
+	for (const auto& it : s_actions) {
+		m_eventHandler.addAction(std::move(createAction(it.first)));
 	}
 
+	// Add all the keybindings
 	if (!parseBindings("keybindings.txt")) {
 		std::cout << "Press Enter to exit.\n";
 		std::cin.get();
@@ -67,6 +67,11 @@ void Engine::run() {
 
 ////////////////////////////////////////////////////////////
 void Engine::pollEvents() {
+
+	m_keyboard.reset();
+	const auto& pressedKeys{ m_keyboard.getPressedKeys() };
+	const auto& releasedKeys{ m_keyboard.getReleasedKeys() };
+
 	sf::Event e;
 	while (m_window.pollEvent(e)) {
 		m_keyboard.handleKeyboardInput(e); // Updte keyboard
@@ -77,17 +82,21 @@ void Engine::pollEvents() {
 		//              | |\|\|\|\|\
 		// sf::Event -> |   __      | -> EventInfo
 		//				|__|  |_____|
-		auto pressedKeys{ m_keyboard.getPressedKeys() };
-		EventInfo eventInfo(m_state, pressedKeys, m_elapsed.asSeconds());
+		EventInfo eventInfo(m_state, pressedKeys, releasedKeys, m_elapsed.asSeconds());
 		m_eventHandler.handleEvent(eventInfo);
 
 		switch (e.type) {
+
+		case sf::Event::Resized:
+			m_window.setSize(m_windowSize);
+			break;
 
 		case sf::Event::Closed:
 			m_window.close();
 			break;
 		}
 	}
+
 }
 
 
@@ -128,7 +137,7 @@ bool Engine::parseBindings(const std::string& t_fileNameWithPath, const std::str
 
 			stream >> action >> key;
 
-			auto actionId{ getActionId(action) };
+			auto actionId{ actionStrToId(action) };
 			if (actionId == ActionId::INVALID_ACTION) {
 				std::cerr << "! WARNING: Invalid action \"" << action << "\" in file \"" << t_fileNameWithPath << '\"' << std::endl;
 				continue;
@@ -140,11 +149,10 @@ bool Engine::parseBindings(const std::string& t_fileNameWithPath, const std::str
 				continue;
 			}// Invalid key; try to read a new binding
 
-			for (unsigned i{ 1 }; i < static_cast<unsigned>(EngineState::STATE_COUNT); i++) {
-				if (!m_eventHandler.addKey(static_cast<EngineState>(i), actionId, keyId)) {
-					std::cerr << "! WARNING: Failed to add key \"" << key << "\" to action  \"" << action << '\"' << std::endl;
-				}
+			if (!m_eventHandler.addKey(actionId, keyId)) {
+				std::cerr << "! WARNING: Failed to add key \"" << key << "\" to action  \"" << action << '\"' << std::endl;
 			}
+
 
 			m_keyboard.listenToKey(keyId); // Tell the keyboard to listen to the key
 		}
@@ -196,132 +204,69 @@ const std::string& Engine::getStateStr(const EngineState& t_stateId) {
 }
 
 //////////////////////////////////////////////////////////
-const EngineState Engine::getStateId(const std::string& t_stateName) {
+EngineState Engine::getStateId(const std::string& t_stateName) {
 	auto it{ s_stateNames.find(t_stateName) };
 	return (it == s_stateNames.cend() ? EngineState::INVALID_STATE : it->second);
 }
 
 
 //////////////////////////////////////////////////////////
-const ActionNames Engine::s_actionNames{
-	{"Pause",			ActionId::Pause},
-	{"Unpause",			ActionId::Unpause},
-	{"MoveViewUp",		ActionId::MoveViewUp},
-	{"MoveViewDown",	ActionId::MoveViewDown},
-	{"MoveViewLeft",	ActionId::MoveViewLeft},
-	{"MoveViewRight",	ActionId::MoveViewRight},
-	{"ResetView",		ActionId::ResetView},
-	{"ZoomIn",			ActionId::ZoomIn},
-	{"ZoomOut",			ActionId::ZoomOut},
-	{"ResetZoom",		ActionId::ResetZoom},
-	{"Save",			ActionId::Save},
-	{"Quit",			ActionId::Quit}
+const ActionFactory Engine::s_actions{
+		{ActionId::Unpause,			{"Action_Unpause",			EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Unpause}},
+		{ActionId::Save,			{"Action_Save",				EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Save}},
+		{ActionId::Quit,			{"Action_Quit",				EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Quit}},
+		{ActionId::Pause,			{"Action_Pause",			EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Pause}},
+		{ActionId::MoveViewUp,		{"Action_MoveViewUp",		EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewUp}},
+		{ActionId::MoveViewDown,	{"Action_MoveViewDown",		EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewDown}},
+		{ActionId::MoveViewLeft,	{"Action_MoveViewLeft",		EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewLeft}},
+		{ActionId::MoveViewRight,	{"Action_MoveViewRight",	EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewRight}},
+		{ActionId::ResetView,		{"Action_ResetView",		EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_ResetView}},
+		{ActionId::ZoomIn,			{"Action_ZoomIn",			EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_ZoomIn}},
+		{ActionId::ZoomOut,			{"Action_ZoomOut",			EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_ZoomOut}},
+		{ActionId::ResetZoom,		{"Action_ResetZoom",		EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_ResetZoom}}
 };
 
-
 ////////////////////////////////////////////////////////////
-const std::string& Engine::getActionStr(const ActionId& t_id) {
-	auto it{ std::find_if(s_actionNames.cbegin(),s_actionNames.cend(),
-	[&t_id](const std::pair<std::string, ActionId>& t_p) {return t_p.second == t_id; }) };
-	return (it == s_actionNames.cend() ? S_EMPTY_STR : it->first);
+const std::string& Engine::actionIdToStr(const ActionId& t_id) {
+	auto it{ s_actions.find(t_id) };
+	return (it == s_actions.cend() ? S_EMPTY_STR : std::get<ACTION_NAME>(it->second));
 }
 
 ////////////////////////////////////////////////////////////
-ActionId Engine::getActionId(const std::string& t_name) {
-	auto it{ s_actionNames.find(t_name) };
-	return (it == s_actionNames.cend() ? ActionId::INVALID_ACTION : it->second);
+ActionId Engine::actionStrToId(const std::string& t_name) {
+	auto it{ std::find_if(s_actions.cbegin(), s_actions.cend(),
+		[t_name](const std::pair<ActionId,ActionTuple>& t_p) {return std::get<ACTION_NAME>(t_p.second) == t_name; }) };
+	return (it == s_actions.cend() ? ActionId::INVALID_ACTION : it->first);
 }
 
 ////////////////////////////////////////////////////////////
-ActionCallback Engine::getActionCallback(const EngineState& t_state, const ActionId& t_id) {
-	ActionFunctor functorPtr;
-	switch (t_state) {
+std::unique_ptr<Action> Engine::createAction(const ActionId& t_id) {
+	auto it{ s_actions.find(t_id) };
+	if (it == s_actions.cend()) { return nullptr; }
 
-	case EngineState::Running:
-
-		switch (t_id) {
-		case ActionId::Pause:
-			functorPtr = &Engine::Action_Pause; break;
-		case ActionId::MoveViewUp:
-			functorPtr = &Engine::Action_MoveViewUp; break;
-		case ActionId::MoveViewDown:
-			functorPtr = &Engine::Action_MoveViewDown; break;
-		case ActionId::MoveViewLeft:
-			functorPtr = &Engine::Action_MoveViewLeft; break;
-		case ActionId::MoveViewRight:
-			functorPtr = &Engine::Action_MoveViewRight; break;
-		case ActionId::ResetView:
-			functorPtr = &Engine::Action_ResetView; break;
-		case ActionId::ZoomIn:
-			functorPtr = &Engine::Action_ZoomIn; break;
-		case ActionId::ZoomOut:
-			functorPtr = &Engine::Action_ZoomOut; break;
-		case ActionId::ResetZoom:
-			functorPtr = &Engine::Action_ResetZoom; break;
-		case ActionId::Save:
-			functorPtr = &Engine::Action_Save; break;
-		case ActionId::Quit:
-			functorPtr = &Engine::Action_Quit; break;
-		default:
-			functorPtr = &Engine::Action_INVALID_ACTION; break;
-		}
-
-	case EngineState::Paused:
-
-		switch (t_id) {
-		case ActionId::Unpause:
-			functorPtr = &Engine::Action_Unpause; break;
-		case ActionId::MoveViewUp:
-			functorPtr = &Engine::Action_MoveViewUp; break;
-		case ActionId::MoveViewDown:
-			functorPtr = &Engine::Action_MoveViewDown; break;
-		case ActionId::MoveViewLeft:
-			functorPtr = &Engine::Action_MoveViewLeft; break;
-		case ActionId::MoveViewRight:
-			functorPtr = &Engine::Action_MoveViewRight; break;
-		case ActionId::ResetView:
-			functorPtr = &Engine::Action_ResetView; break;
-		case ActionId::ZoomIn:
-			functorPtr = &Engine::Action_ZoomIn; break;
-		case ActionId::ZoomOut:
-			functorPtr = &Engine::Action_ZoomOut; break;
-		case ActionId::ResetZoom:
-			functorPtr = &Engine::Action_ResetZoom; break;
-		case ActionId::Save:
-			functorPtr = &Engine::Action_Save; break;
-		case ActionId::Quit:
-			functorPtr = &Engine::Action_Quit; break;
-		default:
-			functorPtr = &Engine::Action_INVALID_ACTION; break;
-		}
-	default:
-		functorPtr = &Engine::Action_INVALID_ACTION; break;
-
-	}
-
-	return std::bind(functorPtr, this, std::placeholders::_1);
-	// We can do this because the engine owns the event handler.
-	// Regularly a class doesnt pass callbacks of its members without dynamic binding
-	// else it risks the functor being called with a dangling this pointer.
+	return std::make_unique<Action>(t_id,
+		std::get<ACTION_ENGINE_STATE>(it->second),
+		std::get<ACTION_NAME>(it->second),
+		std::get<ACTION_TRIGGER>(it->second),
+		std::bind(std::get<ACTION_FUNCTOR>(it->second), this, std::placeholders::_1));
 }
 
-#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 2
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
 #include <iostream>
-
-static const std::string ACTION_MESSAGE_IDENTIFER{ "> ACTION\t" };
-void Engine::Action_Pause(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::Pause) << std::endl; }
-void Engine::Action_Unpause(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFIER << getActionStr(ActionId::UnPause) << std::endl; }
-void Engine::Action_MoveViewLeft(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::MoveViewLeft) << std::endl; }
-void Engine::Action_MoveViewRight(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::MoveViewRight) << std::endl; }
-void Engine::Action_MoveViewUp(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::MoveViewUp) << std::endl; }
-void Engine::Action_MoveViewDown(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::MoveViewDown) << std::endl; }
-void Engine::Action_ResetView(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::ResetView) << std::endl; }
-void Engine::Action_ZoomIn(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::ZoomIn) << std::endl; }
-void Engine::Action_ZoomOut(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::ZoomOut) << std::endl; }
-void Engine::Action_ResetZoom(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::ResetZoom) << std::endl; }
-void Engine::Action_Save(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::Save) << std::endl; }
-void Engine::Action_Quit(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << getActionStr(ActionId::Quit) << std::endl; }
-void Engine::Action_INVALID_ACTION(const EventInfo& t_info) { std::cout << ACTION_MESSAGE_IDENTIFER << "INVALID_ACTION" << std::endl; }
+void Engine::Action_Pause(const EventInfo& t_info) { m_state = EngineState::Paused; std::cout << "> ACTION\tPause" << std::endl; }
+void Engine::Action_Unpause(const EventInfo& t_info) { m_state = EngineState::Running; std::cout <<"> ACTION\tUnpause" << std::endl; }
+void Engine::Action_MoveViewLeft(const EventInfo& t_info) { std::cout <<"> ACTION\tMoveViewLeft" << std::endl; }
+void Engine::Action_MoveViewRight(const EventInfo& t_info) { std::cout <<"> ACTION\tMoveViewRight" << std::endl; }
+void Engine::Action_MoveViewUp(const EventInfo& t_info) { std::cout <<"> ACTION\tMoveViewUp" << std::endl; }
+void Engine::Action_MoveViewDown(const EventInfo& t_info) { std::cout <<"> ACTION\tMoveViewDown" << std::endl; }
+void Engine::Action_ResetView(const EventInfo& t_info) { std::cout <<"> ACTION\tResetView" << std::endl; }
+void Engine::Action_ZoomIn(const EventInfo& t_info) { m_view.zoom(1.f + m_viewZoom); std::cout <<"> ACTION\tZoomIn" << std::endl; }
+void Engine::Action_ZoomOut(const EventInfo& t_info) { m_view.zoom(1.f - m_viewZoom); std::cout <<"> ACTION\tZoomOut" << std::endl; }
+void Engine::Action_ResetZoom(const EventInfo& t_info) { resetView(); std::cout <<"> ACTION\tResetZoom" << std::endl; }
+void Engine::Action_Save(const EventInfo& t_info) { std::cout <<"> ACTION\tSave" << std::endl; }
+void Engine::Action_Quit(const EventInfo& t_info) { std::cout <<"> ACTION\tQuit" << std::endl; }
+void Engine::Action_INVALID_ACTION(const EventInfo& t_info) { std::cout <<"> ACTION\tINVALID_ACTION" << std::endl; }
 
 #else
 

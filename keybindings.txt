@@ -1,7 +1,7 @@
-BIND MoveViewUp    Up
-BIND MoveViewDown  Down
-BIND MoveViewLeft  Left
-BIND MoveViewRight Right
-BIND Pause         P
-BIND Unpause	   P
-BIND Save          S
+BIND Action_MoveViewUp     Up
+BIND Action_MoveViewDown   Down
+BIND Action_MoveViewLeft   Left
+BIND Action_MoveViewRight  Right
+BIND Action_Pause          P
+BIND Action_Unpause	   P
+BIND Action_Save           S

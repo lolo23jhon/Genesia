@@ -5,12 +5,6 @@
 ////////////////////////////////////////////////////////////
 static const std::string S_EMPTY_STR{ "" }; // Used to hand out a reference of this
 
-
-////////////////////////////////////////////////////////////
-KeyInfo::KeyInfo(const std::string& t_name, bool t_listened, bool t_isPressed) :
-	m_name{ t_name }, m_listened{ t_listened }, m_isPressed{ t_isPressed }{}
-
-
 ////////////////////////////////////////////////////////////
 const KeyNames Keyboard::s_keyNames{
 	{"A",sf::Keyboard::Key::A },
@@ -74,53 +68,49 @@ const KeyNames Keyboard::s_keyNames{
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Keyboard() {
-	for (auto& it : s_keyNames) {
-		m_keyContainer.try_emplace(it.second, it.first, false, false);
-	}
-}
+Keyboard::Keyboard() : m_pressedKeys{}, m_releasedKeys{} {}
 
 
 ////////////////////////////////////////////////////////////
 void Keyboard::handleKeyboardInput(const sf::Event& t_e) {
-	auto it{ m_keyContainer.find(t_e.key.code) };
-	if (it == m_keyContainer.end()) { return; }
+	const auto& key{ t_e.key.code };
+	if (m_listenedKeys.find(key) == m_listenedKeys.end()) { return; }
+
 	switch (t_e.type) {
+
 	case sf::Event::KeyPressed:
-		if (!it->second.m_isPressed) { it->second.m_isPressed = true; }
-#if defined(_DEBUG) && IS_PRINT_KEYBOARD_EVENTS_TO_CONSOLE == 1
-		std::cout << "> KEY_PRESS\t" << getKeyStr(it->first) << std::endl;
-#endif
+		m_pressedKeys.emplace(key);
 		break;
 	case sf::Event::KeyReleased:
-		if (it->second.m_isPressed) { it->second.m_isPressed = false; };
-#if defined(_DEBUG) && IS_PRINT_KEYBOARD_EVENTS_TO_CONSOLE == 1
-		std::cout << "> KEY_RELEASE\t" << getKeyStr(it->first) << std::endl;
-#endif
+		m_releasedKeys.emplace(key);
 		break;
 	}
 }
 
 ////////////////////////////////////////////////////////////
+void Keyboard::reset() {
+	m_pressedKeys.clear();
+	m_releasedKeys.clear();
+}
+
+////////////////////////////////////////////////////////////
 void Keyboard::listenToKey(const sf::Keyboard::Key& t_key) {
-	auto it{ m_keyContainer.find(t_key) };
-	if (it == m_keyContainer.end()) { return; }
-	it->second.m_listened = true;
+	m_listenedKeys.emplace(t_key);
 }
 
 ////////////////////////////////////////////////////////////
 void Keyboard::stopListeningToKey(const sf::Keyboard::Key& t_key) {
-	auto it{ m_keyContainer.find(t_key) };
-	if (it == m_keyContainer.end()) { return; }
-	it->second.m_listened = false;
+	m_pressedKeys.erase(t_key);
 }
 
 ////////////////////////////////////////////////////////////
-bool Keyboard::isKeyDown(const sf::Keyboard::Key& t_key) {
-	auto it{ m_keyContainer.find(t_key) };
-	if (it == m_keyContainer.end()) { return false; }
-	if (!it->second.m_listened) { return false; }
-	return it->second.m_isPressed;
+bool Keyboard::isKeyDown(const sf::Keyboard::Key& t_key)const {
+	return (m_pressedKeys.find(t_key) != m_pressedKeys.cend());
+}
+
+////////////////////////////////////////////////////////////
+bool Keyboard::isKeyBeingReleased(const sf::Keyboard::Key& t_key)const {
+	return (m_releasedKeys.find(t_key) != m_releasedKeys.cend());
 }
 
 ////////////////////////////////////////////////////////////
@@ -149,16 +139,7 @@ sf::Keyboard::Key Keyboard::getKeyId(const std::string& t_name) {
 }
 
 ////////////////////////////////////////////////////////////
-const PressedKeys& Keyboard::getPressedKeys() {
-	PressedKeys pressedKeys;
-	for (auto& it : m_keyContainer) {
-		if (it.second.m_listened) {
-			if (it.second.m_isPressed) { pressedKeys.emplace(it.first); }
-			else { m_pressedKeys.erase(it.first); }
-		}
-	}
-	for (auto&& k : pressedKeys) {
-		m_pressedKeys.emplace(k);
-	}
-	return m_pressedKeys;
-}
+const KeySet& Keyboard::getPressedKeys()const { return m_pressedKeys; }
+
+////////////////////////////////////////////////////////////
+const KeySet& Keyboard::getReleasedKeys()const { return m_releasedKeys; }

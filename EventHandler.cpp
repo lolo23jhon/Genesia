@@ -6,17 +6,50 @@
 #include "Engine.h"
 #endif
 
+////////////////////////////////////////////////////////////
+Binding::Binding(std::unique_ptr<Action> t_action, std::unique_ptr<BoundKeys> t_keys) : m_action{ std::move(t_action) }, m_keys{ std::move(t_keys) }{}
+
+////////////////////////////////////////////////////////////
+void Binding::changeKeys(std::unique_ptr<BoundKeys> t_keys) { m_keys = std::move(t_keys); }
+
+////////////////////////////////////////////////////////////
+bool Binding::hasKey(const sf::Keyboard::Key& t_key)const { return m_keys->hasKey(t_key); }
+
+////////////////////////////////////////////////////////////
+void Binding::addKey(const sf::Keyboard::Key& t_key) { m_keys->addKey(t_key); }
+
+////////////////////////////////////////////////////////////
+void Binding::removeKey(const sf::Keyboard::Key& t_key) { m_keys->removeKey(t_key); }
+
+////////////////////////////////////////////////////////////
+bool Binding::checkMatch(const KeySet& t_pressedKeys)const { return m_keys->checkMatch(t_pressedKeys); }
+
+////////////////////////////////////////////////////////////
+void Binding::execute(const EventInfo& t_info) { m_action->execute(t_info); }
+
+////////////////////////////////////////////////////////////
+const ActionTrigger& Binding::getTrigger()const { return m_action->getTrigger(); }
+
+
+////////////////////////////////////////////////////////////
+void Binding::replace(Binding&& t_bind) {
+	m_action.reset();
+	m_action = std::move(t_bind.m_action);
+	m_keys.reset();
+	m_keys = std::move(t_bind.m_keys);
+}
 
 ////////////////////////////////////////////////////////////
 EventHandler::EventHandler() : m_active{}, m_bindings{} {}
 
 ////////////////////////////////////////////////////////////
-void EventHandler::deleteCallback(const EngineState& t_state, const ActionId& t_id) {
-	auto state_it{ m_bindings.find(t_state) };
-	if (state_it == m_bindings.cend()) { return; }
-	auto action_it{ state_it->second.find(t_id) };
-	if (action_it == state_it->second.cend()) { return; }
-	state_it->second.erase(action_it);
+void EventHandler::deleteAction(const ActionId& t_id) {
+	for (auto& state_it : m_bindings) {
+		auto action_it{ state_it.second.find(t_id) };
+		if (action_it == state_it.second.end()) { continue; }
+		state_it.second.erase(action_it);
+		break;
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -30,95 +63,89 @@ bool EventHandler::executeAction(const ActionId& t_id, const EventInfo& t_info) 
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::hasKey(const EngineState& t_state, const ActionId& t_id, const sf::Keyboard::Key& t_key) {
-	auto state_it{ m_bindings.find(t_state) };
-	if (state_it == m_bindings.cend()) { return false; }
-	auto action_it{ state_it->second.find(t_id) };
-	if (action_it == state_it->second.cend()) { return false; }
-	return action_it->second.keys().hasKey(t_key);
+bool EventHandler::hasKey(const ActionId& t_id, const sf::Keyboard::Key& t_key)const {
+	for (const auto& state_it : m_bindings) {
+		auto action_it{ state_it.second.find(t_id) };
+		if (action_it == state_it.second.end()) { continue; }
+		if (action_it->second.hasKey(t_key)) { return true; }
+	}
+	return false;
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::addKey(const EngineState& t_state, const ActionId& t_id, const sf::Keyboard::Key& t_key) {
-	auto state_it{ m_bindings.find(t_state) };
-	if (state_it == m_bindings.cend()) { return false; }
-	auto action_it{ state_it->second.find(t_id) };
-	if (action_it == state_it->second.cend()) { return false; }
-	action_it->second.keys().addKey(t_key);
-	return true;
+bool EventHandler::addKey(const ActionId& t_id, const sf::Keyboard::Key& t_key) {
+	for (auto& state_it : m_bindings) {
+		auto action_it{ state_it.second.find(t_id) };
+		if (action_it == state_it.second.end()) { continue; }
+		action_it->second.addKey(t_key);
+		return true;
+	}
+	return false;
 }
 
 ////////////////////////////////////////////////////////////
-bool EventHandler::removeKey(const EngineState& t_state, const ActionId& t_id, const sf::Keyboard::Key& t_key) {
-	auto state_it{ m_bindings.find(t_state) };
-	if (state_it == m_bindings.cend()) { return false; }
-	auto action_it{ state_it->second.find(t_id) };
-	if (action_it == state_it->second.cend()) { return false; }
-	action_it->second.keys().removeKey(t_key);
-	return true;
+bool EventHandler::removeKey(const ActionId& t_id, const sf::Keyboard::Key& t_key) {
+	for (auto& state_it : m_bindings) {
+		auto action_it{ state_it.second.find(t_id) };
+		if (action_it == state_it.second.end()) { continue; }
+		action_it->second.removeKey(t_key);
+		return true;
+	}
+	return false;
 }
 
 ////////////////////////////////////////////////////////////
-void EventHandler::addCallback(const EngineState& t_state, const ActionId& t_id, const ActionCallback& t_cb) {
-	auto state_it{ m_bindings.find(t_state) };
-	if (state_it == m_bindings.cend()) {
-		// Register state, action and callback
-		
-		CallbackBinding temp_callbackBinding{ t_cb };
-		std::unordered_map<ActionId, CallbackBinding> temp_subMap;
-		temp_subMap.emplace(t_id, std::move(temp_callbackBinding));
+void EventHandler::addAction(std::unique_ptr<Action> t_action) {
+	const auto& state{ t_action->getEngineState() };
+	const auto& id{ t_action->getActionId() };
 
-		m_bindings.emplace(t_state,std::move(temp_subMap));
+	Binding temp_binding(std::move(t_action), std::make_unique<BoundKeys>());
+	auto state_it{ m_bindings.find(state) };
+	if (state_it == m_bindings.end()) {
+
+		// Add state, id, and binding
+		std::unordered_map<ActionId, Binding> temp_map;
+		temp_map.emplace(id, std::move(temp_binding));
+
+		m_bindings.emplace(state, std::move(temp_map));
 		return;
 	}
-	auto action_it{ state_it->second.find(t_id) };
-	if (action_it == state_it->second.cend()) {
-		// Register action and callback
-		state_it->second.emplace(t_id, std::move(CallbackBinding(t_cb)));
+
+	auto action_it{ state_it->second.find(id) };
+	if (action_it == state_it->second.end()) {
+
+		// Add id and binding
+		state_it->second.emplace(id, std::move(temp_binding));
 		return;
 	}
 
-	// Replace current callback binding
-	action_it->second = CallbackBinding(t_cb);
-}
-
-
-////////////////////////////////////////////////////////////
-const ActiveActions& EventHandler::getActiveActions(const EngineState& t_state, const PressedKeys& t_pressedKeys) {
-	auto state_it{ m_bindings.find(t_state) };
-	if (state_it == m_bindings.cend()) {
-		// The engine entered an unexistent state... somehow
-		m_active.clear();
-		return m_active;
-	}
-	for (auto& action_it : state_it->second) {
-		if (action_it.second.keys().checkMatch(t_pressedKeys)) {
-			m_active.emplace(action_it.first);
-		}
-		else {
-			m_active.erase(action_it.first);
-		}
-	}
-	return m_active;
+	// Replace binding
+	action_it->second.replace(std::move(temp_binding));
 }
 
 ////////////////////////////////////////////////////////////
 void EventHandler::handleEvent(const EventInfo& t_info) {
-	getActiveActions(t_info.m_engineState, t_info.m_keysCurrentlyPresssed);
+	const auto& state{ t_info.m_engineState };
+	const auto& pkeys{ t_info.m_keysCurrentlyPresssed };
+	const auto& rkeys{ t_info.m_keysCurrentlyBeingReleased };
 
-#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
-	size_t counter{ 0 };
-#endif
+	auto state_it{ m_bindings.find(state) };
+	if (state_it == m_bindings.end()) { return; }
 
-	for (auto& action : m_active) {
-		executeAction(action, t_info);
 
-#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
-		if (!counter) { std::cout << "> ACTIONS\t"; }
-		counter++;
-		std::cout << Engine::getActionStr(action) << '\t';
-		if (counter == m_active.size()) { std::cout << std::endl; }
-#endif
 
+	for (auto& it : state_it->second) {
+		auto& bind{ it.second };
+		bool isExecute{ false };
+		switch (bind.getTrigger()) {
+		case ActionTrigger::ContinousKeyPress:
+			isExecute = bind.checkMatch(pkeys); break;
+		case ActionTrigger::SingleKeyRelease:
+			isExecute = bind.checkMatch(rkeys); break;
+		}
+
+		if (isExecute) {
+			bind.execute(t_info);
+		}
 	}
 }

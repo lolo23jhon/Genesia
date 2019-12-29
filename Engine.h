@@ -14,11 +14,8 @@
 
 using Actors = std::vector<std::unique_ptr<Actor>>; // contains all the actors in the current simulation
 using StateNames = std::map<std::string, EngineState>;
-using ActionNames = std::unordered_map<std::string, ActionId>;
 struct EventInfo;
-class Engine;
-using ActionFunctor = void (Engine::*)(const EventInfo&);
-using ActionCallback = std::function<void(const EventInfo&)>;
+
 
 
 class Engine {
@@ -44,7 +41,7 @@ private:
 
 	EventHandler m_eventHandler;
 
-	static const ActionNames s_actionNames; // Map for action string names and ids
+	static const ActionFactory s_actions;
 	static const StateNames s_stateNames; // Map for engine states string names and ids
 
 public:
@@ -78,13 +75,12 @@ public:
 	bool executeAction(const ActionId& t_id, const EventInfo& t_info); // Umbrella for all the actions
 	ActionCallback getActionCallback(const EngineState& t_state, const ActionId& t_id); // * See coment bellow
 
-	// Actions strings-ids
-	static const std::string& getActionStr(const ActionId& t_id);
-	static ActionId getActionId(const std::string& t_name);
-
-	// States strings-ids
+	static ActionId actionStrToId(const std::string& t_name);
+	static const std::string& actionIdToStr(const ActionId& t_id);
+	static EngineState getStateId(const std::string& t_stateName);
 	static const std::string& getStateStr(const EngineState& t_stateId);
-	static const EngineState getStateId(const std::string& t_stateName);
+	std::unique_ptr<Action> createAction(const ActionId& t_id);
+
 
 private:
 	// Inout actions that can be queued by user inputs (real time actions take in delta time)

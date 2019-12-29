@@ -15,7 +15,7 @@ public:
 	bool hasKey(const sf::Keyboard::Key& t_key)const;
 	void addKey(const sf::Keyboard::Key& t_key); // Adds another possible key that can execute this action
 	void removeKey(const sf::Keyboard::Key& t_key); // Removes the key
-	bool checkMatch(const PressedKeys& t_pressedKeys)const;
+	bool checkMatch(const KeySet& t_pressedKeys)const;
 };
 
 #endif // !BOUND_KEYS_H
