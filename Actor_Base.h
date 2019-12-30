@@ -1,11 +1,11 @@
 #ifndef ACTOR_BASE_H
 #define ACTOR_BASE_H
 
-#include <map>
+#include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include "ActorComponent.h"
 
-using ActorComponents = std::map<ActorComponentType, std::unique_ptr<ActorComponent>>;
+using ActorComponents = std::unordered_map<ActorComponentType, std::unique_ptr<ActorComponent>>;
 
 class Actor_Base {
 
@@ -33,6 +33,9 @@ public:
 	virtual void clear();
 
 protected:
+	ActorComponent* seeComponent(const ActorComponentType& t_componentType);
+	const ActorComponent* seeComponent(const ActorComponentType& t_componentType)const;
+
 	sf::Vector2f m_position;
 	float m_rotation; // [0 360) 
 	ActorComponents m_components;

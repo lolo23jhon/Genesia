@@ -42,6 +42,7 @@
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h" />
     <ClInclude Include="EngineTypes.h" />
+    <ClInclude Include="Model_2D.h" />
     <ClInclude Include="PreprocessorDirectves.h" />
     <ClInclude Include="ResourceHolder.hpp" />
     <ClInclude Include="TileMap.h" />

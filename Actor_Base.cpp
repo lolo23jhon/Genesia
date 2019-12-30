@@ -122,3 +122,17 @@ void Actor_Base::swapComponent(const ActorComponentType& t_componentType, Actor_
 		t_act1->insertComponent(t_componentType, std::move(act2_comp));
 	}
 }
+
+////////////////////////////////////////////////////////////
+ActorComponent* Actor_Base::seeComponent(const ActorComponentType& t_componentType) {
+	auto it{m_components.find(t_componentType)};
+	if (it == m_components.end()) { return nullptr; }
+	return it->second.get();
+}
+
+////////////////////////////////////////////////////////////
+const ActorComponent* Actor_Base::seeComponent(const ActorComponentType& t_componentType)const {
+	auto it{ m_components.find(t_componentType) };
+	if (it == m_components.cend()) { return nullptr; }
+	return it->second.get();
+}

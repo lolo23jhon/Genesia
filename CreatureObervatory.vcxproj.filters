@@ -40,6 +40,9 @@
     <Filter Include="src\ResourceSystem">
       <UniqueIdentifier>{cec20198-e6dd-493e-acfe-3521ed1f160d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ActorSystem\Components">
+      <UniqueIdentifier>{dde9cfc1-4d61-4c6b-a9e7-af7284314a4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="ActorComponent.h">
       <Filter>src\ActorSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_2D.h">
+      <Filter>src\ActorSystem\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

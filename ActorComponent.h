@@ -4,9 +4,9 @@
 class Actor_Base;
 
 enum class ActorComponentType {
-	Hitbox,
+	BoundingBox,
 	Ai,
-	Sprite,
+	Model_2D,
 	Text
 };
 
@@ -14,6 +14,7 @@ enum class ActorComponentType {
 class ActorComponent {
 
 public:
+	ActorComponent();
 	void setIsDrawn(const bool& t_idDrawn);
 	const bool& isDrawn()const;
 

@@ -1,7 +1,10 @@
 #include "ActorComponent.h"
 
 ////////////////////////////////////////////////////////////
-void ActorComponent::setIsDrawn(const bool& t_idDrawn) { m_isDrawn = t_idDrawn; }
+ActorComponent::ActorComponent() : m_isDrawn{ true } {}
+
+////////////////////////////////////////////////////////////
+void ActorComponent::setIsDrawn(const bool& t_isDrawn) { m_isDrawn = t_isDrawn; }
 
 ////////////////////////////////////////////////////////////
 const bool& ActorComponent::isDrawn()const { return m_isDrawn; }
