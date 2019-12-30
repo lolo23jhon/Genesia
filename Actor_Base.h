@@ -3,9 +3,8 @@
 
 #include <map>
 #include <SFML/Graphics.hpp>
+#include "ActorComponent.h"
 
-class ActorComponent;
-enum class ActorComponentType;
 using ActorComponents = std::map<ActorComponentType, std::unique_ptr<ActorComponent>>;
 
 class Actor_Base {
@@ -27,9 +26,11 @@ public:
 	static void swapComponent(const ActorComponentType& t_componentType, Actor_Base* t_act1, Actor_Base* t_act2);
 	void purgeComponents();
 
-	virtual void draw() = 0;
-	virtual void update() = 0;
+	virtual void update();
+	virtual void reset();
 
+	virtual void draw();
+	virtual void clear();
 
 protected:
 	sf::Vector2f m_position;

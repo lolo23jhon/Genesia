@@ -81,6 +81,9 @@
     <ClCompile Include="Actor_Base.cpp">
       <Filter>src\ActorSystem</Filter>
     </ClCompile>
+    <ClCompile Include="ActorComponent.cpp">
+      <Filter>src\ActorSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">

@@ -2,6 +2,43 @@
 
 
 ////////////////////////////////////////////////////////////
+Actor_Base::Actor_Base(const sf::Vector2f& t_position, const float& t_rotationDeg) :
+	m_position{ t_position }, m_rotation{ t_rotationDeg }{}
+
+
+////////////////////////////////////////////////////////////
+void Actor_Base::update() {
+	for (auto& it : m_components) {
+		it.second->update(this);
+	}
+}
+
+////////////////////////////////////////////////////////////
+void Actor_Base::reset() {
+	for (auto& it : m_components) {
+		it.second->reset();
+	}
+}
+
+
+////////////////////////////////////////////////////////////
+void Actor_Base::clear() {
+	for (auto& it : m_components) {
+		it.second->clear();
+	}
+}
+
+
+////////////////////////////////////////////////////////////
+void Actor_Base::draw() {
+	for (auto& it : m_components) {
+		if (it.second->isDrawn()) {
+			it.second->draw();
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////
 const sf::Vector2f& Actor_Base::getPosition()const { return m_position; }
 
 ////////////////////////////////////////////////////////////
@@ -78,6 +115,10 @@ void Actor_Base::swapComponent(const ActorComponentType& t_componentType, Actor_
 	if (t_act1 == t_act2) { return; }
 	auto act1_comp{ t_act1->extractComponent(t_componentType) };
 	auto act2_comp{ t_act2->extractComponent(t_componentType) };
-	t_act1->insertComponent(t_componentType, std::move(act2_comp));
-	t_act2->insertComponent(t_componentType,std::move(act1_comp));
+	if (act1_comp) {
+		t_act2->insertComponent(t_componentType, std::move(act1_comp));
+	}
+	if (act2_comp) {
+		t_act1->insertComponent(t_componentType, std::move(act2_comp));
+	}
 }
