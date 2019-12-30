@@ -37,6 +37,9 @@
     <Filter Include="src\ActorSystem">
       <UniqueIdentifier>{b039cd95-3f31-45e1-891a-c78a27c435fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ResourceSystem">
+      <UniqueIdentifier>{cec20198-e6dd-493e-acfe-3521ed1f160d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>src\MapSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor_Base.cpp">
+      <Filter>src\ActorSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,8 +122,19 @@
     <ClInclude Include="TileMap.h">
       <Filter>src\MapSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Actor.h">
+    <ClInclude Include="ResourceHolder.hpp">
+      <Filter>src\ResourceSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor_Base.h">
       <Filter>src\ActorSystem</Filter>
     </ClInclude>
+    <ClInclude Include="ActorComponent.h">
+      <Filter>src\ActorSystem</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceHolder.inl">
+      <Filter>src\ResourceSystem</Filter>
+    </None>
   </ItemGroup>
 </Project>

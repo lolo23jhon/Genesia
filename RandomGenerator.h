@@ -32,9 +32,7 @@ public:
 	}
 
 	////////////////////////////////////////////////////////////
-	int operator()(int t_min, int t_max) {
-		return generate(t_min, t_max);
-	}
+	int operator()(int t_min, int t_max) { return generate(t_min, t_max); }
 
 
 
@@ -44,8 +42,8 @@ public:
 
 		if (t_min > t_max) { std::swap(t_min, t_max); };
 
-		if (t_min != m_intDistribution.min() || t_max != m_intDistribution.max()) {
-			m_intDistribution = std::uniform_int_distribution<float>(t_min, t_max);
+		if (t_min != m_floatDistribution.min() || t_max != m_floatDistribution.max()) {
+			m_floatDistribution = std::uniform_real_distribution<float>(t_min, t_max);
 		}
 
 		return m_intDistribution(m_engine);
@@ -53,10 +51,7 @@ public:
 
 
 	////////////////////////////////////////////////////////////
-	float operator()(float t_min, float t_max) {
-		return generate(t_min, t_max);
-	}
-
+	float operator()(float t_min, float t_max) { return generate(t_min, t_max); }
 
 };
 

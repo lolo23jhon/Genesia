@@ -99,6 +99,11 @@ void Engine::pollEvents() {
 
 }
 
+////////////////////////////////////////////////////////////
+float Engine::getRandom(const float& t_min, const float& t_max) { return m_rng(t_min, t_max); }
+
+////////////////////////////////////////////////////////////
+int Engine::getRandom(const int& t_min, const int& t_max) { return m_rng(t_min, t_max); }
 
 ////////////////////////////////////////////////////////////
 const sf::RenderWindow& Engine::getWindow()const {
@@ -255,18 +260,18 @@ std::unique_ptr<Action> Engine::createAction(const ActionId& t_id) {
 #if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
 #include <iostream>
 void Engine::Action_Pause(const EventInfo& t_info) { m_state = EngineState::Paused; std::cout << "> ACTION\tPause" << std::endl; }
-void Engine::Action_Unpause(const EventInfo& t_info) { m_state = EngineState::Running; std::cout <<"> ACTION\tUnpause" << std::endl; }
-void Engine::Action_MoveViewLeft(const EventInfo& t_info) { std::cout <<"> ACTION\tMoveViewLeft" << std::endl; }
-void Engine::Action_MoveViewRight(const EventInfo& t_info) { std::cout <<"> ACTION\tMoveViewRight" << std::endl; }
-void Engine::Action_MoveViewUp(const EventInfo& t_info) { std::cout <<"> ACTION\tMoveViewUp" << std::endl; }
-void Engine::Action_MoveViewDown(const EventInfo& t_info) { std::cout <<"> ACTION\tMoveViewDown" << std::endl; }
-void Engine::Action_ResetView(const EventInfo& t_info) { std::cout <<"> ACTION\tResetView" << std::endl; }
-void Engine::Action_ZoomIn(const EventInfo& t_info) { m_view.zoom(1.f + m_viewZoom); std::cout <<"> ACTION\tZoomIn" << std::endl; }
-void Engine::Action_ZoomOut(const EventInfo& t_info) { m_view.zoom(1.f - m_viewZoom); std::cout <<"> ACTION\tZoomOut" << std::endl; }
-void Engine::Action_ResetZoom(const EventInfo& t_info) { resetView(); std::cout <<"> ACTION\tResetZoom" << std::endl; }
-void Engine::Action_Save(const EventInfo& t_info) { std::cout <<"> ACTION\tSave" << std::endl; }
-void Engine::Action_Quit(const EventInfo& t_info) { std::cout <<"> ACTION\tQuit" << std::endl; }
-void Engine::Action_INVALID_ACTION(const EventInfo& t_info) { std::cout <<"> ACTION\tINVALID_ACTION" << std::endl; }
+void Engine::Action_Unpause(const EventInfo& t_info) { m_state = EngineState::Running; std::cout << "> ACTION\tUnpause" << std::endl; }
+void Engine::Action_MoveViewLeft(const EventInfo& t_info) { std::cout << "> ACTION\tMoveViewLeft" << std::endl; }
+void Engine::Action_MoveViewRight(const EventInfo& t_info) { std::cout << "> ACTION\tMoveViewRight" << std::endl; }
+void Engine::Action_MoveViewUp(const EventInfo& t_info) { std::cout << "> ACTION\tMoveViewUp" << std::endl; }
+void Engine::Action_MoveViewDown(const EventInfo& t_info) { std::cout << "> ACTION\tMoveViewDown" << std::endl; }
+void Engine::Action_ResetView(const EventInfo& t_info) { std::cout << "> ACTION\tResetView" << std::endl; }
+void Engine::Action_ZoomIn(const EventInfo& t_info) { m_view.zoom(1.f + m_viewZoom); std::cout << "> ACTION\tZoomIn" << std::endl; }
+void Engine::Action_ZoomOut(const EventInfo& t_info) { m_view.zoom(1.f - m_viewZoom); std::cout << "> ACTION\tZoomOut" << std::endl; }
+void Engine::Action_ResetZoom(const EventInfo& t_info) { resetView(); std::cout << "> ACTION\tResetZoom" << std::endl; }
+void Engine::Action_Save(const EventInfo& t_info) { std::cout << "> ACTION\tSave" << std::endl; }
+void Engine::Action_Quit(const EventInfo& t_info) { std::cout << "> ACTION\tQuit" << std::endl; }
+void Engine::Action_INVALID_ACTION(const EventInfo& t_info) { std::cout << "> ACTION\tINVALID_ACTION" << std::endl; }
 
 #else
 

@@ -11,6 +11,7 @@
 #include "Actor.h"
 #include "EngineTypes.h"
 #include "EventHandler.h"
+#include "RandomGenerator.h"
 
 using Actors = std::vector<std::unique_ptr<Actor>>; // contains all the actors in the current simulation
 using StateNames = std::map<std::string, EngineState>;
@@ -40,6 +41,8 @@ private:
 	Keyboard m_keyboard;
 
 	EventHandler m_eventHandler;
+	
+	RandomGenerator m_rng;
 
 	static const ActionFactory s_actions;
 	static const StateNames s_stateNames; // Map for engine states string names and ids
@@ -55,6 +58,8 @@ private:
 
 public:
 	// View change settings
+	float getRandom(const float& t_min, const float& t_max);
+	int getRandom(const int& t_min, const int& t_max);
 	float getViewChangeSpeed()const;
 	void setViewChangeSpeed(const float& t_speed);
 	float getZoom()const;
