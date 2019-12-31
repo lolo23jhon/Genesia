@@ -13,18 +13,16 @@ enum class ActorComponentType {
 };
 
 
-
 class ActorComponent_Base {
 public:
-	virtual void update(Actor_Base* t_owner) {}; // Update any functionality
-	virtual void reset(Actor_Base* t_owner) {};	// General reset; optional
-
-	virtual void draw(Actor_Base* t_owner) {}; // Draw on screen command
-	virtual void clear(Actor_Base* t_owner) {}; // Clear from screen
+	virtual void update(Actor_Base* t_owner) = 0; // Update any functionality
+	virtual void reset(Actor_Base* t_owner)	 = 0; // General reset; optional
+	virtual void draw(Actor_Base* t_owner)   = 0; // Draw on screen command
 
 	static bool isComponentDrawable(const ActorComponentType& t_componentId);
 
 };
+
 
 class ActorComponent_Drawable : public ActorComponent_Base {
 
@@ -50,9 +48,7 @@ public:
 
 	void update(Actor_Base* t_owner) {};
 	void reset(Actor_Base* t_owner) {};
-
 	void draw(Actor_Base* t_owner) {};
-	void clear(Actor_Base* t_owner) {};
 };
 
 #endif // !ACTOR_COMPONENT_BASE_H

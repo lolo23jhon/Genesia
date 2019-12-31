@@ -106,7 +106,7 @@ float Engine::getRandom(const float& t_min, const float& t_max) { return m_rng(t
 int Engine::getRandom(const int& t_min, const int& t_max) { return m_rng(t_min, t_max); }
 
 ////////////////////////////////////////////////////////////
-const sf::RenderWindow& Engine::getWindow()const {
+sf::RenderWindow& Engine::getWindow() {
 	return m_window;
 }
 

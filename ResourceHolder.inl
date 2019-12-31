@@ -40,7 +40,7 @@ const Resource& ResourceHolder<Resource, Identifier>::get(Identifier t_id)const 
 }
 
 ////////////////////////////////////////////////////////////
-template <typename Resource, typenameIdentifier>
+template <typename Resource, typename Identifier>
 void ResourceHolder<Resource, Identifier>::insertResource(Identifier t_id, std::unique_ptr<Resource> t_resource) {
 	auto it{m_resources.insert(std::make_pair(t_id,std::move(t_resource)))};
 	assert(inserted.second);

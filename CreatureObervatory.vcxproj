@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.cpp" />
     <ClCompile Include="ActorComponent.cpp" />
+    <ClCompile Include="ActorComponent_Sprite.cpp" />
     <ClCompile Include="Actor_Base.cpp" />
     <ClCompile Include="BoundKeys.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp" />
@@ -36,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorComponent.h" />
+    <ClInclude Include="ActorFactory.h" />
     <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h" />
     <ClInclude Include="BoundKeys.h" />
@@ -46,6 +48,7 @@
     <ClInclude Include="ActorComponent_Sprite.h" />
     <ClInclude Include="PreprocessorDirectves.h" />
     <ClInclude Include="ResourceHolder.hpp" />
+    <ClInclude Include="SharedContext.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.h" />

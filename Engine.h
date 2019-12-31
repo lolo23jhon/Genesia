@@ -8,12 +8,12 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Keyboard.h"
-#include "Actor.h"
+#include "Actor_Base.h"
 #include "EngineTypes.h"
 #include "EventHandler.h"
 #include "RandomGenerator.h"
 
-using Actors = std::vector<std::unique_ptr<Actor>>; // contains all the actors in the current simulation
+using Actors = std::vector<std::unique_ptr<Actor_Base>>; // contains all the actors in the current simulation
 using StateNames = std::map<std::string, EngineState>;
 struct EventInfo;
 
@@ -69,7 +69,7 @@ public:
 	sf::Time getElapsed()const;
 	void resetView();
 
-	const sf::RenderWindow& getWindow()const;
+	sf::RenderWindow& getWindow();
 	const EngineState& getState()const;
 
 	void pollEvents();

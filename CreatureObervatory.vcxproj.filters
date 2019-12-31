@@ -87,6 +87,9 @@
     <ClCompile Include="ActorComponent.cpp">
       <Filter>src\ActorSystem</Filter>
     </ClCompile>
+    <ClCompile Include="ActorComponent_Sprite.cpp">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">
@@ -142,6 +145,12 @@
     </ClInclude>
     <ClInclude Include="ActorComponent_Sprite.h">
       <Filter>src\ActorSystem\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorFactory.h">
+      <Filter>src\ActorSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedContext.h">
+      <Filter>src\EngineSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

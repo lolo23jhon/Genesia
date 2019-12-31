@@ -3,11 +3,15 @@
 
 
 ////////////////////////////////////////////////////////////
-Actor_Base::Actor_Base(const sf::Vector2f& t_position, const float& t_rotationDeg) :
-	m_position{ t_position }, m_rotation{ t_rotationDeg }
+Actor_Base::Actor_Base(const SharedContext& t_context,const sf::Vector2f& t_position, const float& t_rotationDeg) :
+	m_context{t_context}, m_position{ t_position }, m_rotation{ t_rotationDeg }
 {
 	init();
 }
+
+////////////////////////////////////////////////////////////
+SharedContext& Actor_Base::getContext() { return m_context; }
+
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::init() {
@@ -36,15 +40,6 @@ void Actor_Base::reset() {
 		it.second->reset(this);
 	}
 }
-
-
-////////////////////////////////////////////////////////////
-void Actor_Base::clear() {
-	for (auto& it : m_drawables) {
-		it->clear(this);
-	}
-}
-
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::draw() {

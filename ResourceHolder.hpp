@@ -22,8 +22,8 @@ public:
 
 	Resource& get(Identifier t_id);
 	const Resource& get(Identifier t_id)const;
-	   
 
+	void insertResource(Identifier t_id, std::unique_ptr<Resource> t_resource);   
 
 };
 
