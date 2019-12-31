@@ -1,10 +1,27 @@
+#include "MathHelpers.hpp"
 #include "Actor_Base.h"
 
 
 ////////////////////////////////////////////////////////////
 Actor_Base::Actor_Base(const sf::Vector2f& t_position, const float& t_rotationDeg) :
-	m_position{ t_position }, m_rotation{ t_rotationDeg }{}
+	m_position{ t_position }, m_rotation{ t_rotationDeg }
+{
+	init();
+}
 
+////////////////////////////////////////////////////////////
+void Actor_Base::init() {
+
+	// <-- TODO: Solve component initiliazation
+
+	// Put all drawable components in the drawing deque
+	if (!m_drawables.empty()) { m_drawables.clear(); }
+	for (auto& comp : m_components) {
+		if (ActorComponent_Base::isComponentDrawable(comp.first)) {
+			m_drawables.push_back(dynamic_cast<ActorComponent_Drawable*>(comp.second.get()));
+		}
+	}
+}
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::update() {
@@ -16,25 +33,23 @@ void Actor_Base::update() {
 ////////////////////////////////////////////////////////////
 void Actor_Base::reset() {
 	for (auto& it : m_components) {
-		it.second->reset();
+		it.second->reset(this);
 	}
 }
 
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::clear() {
-	for (auto& it : m_components) {
-		it.second->clear();
+	for (auto& it : m_drawables) {
+		it->clear(this);
 	}
 }
 
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::draw() {
-	for (auto& it : m_components) {
-		if (it.second->isDrawn()) {
-			it.second->draw();
-		}
+	for (auto& it : m_drawables) {
+		if (it->getVisibility()) { it->draw(this); }
 	}
 }
 
@@ -49,17 +64,12 @@ void Actor_Base::setPosition(const float& t_x, const float& t_y) { m_position.x 
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::setRotation(const float& t_r) {
-	m_rotation = fmod(t_r, 360);
-	if (m_rotation < 0) { m_rotation += 360; }
+	m_rotation = mat::normalizeAngle(t_r);
 }
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::rotate(const float& t_dr) {
-	m_rotation += t_dr;
-	if (m_rotation < 0 || m_rotation >= 360) {
-		m_rotation = fmod(m_rotation, 360);
-		if (m_rotation < 0) { m_rotation += 360; }
-	}
+	m_rotation = mat::normalizeAngle(m_rotation + t_dr);
 }
 
 ////////////////////////////////////////////////////////////
@@ -67,13 +77,13 @@ void Actor_Base::incrementPosition(const float& t_dx, const float& t_dy) { m_pos
 
 
 ////////////////////////////////////////////////////////////
-bool Actor_Base::insertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent> t_component) {
+bool Actor_Base::insertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component) {
 	auto it{ m_components.emplace(t_componentType,std::move(t_component)) };
 	return it.second;
 }
 
 ////////////////////////////////////////////////////////////
-void Actor_Base::forceInsertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent> t_component) {
+void Actor_Base::forceInsertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component) {
 	auto it{ m_components.find(t_componentType) };
 	if (it == m_components.end()) {
 		it->second = std::move(t_component);
@@ -102,7 +112,7 @@ void Actor_Base::purgeComponents() {
 }
 
 ////////////////////////////////////////////////////////////
-std::unique_ptr<ActorComponent> Actor_Base::extractComponent(const ActorComponentType& t_componentType) {
+std::unique_ptr<ActorComponent_Base> Actor_Base::extractComponent(const ActorComponentType& t_componentType) {
 	auto it{ m_components.find(t_componentType) };
 	if (it == m_components.end()) { return nullptr; }
 	auto component{ std::move(it->second) };
@@ -124,15 +134,34 @@ void Actor_Base::swapComponent(const ActorComponentType& t_componentType, Actor_
 }
 
 ////////////////////////////////////////////////////////////
-ActorComponent* Actor_Base::seeComponent(const ActorComponentType& t_componentType) {
-	auto it{m_components.find(t_componentType)};
+ActorComponent_Base* Actor_Base::seeComponent(const ActorComponentType& t_componentType) {
+	auto it{ m_components.find(t_componentType) };
 	if (it == m_components.end()) { return nullptr; }
 	return it->second.get();
 }
 
 ////////////////////////////////////////////////////////////
-const ActorComponent* Actor_Base::seeComponent(const ActorComponentType& t_componentType)const {
+const ActorComponent_Base* Actor_Base::seeComponent(const ActorComponentType& t_componentType)const {
 	auto it{ m_components.find(t_componentType) };
 	if (it == m_components.cend()) { return nullptr; }
 	return it->second.get();
+}
+
+////////////////////////////////////////////////////////////
+void Actor_Base::sendDrawableToFront(const ActorComponent_Drawable* t_component) {
+	if (!t_component) { return; }
+	auto it{ std::find_if(m_drawables.begin(), m_drawables.end(),
+		[&t_component](const ActorComponent_Drawable* t_ptr) {return t_ptr == t_component; }) };
+	auto tmp_ptr{ *it };
+	m_drawables.erase(it);
+	m_drawables.push_front(tmp_ptr);
+}
+
+void Actor_Base::sendDrawableToBack(const ActorComponent_Drawable* t_component) {
+	if (!t_component) { return; }
+	auto it{ std::find_if(m_drawables.begin(), m_drawables.end(),
+		[&t_component](const ActorComponent_Drawable* t_ptr) {return t_ptr == t_component; }) };
+	auto tmp_ptr{ *it };
+	m_drawables.erase(it);
+	m_drawables.push_back(tmp_ptr);
 }

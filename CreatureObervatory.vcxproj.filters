@@ -137,7 +137,10 @@
     <ClInclude Include="ActorComponent.h">
       <Filter>src\ActorSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Model_2D.h">
+    <ClInclude Include="MathHelpers.hpp">
+      <Filter>src\Utitlities</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Sprite.h">
       <Filter>src\ActorSystem\Components</Filter>
     </ClInclude>
   </ItemGroup>
