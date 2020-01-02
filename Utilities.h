@@ -10,22 +10,25 @@
 #include <vector>
 #include <SFML/Graphics/Text.hpp>
 
-
-namespace utilities {
-#if defined(WIN32) || defined(_WIN32) || defined (__WIN32) && !defined(__CYGWIN__)
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
 #include <Windows.h>
-#include <Shlwapi.h>
+#include <pathcch.h>
+
+#endif // WINDOWS 
+
+namespace utilities {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 
 	////////////////////////////////////////////////////////////
 	inline std::string getWorkingDirectory() {
-		HMODULE hModule{ DrvGetModuleHandle(nullptr) };
-		if (!hModule) { return ""; }
-		char path[256];
-		GetModuleFileName(hModule, path, sizeof(path));
-		PathRemoveFileSpec(path);
-		return std::move(std::string(path) + "\\");
+		char buff[MAX_PATH];
+		GetModuleFileName(NULL, buff, MAX_PATH);
+		std::string path{ buff };
+		path = path.substr(0, path.find_last_of('\\') + 1);
+		return std::move(path);
 	}
+
 
 	////////////////////////////////////////////////////////////
 	inline std::vector<std::pair<std::string, bool>> getFileList(const std::string& t_directory, const std::string& t_search = "*.*", bool t_directories = false) {

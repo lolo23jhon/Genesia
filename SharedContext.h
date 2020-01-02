@@ -8,18 +8,25 @@ class Engine;
 class sf::RenderWindow;
 class RandomGenerator;
 class ResourceHolder;
-
 struct SharedContext {
 
 	sf::RenderWindow& m_window;
 	Engine& m_engine;
 	RandomGenerator& m_rng;
 	ResourceHolder& m_resourceHolder;
-	
-	////////////////////////////////////////////////////////////
-	SharedContext(sf::RenderWindow& t_window, Engine& t_engine, RandomGenerator& t_rng, ResourceHolder& t_resourceHolder) :
-		m_window{ t_window }, m_engine{ t_engine }, m_rng{ t_rng }, m_resourceHolder{ t_resourceHolder }{}
 
+	////////////////////////////////////////////////////////////
+	SharedContext(
+		sf::RenderWindow& t_window,
+		Engine& t_engine,
+		RandomGenerator& t_rng,
+		ResourceHolder& t_resourceHolder):
+		m_window{ t_window },
+		m_engine{ t_engine },
+		m_rng{ t_rng },
+		m_resourceHolder{t_resourceHolder}
+	{
+	}
 };
 
 #endif // !SHARED_CONTEXT_H

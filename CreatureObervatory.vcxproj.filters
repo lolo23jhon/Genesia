@@ -37,11 +37,11 @@
     <Filter Include="src\ActorSystem">
       <UniqueIdentifier>{b039cd95-3f31-45e1-891a-c78a27c435fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\ResourceSystem">
-      <UniqueIdentifier>{cec20198-e6dd-493e-acfe-3521ed1f160d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\ActorSystem\Components">
       <UniqueIdentifier>{dde9cfc1-4d61-4c6b-a9e7-af7284314a4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Resources">
+      <UniqueIdentifier>{d0eb4f77-401c-4c35-8283-ebb1842018fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +90,12 @@
     <ClCompile Include="ActorComponent_Sprite.cpp">
       <Filter>src\ActorSystem\Components</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceHolder.cpp">
+      <Filter>src\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="MathHelpers.cpp">
+      <Filter>src\Utitlities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">
@@ -131,17 +137,11 @@
     <ClInclude Include="TileMap.h">
       <Filter>src\MapSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceHolder.hpp">
-      <Filter>src\ResourceSystem</Filter>
-    </ClInclude>
     <ClInclude Include="Actor_Base.h">
       <Filter>src\ActorSystem</Filter>
     </ClInclude>
     <ClInclude Include="ActorComponent.h">
       <Filter>src\ActorSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="MathHelpers.hpp">
-      <Filter>src\Utitlities</Filter>
     </ClInclude>
     <ClInclude Include="ActorComponent_Sprite.h">
       <Filter>src\ActorSystem\Components</Filter>
@@ -152,10 +152,11 @@
     <ClInclude Include="SharedContext.h">
       <Filter>src\EngineSystem</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ResourceHolder.inl">
-      <Filter>src\ResourceSystem</Filter>
-    </None>
+    <ClInclude Include="ResourceHolder.h">
+      <Filter>src\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelpers.h">
+      <Filter>src\Utitlities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

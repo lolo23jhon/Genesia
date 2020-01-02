@@ -1,14 +1,17 @@
 #include "ActorComponent_Sprite.h"
 #include "Actor_Base.h"
-#include "MathHelpers.hpp"
-#include "ResourceHolder.hpp"
+#include "ResourceHolder.h"
+#include "MathHelpers.h"
 
 
 ////////////////////////////////////////////////////////////
-ActorComponent_Sprite::ActorComponent_Sprite(Actor_Base* t_owner, const std::string& t_spriteIdentifier) : ActorComponent_Drawable(){
+ActorComponent_Sprite::ActorComponent_Sprite(Actor_Base* t_owner, const std::string& t_texture, const sf::IntRect& t_spriteRect) :
+	ActorComponent_Drawable(), m_texture{t_texture}
+{	
+	Resource* resource{ t_owner->getContext().m_resourceHolder.getResource(ResourceType::Texture, t_texture) };
 	
-	m_sprite =
-	t_owner->getContext().m_resourceHolder.
+	m_sprite.setTexture(std::get<sf::Texture>(*resource));
+	m_sprite.setTextureRect(t_spriteRect);
 }
 
 

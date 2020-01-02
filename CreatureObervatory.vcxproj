@@ -27,6 +27,8 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp" />
     <ClCompile Include="dep_main.cpp" />
+    <ClCompile Include="MathHelpers.cpp" />
+    <ClCompile Include="ResourceHolder.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.cpp" />
@@ -44,10 +46,10 @@
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h" />
     <ClInclude Include="EngineTypes.h" />
-    <ClInclude Include="MathHelpers.hpp" />
+    <ClInclude Include="MathHelpers.h" />
     <ClInclude Include="ActorComponent_Sprite.h" />
     <ClInclude Include="PreprocessorDirectves.h" />
-    <ClInclude Include="ResourceHolder.hpp" />
+    <ClInclude Include="ResourceHolder.h" />
     <ClInclude Include="SharedContext.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h" />
@@ -56,9 +58,6 @@
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\RandomGenerator.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Utilities.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ResourceHolder.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -139,6 +138,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

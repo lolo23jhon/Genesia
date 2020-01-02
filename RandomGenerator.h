@@ -46,7 +46,7 @@ public:
 			m_floatDistribution = std::uniform_real_distribution<float>(t_min, t_max);
 		}
 
-		return m_intDistribution(m_engine);
+		return m_floatDistribution(m_engine);
 	}
 
 

@@ -1,14 +1,11 @@
-#ifndef MATH_HELPERS_HPP
-#define MATH_HEMPLERS_HPP
-
 #include <cmath>
 #include <SFML/System/Vector2.hpp>
 
 namespace mat {
 
-	constexpr float TO_DEGREES{ 57.2957795 };
-	constexpr float TO_RADIANS{ 0.0174533 };
-	constexpr float PI{ 3.1415926 };
+	constexpr float TO_DEGREES{ 57.2957795f };
+	constexpr float TO_RADIANS{ 0.0174533f };
+	constexpr float PI{ 3.1415926f };
 
 
 	////////////////////////////////////////////////////////////
@@ -50,7 +47,7 @@ namespace mat {
 
 	////////////////////////////////////////////////////////////
 	template <typename T>
-	float vec2d_magnitude(const sf::Vector2<T> t_vec) { return std::sqrtf(t_vec.x * t_vec.x + t_vec.y * t_vec.y) }
+	float vec2d_magnitude(const sf::Vector2<T> t_vec) { return std::sqrtf(t_vec.x * t_vec.x + t_vec.y * t_vec.y); }
 
 	////////////////////////////////////////////////////////////
 	void vec2d_unitary(const float& t_i, const float& t_j, float& t_out_i, float& t_out_j) {
@@ -140,5 +137,3 @@ namespace mat {
 	}
 
 }
-
-#endif // !MATH_HELPERS_H

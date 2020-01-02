@@ -1,6 +1,6 @@
 #include "ActorComponent.h"
 #include "Actor_Base.h"
-#include "MathHelpers.hpp"
+#include "MathHelpers.h"
 
 ////////////////////////////////////////////////////////////
 bool ActorComponent_Base::isComponentDrawable(const ActorComponentType& t_componentId) {
@@ -10,6 +10,7 @@ bool ActorComponent_Base::isComponentDrawable(const ActorComponentType& t_compon
 	case ActorComponentType::Box:
 	case ActorComponentType::Sprite:
 	case ActorComponentType::Text:
+	default:
 		return true;
 	}
 }

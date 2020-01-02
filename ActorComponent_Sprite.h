@@ -9,9 +9,14 @@ class ActorComponent_Sprite : public ActorComponent_Drawable {
 
 protected:
 
-	sf::Sprite m_sprite;
+	std::string m_texture;
+	sf::Sprite m_sprite; // Non data-owning pointer
 
-	ActorComponent_Sprite(Actor_Base* t_owner, const std::string& t_spriteIdentifier);
+	ActorComponent_Sprite(Actor_Base* t_owner, const std::string& t_texture, const sf::IntRect& t_spriteRect = sf::IntRect()); // Take a region of the texture to make the sprite
+
+	const std::string& getTexture()const;
+	void setSprite(Actor_Base* t_owner, const std::string& t_texture); 
+	void setSprite(Actor_Base* t_owner, const std::string& t_texture, const sf::IntRect& t_spriteRect); 
 
 	void update(Actor_Base* t_owner); // Update any functionality
 	void reset(Actor_Base* t_owner);	// General reset; optional
