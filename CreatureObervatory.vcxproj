@@ -20,7 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.cpp" />
-    <ClCompile Include="ActorComponent.cpp" />
+    <ClCompile Include="ActorComponenet_Drawable.cpp" />
+    <ClCompile Include="ActorComponent_Base.cpp" />
     <ClCompile Include="ActorComponent_Sprite.cpp" />
     <ClCompile Include="Actor_Base.cpp" />
     <ClCompile Include="BoundKeys.cpp" />
@@ -38,7 +39,8 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActorComponent.h" />
+    <ClInclude Include="ActorComponent_Base.h" />
+    <ClInclude Include="ActorComponent_Drawable.h" />
     <ClInclude Include="ActorFactory.h" />
     <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h" />

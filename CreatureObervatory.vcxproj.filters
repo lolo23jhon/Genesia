@@ -84,9 +84,6 @@
     <ClCompile Include="Actor_Base.cpp">
       <Filter>src\ActorSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ActorComponent.cpp">
-      <Filter>src\ActorSystem</Filter>
-    </ClCompile>
     <ClCompile Include="ActorComponent_Sprite.cpp">
       <Filter>src\ActorSystem\Components</Filter>
     </ClCompile>
@@ -95,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="MathHelpers.cpp">
       <Filter>src\Utitlities</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Base.cpp">
+      <Filter>src\ActorSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponenet_Drawable.cpp">
+      <Filter>src\ActorSystem\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +143,6 @@
     <ClInclude Include="Actor_Base.h">
       <Filter>src\ActorSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ActorComponent.h">
-      <Filter>src\ActorSystem</Filter>
-    </ClInclude>
     <ClInclude Include="ActorComponent_Sprite.h">
       <Filter>src\ActorSystem\Components</Filter>
     </ClInclude>
@@ -157,6 +157,12 @@
     </ClInclude>
     <ClInclude Include="MathHelpers.h">
       <Filter>src\Utitlities</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Base.h">
+      <Filter>src\ActorSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Drawable.h">
+      <Filter>src\ActorSystem\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

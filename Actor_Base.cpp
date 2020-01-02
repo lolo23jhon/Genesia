@@ -1,4 +1,6 @@
 #include "Actor_Base.h"
+#include "ActorComponent_Base.h"
+#include "ActorComponent_Drawable.h"
 #include "MathHelpers.h"
 
 

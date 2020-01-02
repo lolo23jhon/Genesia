@@ -1,0 +1,1 @@
+RESOURCE Texture Texture_TriangleActorCyan triangle_actor_cyan.png

@@ -4,11 +4,12 @@
 #include <unordered_map>
 #include <queue>
 #include <SFML/Graphics.hpp>
-#include "ActorComponent.h"
+#include "ActorComponent_Base.h"
+#include "ActorComponent_Drawable.h"
 #include "SharedContext.h"
 
 using ActorComponents = std::unordered_map<ActorComponentType, std::unique_ptr<ActorComponent_Base>>;
-using DrawableComponents = std::deque<ActorComponent_Drawable*>; 
+using DrawableComponents = std::deque<ActorComponent_Drawable*>;
 
 enum class OriginSetting {
 	TopRightCorner,
@@ -25,7 +26,7 @@ public:
 	bool hasComponent(const ActorComponentType& t_componentType)const;
 
 private:
-	Actor_Base(const SharedContext & t_context,const sf::Vector2f& t_position, const float& t_rotationDeg);
+	Actor_Base(const SharedContext& t_context, const sf::Vector2f& t_position, const float& t_rotationDeg);
 	void init();
 	void setPosition(const float& t_x, const float& t_y);
 	void setRotation(const float& t_r);
