@@ -23,14 +23,15 @@ ResourceType ResourceHolder::resourceTypeStrToId(const std::string& t_str) {
 }
 
 ////////////////////////////////////////////////////////////
-ResourceHolder::ResourceHolder() : m_workingDirPath{ utilities::getWorkingDirectory() } {}
+ResourceHolder::ResourceHolder() : m_workingDirPath{ utilities::getWorkingDirectory() }, m_mutex{}{}
 
 
 ////////////////////////////////////////////////////////////
 bool ResourceHolder::loadResources(const std::string& t_cfgFile, const std::string& t_resourceIdentifier) {
+	sf::Lock lock{ m_mutex };
 	std::stringstream stream;
 	const std::string cfg_fullFileNaname{ m_workingDirPath + t_cfgFile };
-	if (!utilities::readFile(cfg_fullFileNaname, stream, true)) {return false; }
+	if (!utilities::readFile(cfg_fullFileNaname, stream, true)) { return false; }
 	std::string token;
 	while (stream >> token) { // Read command idenfitier ("RESOURCE", unless made otherwise)
 		if (token == t_resourceIdentifier) {
@@ -49,7 +50,7 @@ bool ResourceHolder::loadResources(const std::string& t_cfgFile, const std::stri
 			std::string res_fullFileName{ m_workingDirPath + fileName };
 			if (!loadResource(resourceType, resName, res_fullFileName)) {
 				std::string msg{ resourceTypeIdToStr(resourceType) };
-				std::cerr << "@ ERROR: Failed to load " << (msg.empty() ? "resource" : msg) << "from file \""<< res_fullFileName <<'\"' << std::endl;
+				std::cerr << "@ ERROR: Failed to load " << (msg.empty() ? "resource" : msg) << "from file \"" << res_fullFileName << '\"' << std::endl;
 				continue;
 			}
 		}
@@ -62,7 +63,7 @@ bool ResourceHolder::loadResources(const std::string& t_cfgFile, const std::stri
 
 ////////////////////////////////////////////////////////////
 bool ResourceHolder::loadResource(const ResourceType& t_type, const std::string& t_resourceName, const std::string& t_fileNameWithPath) {
-
+	sf::Lock lock{ m_mutex };
 	auto resource{ std::make_unique<Resource>() };
 	bool load_result{ false };
 
@@ -110,6 +111,7 @@ bool ResourceHolder::loadResource(const ResourceType& t_type, const std::string&
 
 ////////////////////////////////////////////////////////////
 void ResourceHolder::releaseResource(const ResourceType& t_type, const std::string& t_resourceName) {
+	sf::Lock lock{ m_mutex };
 	auto type_it{ m_resources.find(t_type) };
 	if (type_it == m_resources.end()) { return; }
 	auto str_it{ type_it->second.find(t_resourceName) };
@@ -128,4 +130,7 @@ Resource* ResourceHolder::getResource(const ResourceType& t_type, const std::str
 
 
 ////////////////////////////////////////////////////////////
-void ResourceHolder::purgeResources() { m_resources.clear(); }
+void ResourceHolder::purgeResources() {
+	sf::Lock lock{ m_mutex };
+	m_resources.clear();
+}

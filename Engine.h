@@ -12,6 +12,7 @@
 #include "EngineTypes.h"
 #include "EventHandler.h"
 #include "RandomGenerator.h"
+#include "ActorFactory.h"
 
 using Actors = std::vector<std::unique_ptr<Actor_Base>>; // contains all the actors in the current simulation
 using StateNames = std::map<std::string, EngineState>;
@@ -30,6 +31,7 @@ private:
 	unsigned m_fpsLimit;
 
 	Actors  m_actors;
+	ActorFactory m_actorFactory;
 
 	float m_viewSpeed;
 	float m_viewZoom;

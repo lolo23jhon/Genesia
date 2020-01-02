@@ -2,6 +2,7 @@
 #define UTILITIES_H
 
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -26,6 +27,7 @@ namespace utilities {
 		GetModuleFileName(NULL, buff, MAX_PATH);
 		std::string path{ buff };
 		path = path.substr(0, path.find_last_of('\\') + 1);
+		assert(!path.empty() && "utilities::getWorkingDirectory: Returned empty string as path.");
 		return std::move(path);
 	}
 

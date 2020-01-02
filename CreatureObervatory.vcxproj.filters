@@ -43,6 +43,9 @@
     <Filter Include="src\Resources">
       <UniqueIdentifier>{d0eb4f77-401c-4c35-8283-ebb1842018fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ActorSystem\ActorPresets">
+      <UniqueIdentifier>{617ee1e0-66ef-4652-afd2-471607c70f79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -98,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="ActorComponenet_Drawable.cpp">
       <Filter>src\ActorSystem\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorFactory.cpp">
+      <Filter>src\ActorSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +168,15 @@
       <Filter>src\ActorSystem</Filter>
     </ClInclude>
     <ClInclude Include="ActorComponent_Drawable.h">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Collidable.h">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Ai.h">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Text.h">
       <Filter>src\ActorSystem\Components</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,7 +5,6 @@
 #include <queue>
 #include <SFML/Graphics.hpp>
 #include "ActorComponent_Base.h"
-#include "ActorComponent_Drawable.h"
 #include "SharedContext.h"
 
 using ActorComponents = std::unordered_map<ActorComponentType, std::unique_ptr<ActorComponent_Base>>;
@@ -19,6 +18,8 @@ enum class OriginSetting {
 
 class Actor_Base {
 	friend class Engine;
+	friend class ActorFactory;
+
 public:
 	SharedContext& getContext();
 	const sf::Vector2f& getPosition()const;

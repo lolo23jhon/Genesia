@@ -23,6 +23,7 @@
     <ClCompile Include="ActorComponenet_Drawable.cpp" />
     <ClCompile Include="ActorComponent_Base.cpp" />
     <ClCompile Include="ActorComponent_Sprite.cpp" />
+    <ClCompile Include="ActorFactory.cpp" />
     <ClCompile Include="Actor_Base.cpp" />
     <ClCompile Include="BoundKeys.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp" />
@@ -39,8 +40,11 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActorComponent_Ai.h" />
     <ClInclude Include="ActorComponent_Base.h" />
+    <ClInclude Include="ActorComponent_Collidable.h" />
     <ClInclude Include="ActorComponent_Drawable.h" />
+    <ClInclude Include="ActorComponent_Text.h" />
     <ClInclude Include="ActorFactory.h" />
     <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h" />

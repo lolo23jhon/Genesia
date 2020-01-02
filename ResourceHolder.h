@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <variant>
 #include <SFML/System/Mutex.hpp>
+#include <SFML/System/Lock.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
@@ -28,6 +29,8 @@ class ResourceHolder {
 	std::string m_workingDirPath;
 	Resources m_resources;
 	static const ResourceTypeStrings s_resourceTypeStrings;
+
+	sf::Mutex m_mutex;
 
 public:
 	static const std::string& resourceTypeIdToStr(const ResourceType& t_id);
