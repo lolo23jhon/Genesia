@@ -9,7 +9,6 @@ class Scenario_Base {
 
 public:
 	Scenario_Base();
-	virtual ~Scenario_Base();
 	unsigned getMaxNumActors()const;
 	void setMaxNumActors(const unsigned& t_num);
 

@@ -28,7 +28,7 @@ class ActorFactory {
 
 public:
 	ActorFactory(const SharedContext& t_context);
-	std::unique_ptr<Actor_Base> create(); // Construction of actor and give ownership of it
+	ActorPtr create(); // Construction of actor and give ownership of it
 	ActorFactory& newActor();
 	ActorFactory& setPosition(const sf::Vector2f& t_position);
 	ActorFactory& setRotation(const float& t_rotationDeg);
@@ -38,6 +38,7 @@ public:
 	ActorFactory& newActorFromPreset(const std::string& t_presetName); // The preset must be previously created from the function save preset
 	ActorFactory& makeActorCopy(const ActorPtr& t_mold, ActorPtr& t_out_copy);
 	ActorFactory& makeActorCopies(const ActorPtr& t_mold, std::vector<ActorPtr>& t_out_copies, unsigned t_numCopies);
+	ActorFactory& loadPresetsFromFile(const std::string& t_fileName, const std::string& t_actorPresetIdentifier = "ACTOR_PRESET", const std::string& t_actorComponentIdentifier = "ACTOR_COMPONENT");
 	ActorFactory& purge();
 };
 

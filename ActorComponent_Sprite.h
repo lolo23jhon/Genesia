@@ -8,6 +8,7 @@
 class ActorComponent_Sprite : public ActorComponent_Drawable {
 public:
 	ActorComponent_Sprite(ResourceHolder& t_resHolder, const std::string& t_texture, const sf::IntRect& t_spriteRect = sf::IntRect());
+	ActorComponent_Sprite(ResourceHolder& t_resHolder, std::stringstream& t_stream);
 	const std::string& getTexture()const;
 	bool setSprite(Actor_Base* t_owner, const std::string& t_texture, const sf::IntRect& t_spriteRect = sf::IntRect());
 	const sf::IntRect& getTextureRect()const;

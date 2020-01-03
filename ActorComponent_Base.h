@@ -18,6 +18,10 @@ enum class ActorComponentType {
 
 using ActorComponentStrings = std::unordered_map<std::string, ActorComponentType>;
 using ActorComponentDrawables = std::unordered_set<ActorComponentType>;
+class ActorComponent_Base;
+using ActorComponentPtr = std::unique_ptr<ActorComponent_Base>;
+class SharedContext;
+
 class ActorComponent_Base {
 	friend class ActorFactory;
 
@@ -25,6 +29,9 @@ class ActorComponent_Base {
 	static const ActorComponentDrawables s_drawables;
 
 public:
+	// Hand tailored for the actor factory
+	static ActorComponentPtr createComponent(SharedContext& t_context, const ActorComponentType& t_type, std::stringstream& t_stream);
+	
 	static bool isComponentDrawable(const ActorComponentType& t_type);
 	static const std::string& idToStr(const ActorComponentType& t_compType);
 	static ActorComponentType strToId(const std::string& t_compStr);

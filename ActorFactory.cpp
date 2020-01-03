@@ -1,12 +1,13 @@
 #include <cassert>
 #include "ActorFactory.h"
 #include "Actor_Base.h"
+#include "Utilities.h"
 
 ////////////////////////////////////////////////////////////
 ActorFactory::ActorFactory(const SharedContext& t_context) : m_context{ t_context }, m_actor_wip{ nullptr } {}
 
 ////////////////////////////////////////////////////////////
-std::unique_ptr<Actor_Base> ActorFactory::create() {
+ActorPtr ActorFactory::create() {
 	return std::move(m_actor_wip);
 }
 
@@ -96,4 +97,64 @@ ActorFactory& ActorFactory::makeActorCopies(const ActorPtr& t_mold, std::vector<
 ActorFactory& ActorFactory::purge() {
 	m_actor_wip.reset();
 	m_actor_presets.clear();
+	return *this;
+}
+
+
+////////////////////////////////////////////////////////////
+ActorFactory& ActorFactory::loadPresetsFromFile(const std::string& t_fileName, const std::string& t_actorPresetIdentifier, const std::string& t_actorComponentIdentifier) {
+	std::string path{ utilities::getWorkingDirectory() };
+	std::string fullFileName{ path + t_fileName };
+	std::stringstream stream;
+	if (!utilities::readFile(fullFileName, stream, true)) {
+		assert(!"ActorFactory::loadPresetsFromFile: Failed loading from file!");
+		return *this;
+	}
+
+	std::string token;
+	// Read in as long as there are actors to be read
+	while (stream >> token) {
+		std::string presetName;
+
+		// Identify the keyword to denote an actor preset
+		if (token == t_actorPresetIdentifier) {
+
+			newActor(); // Start object construction
+
+
+			stream >> presetName;
+			unsigned numComponents{ std::stoul(token) }; // Get the number of components
+
+			// Continue as long as there ara actor components to be read
+			while (stream >> token) {
+
+				// Check for actor component identifier ("ACTOR_COMPONENET" by defaults)
+				if (token == t_actorComponentIdentifier) {
+
+					// Component confirmed, now get the type of component
+					auto componentId{ ActorComponent_Base::strToId(token) };
+
+					// Validate the componenet type
+					if (componentId == ActorComponentType::INVALID_ACTOR_COMPONENT) {
+						std::cout << "! WARNING: Invalid actor component type \"" << token << "\" in file \"" << fullFileName << "\"" << std::endl;
+						continue;
+					}
+
+					// Createa each component with its special strinsgream constructor
+					// (Use lower level ways because we cannot deduce type template parameter from enum class... without creating a black hole)
+					m_actor_wip->insertComponent(componentId, std::move(ActorComponent_Base::createComponent(m_context, componentId, stream)));
+				}
+				else {
+					std::cout << "! WARNING: Invalid actor component identifier keyword in file \"" << fullFileName << "\"" << std::endl;
+					continue;
+				}
+			}
+		}
+		else {
+			std::cout << "! WARNING: Invalid actor preset identifier keyword in file \"" << fullFileName << "\"" << std::endl;
+			continue;
+		}
+		savePreset(presetName); // Save the preset preset loaded into the construction test tube
+	}
+	return *this;
 }

@@ -3,9 +3,9 @@
 
 // Used by the classes and nodes to get access to the engine, window and some other important stuff
 //	that is globally shared
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class Engine;
-class sf::RenderWindow;
 class RandomGenerator;
 class ResourceHolder;
 struct SharedContext {

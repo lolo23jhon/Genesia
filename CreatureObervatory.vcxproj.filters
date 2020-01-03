@@ -114,6 +114,12 @@
     <ClCompile Include="Scenario_Base.cpp">
       <Filter>src\ScenarioSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Scenario_Basic.cpp">
+      <Filter>src\ScenarioSystem\Scenarios</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Text.cpp">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">

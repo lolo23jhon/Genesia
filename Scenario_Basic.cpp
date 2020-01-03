@@ -1,0 +1,20 @@
+#include "Scenario_Basic.h"
+
+////////////////////////////////////////////////////////////
+void init(SharedContext& t_context) {
+
+	// Spawn initial amount of food
+
+	// Spanw initial amount of organisms
+		// Call the factory 
+	
+
+
+
+}
+
+////////////////////////////////////////////////////////////
+void update() {
+
+
+}

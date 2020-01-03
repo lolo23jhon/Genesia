@@ -18,16 +18,9 @@ enum class OriginSetting {
 
 
 class Actor_Base {
-	friend class Engine;
 	friend class ActorFactory;
-
 public:
-	SharedContext& getContext();
-	const sf::Vector2f& getPosition()const;
-	const float& getRotation()const;
-	bool hasComponent(const ActorComponentType& t_componentType)const;
 
-private:
 	Actor_Base(const SharedContext& t_context, const sf::Vector2f& t_position, const float& t_rotationDeg);
 	void init();
 	void setPosition(const float& t_x, const float& t_y);
@@ -38,8 +31,14 @@ private:
 	void forceInsertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component);
 	bool removeComponent(const ActorComponentType& t_componentType);
 	ActorComponentPtr extractComponent(const ActorComponentType& t_componentType);
-	static void swapComponent(const ActorComponentType& t_componentType, Actor_Base* t_act1, Actor_Base* t_act2);
 	void purgeComponents();
+	SharedContext& getContext();
+	const sf::Vector2f& getPosition()const;
+	const float& getRotation()const;
+	bool hasComponent(const ActorComponentType& t_componentType)const;
+	
+	static void swapComponent(const ActorComponentType& t_componentType, Actor_Base* t_act1, Actor_Base* t_act2);
+
 
 	virtual void update();
 	virtual void reset();

@@ -1,6 +1,12 @@
+#include <cassert>
 #include "ActorComponent_Base.h"
 #include "Actor_Base.h"
 #include "MathHelpers.h"
+#include "ActorComponent_Ai.h"
+#include "ActorComponent_Sprite.h";
+#include "ActorComponent_Collidable.h"
+#include "ActorComponent_Text.h"
+
 
 ////////////////////////////////////////////////////////////
 const ActorComponentStrings ActorComponent_Base::s_componentNames{
@@ -9,6 +15,24 @@ const ActorComponentStrings ActorComponent_Base::s_componentNames{
 	{"Sprite",ActorComponentType::Sprite},
 	{"Text",ActorComponentType::Text}
 };
+
+////////////////////////////////////////////////////////////
+ActorComponentPtr ActorComponent_Base::createComponent(SharedContext& t_context, const ActorComponentType& t_type, std::stringstream& t_stream) {
+	switch (t_type) {
+	case ActorComponentType::Ai:
+		return std::make_unique<ActorComponent_Ai>(t_context, t_stream);
+	case ActorComponentType::Sprite:
+		return std::make_unique<ActorComponent_Sprite>(t_context, t_stream);
+	case ActorComponentType::Collidable:
+		return std::make_unique<ActorComponent_Collidable>(t_context, t_stream);
+	case ActorComponentType::Text:
+		return std::make_unique<ActorComponent_Text>(t_context, t_stream);
+	default:
+		assert(!"ActorComponent_Base::createComponent: Invalid component type!");
+		return nullptr;
+	}
+}
+
 
 ////////////////////////////////////////////////////////////
 const ActorComponentDrawables ActorComponent_Base::s_drawables{

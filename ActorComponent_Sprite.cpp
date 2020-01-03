@@ -1,4 +1,8 @@
 #include <cassert>
+#include <exception>
+#include <string>
+#include <sstream>
+#include <iostream>
 #include "ActorComponent_Sprite.h"
 #include "Actor_Base.h"
 #include "ResourceHolder.h"
@@ -7,13 +11,28 @@
 
 
 ////////////////////////////////////////////////////////////
-ActorComponent_Sprite::ActorComponent_Sprite(ResourceHolder& t_resHolder, const std::string& t_texture, const sf::IntRect& t_spriteRect): 
-	ActorComponent_Drawable(), m_texture{ t_texture }, m_textureRect{t_spriteRect}
+ActorComponent_Sprite::ActorComponent_Sprite(ResourceHolder& t_resHolder, const std::string& t_texture, const sf::IntRect& t_spriteRect) :
+	ActorComponent_Drawable(), m_texture{ t_texture }, m_textureRect{ t_spriteRect }
 {
-	Resource* resource{ t_resHolder.getResource(ResourceType::Texture, t_texture) };
-	assert(resource != nullptr && "ActorComponenet_Sprite::ActorComponenet_Sprite -> ResourceHolder returned nullptr from invalid texture name!");
+	Resource* resource{ t_resHolder.getResource(ResourceType::Texture, m_texture) };
+	assert(resource != nullptr && "ActorComponenet_Sprite::ActorComponenet_Sprite: ResourceHolder returned nullptr from invalid texture name!");
 	m_sprite.setTexture(std::get<sf::Texture>(*resource));
-	m_sprite.setTextureRect(t_spriteRect);
+	m_sprite.setTextureRect(m_textureRect);
+}
+
+////////////////////////////////////////////////////////////
+ActorComponent_Sprite::ActorComponent_Sprite(ResourceHolder& t_resHolder, std::stringstream& t_stream) : m_texture{ "" }, m_textureRect{} {
+	std::string rect_x, rect_y;
+	if (!(t_stream >> m_texture >> rect_x >> rect_y)) {
+		throw(std::runtime_error("ActorComponent_Sprite::ActorComponent_Sprite: Failed to extract token from strinsgtream!"));
+	}
+	m_textureRect.width = std::stoi(rect_x);
+	m_textureRect.height = std::stoi(rect_y);
+
+	Resource* resource{ t_resHolder.getResource(ResourceType::Texture, m_texture) };
+	assert(resource != nullptr && "ActorComponenet_Sprite::ActorComponenet_Sprite: ResourceHolder returned nullptr from invalid texture name!");
+	m_sprite.setTexture(std::get<sf::Texture>(*resource));
+	m_sprite.setTextureRect(m_textureRect);
 }
 
 

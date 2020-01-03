@@ -23,6 +23,7 @@
     <ClCompile Include="ActorComponenet_Drawable.cpp" />
     <ClCompile Include="ActorComponent_Base.cpp" />
     <ClCompile Include="ActorComponent_Sprite.cpp" />
+    <ClCompile Include="ActorComponent_Text.cpp" />
     <ClCompile Include="ActorFactory.cpp" />
     <ClCompile Include="Actor_Base.cpp" />
     <ClCompile Include="BoundKeys.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="MathHelpers.cpp" />
     <ClCompile Include="ResourceHolder.cpp" />
     <ClCompile Include="Scenario_Base.cpp" />
+    <ClCompile Include="Scenario_Basic.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.cpp" />
