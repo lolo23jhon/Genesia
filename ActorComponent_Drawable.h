@@ -4,7 +4,6 @@
 #include "ActorComponent_Base.h"
 
 class ActorComponent_Drawable : public ActorComponent_Base {
-
 protected:
 	bool m_visible; // Whether this component is drawn or not
 	sf::Vector2f m_positionOffsetFromOwner; // Offsets the relative origin of the component from the owners center
@@ -25,9 +24,5 @@ public:
 	sf::Vector2f getAboslutePosition(Actor_Base* t_owner)const;
 	float getAbsoluteRotation(Actor_Base* t_owner)const;
 
-	void update(Actor_Base* t_owner) {};
-	void reset(Actor_Base* t_owner) {};
-	void draw(Actor_Base* t_owner) {};
 };
-
 #endif // !ACTOR_COMPONENT_DRAWABLE_H

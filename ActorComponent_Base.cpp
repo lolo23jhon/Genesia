@@ -10,6 +10,19 @@ const ActorComponentStrings ActorComponent_Base::s_componentNames{
 	{"Text",ActorComponentType::Text}
 };
 
+////////////////////////////////////////////////////////////
+const ActorComponentDrawables ActorComponent_Base::s_drawables{
+	ActorComponentType::Collidable,
+	ActorComponentType::Sprite,
+	ActorComponentType::Text
+};
+
+////////////////////////////////////////////////////////////
+bool ActorComponent_Base::isComponentDrawable(const ActorComponentType& t_type) {
+	return (s_drawables.find(t_type) != s_drawables.cend());
+}
+
+
 static const std::string S_EMPTY_STRING{ "" };
 
 ////////////////////////////////////////////////////////////
@@ -22,17 +35,4 @@ const std::string& ActorComponent_Base::idToStr(const ActorComponentType& t_comp
 ActorComponentType ActorComponent_Base::strToId(const std::string& t_compStr) {
 	auto it{ s_componentNames.find(t_compStr) };
 	return (it == s_componentNames.cend() ? ActorComponentType::INVALID_ACTOR_COMPONENT : it->second);
-}
-
-////////////////////////////////////////////////////////////
-bool ActorComponent_Base::isComponentDrawable(const ActorComponentType& t_componentId) {
-	switch (t_componentId) {
-	case ActorComponentType::Ai:
-		return false;
-	case ActorComponentType::Collidable:
-	case ActorComponentType::Sprite:
-	case ActorComponentType::Text:
-	default:
-		return true;
-	}
 }

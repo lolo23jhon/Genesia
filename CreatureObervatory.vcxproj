@@ -31,6 +31,7 @@
     <ClCompile Include="dep_main.cpp" />
     <ClCompile Include="MathHelpers.cpp" />
     <ClCompile Include="ResourceHolder.cpp" />
+    <ClCompile Include="Scenario_Base.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.cpp" />
@@ -56,6 +57,8 @@
     <ClInclude Include="ActorComponent_Sprite.h" />
     <ClInclude Include="PreprocessorDirectves.h" />
     <ClInclude Include="ResourceHolder.h" />
+    <ClInclude Include="Scenario_Base.h" />
+    <ClInclude Include="Scenario_Basic.h" />
     <ClInclude Include="SharedContext.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h" />

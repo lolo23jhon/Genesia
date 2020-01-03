@@ -1,3 +1,4 @@
+#include <cassert>
 #include "Actor_Base.h"
 #include "ActorComponent_Base.h"
 #include "ActorComponent_Drawable.h"
@@ -109,9 +110,11 @@ void Actor_Base::purgeComponents() {
 }
 
 ////////////////////////////////////////////////////////////
-std::unique_ptr<ActorComponent_Base> Actor_Base::extractComponent(const ActorComponentType& t_componentType) {
+ActorComponentPtr Actor_Base::extractComponent(const ActorComponentType& t_componentType) {
 	auto it{ m_components.find(t_componentType) };
-	if (it == m_components.end()) { return nullptr; }
+	if (it == m_components.end()) { 
+		
+		return nullptr; }
 	auto component{ std::move(it->second) };
 	m_components.erase(it);
 	return std::move(component);
@@ -142,23 +145,4 @@ const ActorComponent_Base* Actor_Base::seeComponent(const ActorComponentType& t_
 	auto it{ m_components.find(t_componentType) };
 	if (it == m_components.cend()) { return nullptr; }
 	return it->second.get();
-}
-
-////////////////////////////////////////////////////////////
-void Actor_Base::sendDrawableToFront(const ActorComponent_Drawable* t_component) {
-	if (!t_component) { return; }
-	auto it{ std::find_if(m_drawables.begin(), m_drawables.end(),
-		[&t_component](const ActorComponent_Drawable* t_ptr) {return t_ptr == t_component; }) };
-	auto tmp_ptr{ *it };
-	m_drawables.erase(it);
-	m_drawables.push_front(tmp_ptr);
-}
-
-void Actor_Base::sendDrawableToBack(const ActorComponent_Drawable* t_component) {
-	if (!t_component) { return; }
-	auto it{ std::find_if(m_drawables.begin(), m_drawables.end(),
-		[&t_component](const ActorComponent_Drawable* t_ptr) {return t_ptr == t_component; }) };
-	auto tmp_ptr{ *it };
-	m_drawables.erase(it);
-	m_drawables.push_back(tmp_ptr);
 }

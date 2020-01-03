@@ -5,6 +5,7 @@
 
 class ActorComponent_Text : public ActorComponent_Drawable {
 
+
 };
 
 #endif // !ACTOR_COMPONENET_TEXT_H

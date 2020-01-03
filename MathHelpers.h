@@ -56,6 +56,7 @@ namespace mat {
 	float distance(const float& t_x1, const float& t_y1, const float& t_x2, const float& t_y2);
 
 	float distance(const sf::Vector2f& t_pos1, const sf::Vector2f& t_pos2);
-}
+
+};
 
 #endif // !MATH_HELPERS_H

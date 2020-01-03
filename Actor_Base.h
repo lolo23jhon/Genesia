@@ -7,7 +7,8 @@
 #include "ActorComponent_Base.h"
 #include "SharedContext.h"
 
-using ActorComponents = std::unordered_map<ActorComponentType, std::unique_ptr<ActorComponent_Base>>;
+using ActorComponentPtr = std::unique_ptr<ActorComponent_Base>;
+using ActorComponents = std::unordered_map<ActorComponentType, ActorComponentPtr>;
 using DrawableComponents = std::deque<ActorComponent_Drawable*>;
 
 enum class OriginSetting {
@@ -36,9 +37,7 @@ private:
 	bool insertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component);
 	void forceInsertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component);
 	bool removeComponent(const ActorComponentType& t_componentType);
-	std::unique_ptr<ActorComponent_Base> extractComponent(const ActorComponentType& t_componentType);
-	void sendDrawableToFront(const ActorComponent_Drawable* t_component);
-	void sendDrawableToBack(const ActorComponent_Drawable* t_component);
+	ActorComponentPtr extractComponent(const ActorComponentType& t_componentType);
 	static void swapComponent(const ActorComponentType& t_componentType, Actor_Base* t_act1, Actor_Base* t_act2);
 	void purgeComponents();
 
