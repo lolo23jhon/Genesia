@@ -21,7 +21,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.cpp" />
     <ClCompile Include="ActorComponenet_Drawable.cpp" />
+    <ClCompile Include="ActorComponent_Ai._Base.cpp" />
+    <ClCompile Include="ActorComponent_Ai_Basic.cpp" />
     <ClCompile Include="ActorComponent_Base.cpp" />
+    <ClCompile Include="ActorComponent_Collidable_Base.cpp" />
+    <ClCompile Include="ActorComponent_Collidable_Circle.cpp" />
     <ClCompile Include="ActorComponent_Sprite.cpp" />
     <ClCompile Include="ActorComponent_Text.cpp" />
     <ClCompile Include="ActorFactory.cpp" />
@@ -43,9 +47,11 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActorComponent_Ai.h" />
+    <ClInclude Include="ActorComponent_Ai_Base.h" />
+    <ClInclude Include="ActorComponent_Ai_Basic.h" />
     <ClInclude Include="ActorComponent_Base.h" />
-    <ClInclude Include="ActorComponent_Collidable.h" />
+    <ClInclude Include="ActorComponent_Collidable_Base.h" />
+    <ClInclude Include="ActorComponent_Collidable_Circle.h" />
     <ClInclude Include="ActorComponent_Drawable.h" />
     <ClInclude Include="ActorComponent_Text.h" />
     <ClInclude Include="ActorFactory.h" />

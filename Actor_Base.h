@@ -9,6 +9,7 @@
 
 using ActorComponentPtr = std::unique_ptr<ActorComponent_Base>;
 using ActorComponents = std::unordered_map<ActorComponentType, ActorComponentPtr>;
+class ActorComponent_Drawable;
 using DrawableComponents = std::deque<ActorComponent_Drawable*>;
 
 enum class OriginSetting {

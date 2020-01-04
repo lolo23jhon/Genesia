@@ -9,8 +9,8 @@
 #include "ActorComponent_Base.h"
 #include "ActorComponent_Drawable.h"
 #include "ActorComponent_Sprite.h"
-#include "ActorComponent_Collidable.h"
-#include "ActorComponent_Ai.h"
+#include "ActorComponent_Collidable_Base.h"
+#include "ActorComponent_Ai_Base.h"
 #include "ActorComponent_Text.h"
 #include "SharedContext.h"
 
@@ -28,11 +28,11 @@ class ActorFactory {
 
 public:
 	ActorFactory(const SharedContext& t_context);
+	void setContext(SharedContext& t_context);
 	ActorPtr create(); // Construction of actor and give ownership of it
 	ActorFactory& newActor();
 	ActorFactory& setPosition(const sf::Vector2f& t_position);
 	ActorFactory& setRotation(const float& t_rotationDeg);
-	template <class TComponent, class ...TArgs>ActorFactory& addComponent(TArgs...  t_compArgs);
 	ActorFactory& abortConstruction();
 	ActorFactory& savePreset(const std::string& t_presetName);
 	ActorFactory& newActorFromPreset(const std::string& t_presetName); // The preset must be previously created from the function save preset
@@ -40,6 +40,12 @@ public:
 	ActorFactory& makeActorCopies(const ActorPtr& t_mold, std::vector<ActorPtr>& t_out_copies, unsigned t_numCopies);
 	ActorFactory& loadPresetsFromFile(const std::string& t_fileName, const std::string& t_actorPresetIdentifier = "ACTOR_PRESET", const std::string& t_actorComponentIdentifier = "ACTOR_COMPONENT");
 	ActorFactory& purge();
+
+	////////////////////////////////////////////////////////////
+	template <class ...TArgs> ActorFactory& addComponent(const ActorComponentType& t_componentType, TArgs...  t_compArgs) {
+		m_actor_wip->forceInsertComponent(t_componentType, ActorComponent_Base::createComponent(t_componentType, m_context, t_compArgs...));
+		return *this;
+	}
 };
 
 #endif // !ACTOR_FACTORY_H

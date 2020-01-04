@@ -1,42 +1,44 @@
 #include <cassert>
-#include "ActorComponent_Base.h"
 #include "Actor_Base.h"
 #include "MathHelpers.h"
-#include "ActorComponent_Ai.h"
-#include "ActorComponent_Sprite.h";
-#include "ActorComponent_Collidable.h"
+#include "ActorComponent_Base.h"
+#include "ActorComponent_Ai_Base.h"
+#include "ActorComponent_Ai_Basic.h"
+#include "ActorComponent_Collidable_Base.h"
+#include "ActorComponent_Collidable_Circle.h"
+#include "ActorComponent_Sprite.h"
 #include "ActorComponent_Text.h"
 
 
 ////////////////////////////////////////////////////////////
 const ActorComponentStrings ActorComponent_Base::s_componentNames{
-	{"Collidable", ActorComponentType::Collidable},
-	{"Ai", ActorComponentType::Ai},
+	{"Collidable_Circle", ActorComponentType::Collidable_Circle},
+	{"Ai_Basic", ActorComponentType::Ai_Basic},
 	{"Sprite",ActorComponentType::Sprite},
 	{"Text",ActorComponentType::Text}
 };
 
 ////////////////////////////////////////////////////////////
-ActorComponentPtr ActorComponent_Base::createComponent(SharedContext& t_context, const ActorComponentType& t_type, std::stringstream& t_stream) {
+ActorComponentPtr ActorComponent_Base::createComponent(const ActorComponentType& t_type, SharedContext& t_context, std::stringstream& t_stream) {
 	switch (t_type) {
-	case ActorComponentType::Ai:
-		return std::make_unique<ActorComponent_Ai>(t_context, t_stream);
+	case ActorComponentType::Ai_Basic:
+		return std::make_unique<ActorComponent_Ai_Basic>(t_context,t_stream);
 	case ActorComponentType::Sprite:
 		return std::make_unique<ActorComponent_Sprite>(t_context, t_stream);
-	case ActorComponentType::Collidable:
-		return std::make_unique<ActorComponent_Collidable>(t_context, t_stream);
+	case ActorComponentType::Collidable_Circle:
+		return std::make_unique<ActorComponent_Collidable_Circle>(t_context, t_stream);
 	case ActorComponentType::Text:
 		return std::make_unique<ActorComponent_Text>(t_context, t_stream);
 	default:
 		assert(!"ActorComponent_Base::createComponent: Invalid component type!");
-		return nullptr;
+		break;
 	}
+	return nullptr;
 }
-
 
 ////////////////////////////////////////////////////////////
 const ActorComponentDrawables ActorComponent_Base::s_drawables{
-	ActorComponentType::Collidable,
+	ActorComponentType::Collidable_Circle,
 	ActorComponentType::Sprite,
 	ActorComponentType::Text
 };

@@ -120,6 +120,18 @@
     <ClCompile Include="ActorComponent_Text.cpp">
       <Filter>src\ActorSystem\Components</Filter>
     </ClCompile>
+    <ClCompile Include="ActorComponent_Ai._Base.cpp">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Collidable_Circle.cpp">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Ai_Basic.cpp">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Collidable_Base.cpp">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">
@@ -185,12 +197,6 @@
     <ClInclude Include="ActorComponent_Drawable.h">
       <Filter>src\ActorSystem\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ActorComponent_Collidable.h">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ActorComponent_Ai.h">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClInclude>
     <ClInclude Include="ActorComponent_Text.h">
       <Filter>src\ActorSystem\Components</Filter>
     </ClInclude>
@@ -199,6 +205,18 @@
     </ClInclude>
     <ClInclude Include="Scenario_Basic.h">
       <Filter>src\ScenarioSystem\Scenarios</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Ai_Base.h">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Collidable_Base.h">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Ai_Basic.h">
+      <Filter>src\ActorSystem\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Collidable_Circle.h">
+      <Filter>src\ActorSystem\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

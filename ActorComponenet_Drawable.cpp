@@ -3,7 +3,7 @@
 #include "MathHelpers.h"
 
 ////////////////////////////////////////////////////////////
-ActorComponent_Drawable::ActorComponent_Drawable() {};
+ActorComponent_Drawable::ActorComponent_Drawable() {}
 
 ////////////////////////////////////////////////////////////
 void ActorComponent_Drawable::setVisibility(const bool& t_isVisible) { m_visible = t_isVisible; }

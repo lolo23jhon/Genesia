@@ -9,7 +9,7 @@ ActorComponent_Text::ActorComponent_Text(SharedContext& t_context, const std::st
 	ActorComponent_Drawable()
 {
 
-	Resource* resource{ t_context.m_resourceHolder.getResource(ResourceType::Font,t_fontResourceName) };
+	Resource* resource{ t_context.m_resourceHolder->getResource(ResourceType::Font,t_fontResourceName) };
 	if (!resource) {
 		throw(std::runtime_error("ActorComponent_Text::ActorComponent_Text(SharedContext&, const std::string&, const unsigned&, const std::string&): The font resource was nullptr!"));
 	}
@@ -27,7 +27,7 @@ ActorComponent_Text::ActorComponent_Text(SharedContext& t_context, std::stringst
 		throw (std::runtime_error("ActorComponent_Text::ActorComponent_Text(SharedContext&, std::stringstream&): Could not read stream!"));
 	}
 
-	Resource* resource{ t_context.m_resourceHolder.getResource(ResourceType::Font,fontResName) };
+	Resource* resource{ t_context.m_resourceHolder->getResource(ResourceType::Font,fontResName) };
 	if (!resource) {
 		throw(std::runtime_error("ActorComponent_Text::ActorComponent_Text(SharedContext&, const std::string&, const unsigned&, const std::string&): The font resource was nullptr!"));
 	}
@@ -45,7 +45,7 @@ void ActorComponent_Text::reset(Actor_Base* t_owner) {}
 
 ////////////////////////////////////////////////////////////
 void ActorComponent_Text::draw(Actor_Base* t_owner) {
-	t_owner->getContext().m_window.draw(m_text);
+	t_owner->getContext().m_window->draw(m_text);
 }
 
 ////////////////////////////////////////////////////////////
@@ -58,3 +58,6 @@ sf::Text& ActorComponent_Text::getText() { return m_text; }
 
 ////////////////////////////////////////////////////////////
 const sf::Text& ActorComponent_Text::getText()const { return m_text; }
+
+////////////////////////////////////////////////////////////
+void ActorComponent_Text::update(Actor_Base* t_owner) {}

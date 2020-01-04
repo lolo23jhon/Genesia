@@ -1,10 +1,14 @@
 #include <cassert>
 #include "ActorFactory.h"
 #include "Actor_Base.h"
+#include "ActorComponent_Base.h"
 #include "Utilities.h"
 
 ////////////////////////////////////////////////////////////
 ActorFactory::ActorFactory(const SharedContext& t_context) : m_context{ t_context }, m_actor_wip{ nullptr } {}
+
+////////////////////////////////////////////////////////////
+void ActorFactory::setContext(SharedContext& t_context) { m_context = t_context; }
 
 ////////////////////////////////////////////////////////////
 ActorPtr ActorFactory::create() {
@@ -14,7 +18,7 @@ ActorPtr ActorFactory::create() {
 
 ////////////////////////////////////////////////////////////
 ActorFactory& ActorFactory::newActor() {
-	m_actor_wip = std::make_unique<Actor_Base>();
+	m_actor_wip = std::make_unique<Actor_Base>(m_context, sf::Vector2f(0.f,0.f),0.f);
 	return *this;
 }
 
@@ -27,13 +31,9 @@ ActorFactory& ActorFactory::setPosition(const sf::Vector2f& t_position) {
 ////////////////////////////////////////////////////////////
 ActorFactory& ActorFactory::setRotation(const float& t_rotationDeg) {
 	m_actor_wip->setRotation(t_rotationDeg);
-}
-
-////////////////////////////////////////////////////////////
-template <class TComponent, class ...TArgs>ActorFactory& ActorFactory::addComponent(TArgs...  t_compArgs) {
-	m_actor_wip->forceInsertComponent(t_componentType, std::make_unique<TComponent>(m_actor_wip.get(), t_compArgs...));
 	return *this;
 }
+
 
 ////////////////////////////////////////////////////////////
 ActorFactory& ActorFactory::abortConstruction() {
@@ -74,7 +74,7 @@ ActorFactory& ActorFactory::newActorFromPreset(const std::string& t_presetName) 
 
 ////////////////////////////////////////////////////////////
 ActorFactory& ActorFactory::makeActorCopy(const ActorPtr& t_mold, ActorPtr& t_out_copy) {
-	t_out_copy = std::make_unique<Actor_Base>();
+	t_out_copy = std::make_unique<Actor_Base>(t_mold->getContext(),t_mold->getPosition(), t_mold->getRotation());
 	for (const auto& comp_it : t_mold->m_components) {
 		t_out_copy->insertComponent(comp_it.first, std::move(comp_it.second->clone(m_context)));
 	}
@@ -142,7 +142,7 @@ ActorFactory& ActorFactory::loadPresetsFromFile(const std::string& t_fileName, c
 
 					// Createa each component with its special strinsgream constructor
 					// (Use lower level ways because we cannot deduce type template parameter from enum class... without creating a black hole)
-					m_actor_wip->insertComponent(componentId, std::move(ActorComponent_Base::createComponent(m_context, componentId, stream)));
+					m_actor_wip->insertComponent(componentId, std::move(ActorComponent_Base::createComponent(componentId, m_context, stream)));
 				}
 				else {
 					std::cout << "! WARNING: Invalid actor component identifier keyword in file \"" << fullFileName << "\"" << std::endl;

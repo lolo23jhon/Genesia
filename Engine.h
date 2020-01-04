@@ -13,8 +13,9 @@
 #include "EventHandler.h"
 #include "RandomGenerator.h"
 #include "ActorFactory.h"
+#include "ResourceHolder.h"
 
-using Actors = std::vector<std::unique_ptr<Actor_Base>>; // contains all the actors in the current simulation
+using Actors = std::vector<ActorPtr>; // contains all the actors in the current simulation
 using StateNames = std::map<std::string, EngineState>;
 struct EventInfo;
 
@@ -31,6 +32,7 @@ private:
 	unsigned m_fpsLimit;
 
 	Actors  m_actors;
+	SharedContext m_context;
 	ActorFactory m_actorFactory;
 
 	float m_viewSpeed;
@@ -43,8 +45,9 @@ private:
 	Keyboard m_keyboard;
 
 	EventHandler m_eventHandler;
-	
+
 	RandomGenerator m_rng;
+	ResourceHolder m_resourceHolder;
 
 	static const ActionFactory s_actions;
 	static const StateNames s_stateNames; // Map for engine states string names and ids
@@ -69,6 +72,8 @@ public:
 	unsigned getMaxFramerate()const;
 	void setMaxFramerate(const unsigned& t_fps);
 	sf::Time getElapsed()const;
+	ActorFactory& getActorFactory();
+	void spawnActor(ActorPtr t_actor);
 	void resetView();
 
 	sf::RenderWindow& getWindow();

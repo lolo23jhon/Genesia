@@ -1,7 +1,7 @@
 #ifndef SCENARIO_BASE_H
 #define SCENARIO_BASE_H
 
-class SharedContext;
+struct SharedContext;
 
 class Scenario_Base {
 

@@ -1,24 +1,32 @@
-#include <tuple>
 #include "PreprocessorDirectves.h"
-#include "Utilities.h"
 #include "Engine.h"
-
+#include "Utilities.h"
+#include "SharedContext.h"
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
 	m_keyboard{ Keyboard() },
 	m_eventHandler{ EventHandler() },
 	m_state{ EngineState::Loading },
-	m_window{ sf::VideoMode(t_windowSize.x, t_windowSize.y), t_windowName }
+	m_window{ sf::VideoMode(t_windowSize.x, t_windowSize.y), t_windowName },
+	m_rng{},
+	m_resourceHolder{},
+	m_context{},
+	m_actorFactory{ SharedContext() }
 {
-
 	init();
 	m_state = EngineState::Paused;
+	m_context.m_engine = this;
+	m_context.m_resourceHolder = &m_resourceHolder;
+	m_context.m_rng = &m_rng;
+	m_context.m_window = &m_window;
+	m_actorFactory.setContext(m_context);
 }
 
 
 ////////////////////////////////////////////////////////////
 void Engine::init() {
+	// Set default view settins
 	m_viewSpeed = 250.f;
 	m_viewZoom = 0.05f;
 	resetView();
@@ -191,6 +199,12 @@ void Engine::resetView() {
 	m_view.setCenter(static_cast<float>(m_windowSize.x) / 2, static_cast<float>(m_windowSize.y) / 2);
 	m_view.setSize(static_cast<float>(m_windowSize.x), static_cast<float>(m_windowSize.y));
 }
+
+////////////////////////////////////////////////////////////
+ActorFactory& Engine::getActorFactory() { return m_actorFactory; }
+
+////////////////////////////////////////////////////////////
+void Engine::spawnActor(ActorPtr t_actor) { m_actors.emplace_back(std::move(t_actor)); }
 
 
 static const std::string S_EMPTY_STR{ "" };
