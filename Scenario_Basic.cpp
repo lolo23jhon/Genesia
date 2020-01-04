@@ -11,7 +11,7 @@ void init(SharedContext& t_context) {
 	auto& factory{ t_context.m_engine->getActorFactory() };
 
 	auto actor{ factory.newActor()
-		.addComponent(ActorComponentType::Sprite, t_context, S_TEXTURE_NAME, S_TEXTURE_FILENAME)
+		.addComponent(ActorComponentType::Sprite, S_TEXTURE_NAME)
 		.create() };
 	unsigned numCopies{ 4 };
 	Actors copies;

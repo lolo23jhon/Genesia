@@ -9,7 +9,6 @@
 #include "ActorComponent_Base.h"
 #include "ActorComponent_Drawable.h"
 #include "ActorComponent_Sprite.h"
-#include "ActorComponent_Collidable_Base.h"
 #include "ActorComponent_Ai_Base.h"
 #include "ActorComponent_Text.h"
 #include "SharedContext.h"

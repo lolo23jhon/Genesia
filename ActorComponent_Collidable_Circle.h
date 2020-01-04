@@ -3,11 +3,11 @@
 
 #include <sstream>
 #include <SFML/Graphics/CircleShape.hpp>
-#include "ActorComponent_Collidable_Base.h"
+#include "Collidable_Base.h"
 #include "ActorComponent_Drawable.h"
 struct SharedContext;
 
-class ActorComponent_Collidable_Circle : public ActorComponent_Collidable_Base, public ActorComponent_Drawable {
+class ActorComponent_Collidable_Circle : public Collidable_Base, public ActorComponent_Drawable {
 
 	sf::CircleShape m_circle;
 

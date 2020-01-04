@@ -50,7 +50,7 @@
     <ClInclude Include="ActorComponent_Ai_Base.h" />
     <ClInclude Include="ActorComponent_Ai_Basic.h" />
     <ClInclude Include="ActorComponent_Base.h" />
-    <ClInclude Include="ActorComponent_Collidable_Base.h" />
+    <ClInclude Include="Collidable_Base.h" />
     <ClInclude Include="ActorComponent_Collidable_Circle.h" />
     <ClInclude Include="ActorComponent_Drawable.h" />
     <ClInclude Include="ActorComponent_Text.h" />

@@ -43,14 +43,26 @@
     <Filter Include="src\Resources">
       <UniqueIdentifier>{d0eb4f77-401c-4c35-8283-ebb1842018fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\ActorSystem\ActorPresets">
-      <UniqueIdentifier>{617ee1e0-66ef-4652-afd2-471607c70f79}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\ScenarioSystem">
       <UniqueIdentifier>{4839eb3b-49be-49a6-a741-f44b1971c4b7}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\ScenarioSystem\Scenarios">
       <UniqueIdentifier>{430ece39-6e97-4c27-8789-16f62e817b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ActorSystem\Components\Drawable">
+      <UniqueIdentifier>{d1b4ccfd-8c7f-485c-b07b-c59e5efa88ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ActorSystem\Components\Collidable">
+      <UniqueIdentifier>{c7e29258-8d51-41f6-86f0-48c3b407f0c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ActorSystem\ActorFactory">
+      <UniqueIdentifier>{99372418-4e36-47f6-931e-23ee99ec67f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ActorSystem\ActorFactory\ActorPresets">
+      <UniqueIdentifier>{617ee1e0-66ef-4652-afd2-471607c70f79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ActorSystem\Components\Ai">
+      <UniqueIdentifier>{3dc8072d-fd98-4f63-b634-f8d19fe24f24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +105,6 @@
     <ClCompile Include="Actor_Base.cpp">
       <Filter>src\ActorSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ActorComponent_Sprite.cpp">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceHolder.cpp">
       <Filter>src\Resources</Filter>
     </ClCompile>
@@ -105,32 +114,35 @@
     <ClCompile Include="ActorComponent_Base.cpp">
       <Filter>src\ActorSystem</Filter>
     </ClCompile>
-    <ClCompile Include="ActorComponenet_Drawable.cpp">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorFactory.cpp">
-      <Filter>src\ActorSystem</Filter>
-    </ClCompile>
     <ClCompile Include="Scenario_Base.cpp">
       <Filter>src\ScenarioSystem</Filter>
     </ClCompile>
     <ClCompile Include="Scenario_Basic.cpp">
       <Filter>src\ScenarioSystem\Scenarios</Filter>
     </ClCompile>
-    <ClCompile Include="ActorComponent_Text.cpp">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorComponent_Ai._Base.cpp">
-      <Filter>src\ActorSystem\Components</Filter>
+    <ClCompile Include="ActorComponenet_Drawable.cpp">
+      <Filter>src\ActorSystem\Components\Collidable</Filter>
     </ClCompile>
     <ClCompile Include="ActorComponent_Collidable_Circle.cpp">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorComponent_Ai_Basic.cpp">
-      <Filter>src\ActorSystem\Components</Filter>
+      <Filter>src\ActorSystem\Components\Collidable</Filter>
     </ClCompile>
     <ClCompile Include="ActorComponent_Collidable_Base.cpp">
-      <Filter>src\ActorSystem\Components</Filter>
+      <Filter>src\ActorSystem\Components\Collidable</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorFactory.cpp">
+      <Filter>src\ActorSystem\ActorFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Ai._Base.cpp">
+      <Filter>src\ActorSystem\Components\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Ai_Basic.cpp">
+      <Filter>src\ActorSystem\Components\Ai</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Sprite.cpp">
+      <Filter>src\ActorSystem\Components\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent_Text.cpp">
+      <Filter>src\ActorSystem\Components\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -176,12 +188,6 @@
     <ClInclude Include="Actor_Base.h">
       <Filter>src\ActorSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ActorComponent_Sprite.h">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ActorFactory.h">
-      <Filter>src\ActorSystem</Filter>
-    </ClInclude>
     <ClInclude Include="SharedContext.h">
       <Filter>src\EngineSystem</Filter>
     </ClInclude>
@@ -194,29 +200,35 @@
     <ClInclude Include="ActorComponent_Base.h">
       <Filter>src\ActorSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ActorComponent_Drawable.h">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ActorComponent_Text.h">
-      <Filter>src\ActorSystem\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Scenario_Base.h">
       <Filter>src\ScenarioSystem</Filter>
     </ClInclude>
     <ClInclude Include="Scenario_Basic.h">
       <Filter>src\ScenarioSystem\Scenarios</Filter>
     </ClInclude>
-    <ClInclude Include="ActorComponent_Ai_Base.h">
-      <Filter>src\ActorSystem\Components</Filter>
+    <ClInclude Include="ActorComponent_Collidable_Circle.h">
+      <Filter>src\ActorSystem\Components\Collidable</Filter>
     </ClInclude>
-    <ClInclude Include="ActorComponent_Collidable_Base.h">
-      <Filter>src\ActorSystem\Components</Filter>
+    <ClInclude Include="Collidable_Base.h">
+      <Filter>src\ActorSystem\Components\Collidable</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorFactory.h">
+      <Filter>src\ActorSystem\ActorFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Ai_Base.h">
+      <Filter>src\ActorSystem\Components\Ai</Filter>
     </ClInclude>
     <ClInclude Include="ActorComponent_Ai_Basic.h">
-      <Filter>src\ActorSystem\Components</Filter>
+      <Filter>src\ActorSystem\Components\Ai</Filter>
     </ClInclude>
-    <ClInclude Include="ActorComponent_Collidable_Circle.h">
-      <Filter>src\ActorSystem\Components</Filter>
+    <ClInclude Include="ActorComponent_Drawable.h">
+      <Filter>src\ActorSystem\Components\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Sprite.h">
+      <Filter>src\ActorSystem\Components\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent_Text.h">
+      <Filter>src\ActorSystem\Components\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

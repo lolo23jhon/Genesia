@@ -4,7 +4,7 @@
 #include "ActorComponent_Base.h"
 #include "SharedContext.h"
 
-class ActorComponent_Ai_Base : public ActorComponent_Base {
+class ActorComponent_Ai_Base {
 
 protected:
 	float m_rotationSpeed;

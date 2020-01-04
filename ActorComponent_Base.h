@@ -15,8 +15,6 @@ class ActorComponent_Sprite;
 
 enum class ActorComponentType {
 	INVALID_ACTOR_COMPONENT = -1,
-	Collidable_Circle,
-	Ai_Basic,
 	Sprite,
 	Text
 };
@@ -48,14 +46,8 @@ public:
 	////////////////////////////////////////////////////////////
 	template <class ...TArgs> static ActorComponentPtr createComponent(const ActorComponentType& t_type, SharedContext& t_context, TArgs... t_args) {
 		switch (t_type) {
-		case ActorComponentType::Ai_Basic:
-			return std::make_unique<ActorComponent_Ai_Basic>(t_context, t_args...);
 		case ActorComponentType::Sprite:
 			return std::make_unique<ActorComponent_Sprite>(t_context, t_args...);
-		case ActorComponentType::Collidable_Circle:
-			return std::make_unique<ActorComponent_Collidable_Circle>(t_context, t_args...);
-		case ActorComponentType::Text:
-			return std::make_unique<ActorComponent_Text>(t_context, t_args...);
 		default:
 			assert(!"ActorComponent_Base::createComponent: Invalid component type!");
 			return nullptr;

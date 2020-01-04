@@ -46,7 +46,8 @@ void ActorComponent_Collidable_Circle::draw(Actor_Base* t_owner) {
 
 ////////////////////////////////////////////////////////////
 ActorComponentPtr ActorComponent_Collidable_Circle::clone(SharedContext& t_context)const {
-	return std::make_unique<ActorComponent_Collidable_Circle>(m_circle);
+	//return std::make_unique<ActorComponent_Collidable_Circle>(m_circle);
+	return nullptr;
 }
 
 ////////////////////////////////////////////////////////////
