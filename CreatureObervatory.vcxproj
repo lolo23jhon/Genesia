@@ -20,21 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.cpp" />
-    <ClCompile Include="ActorComponenet_Drawable.cpp" />
-    <ClCompile Include="ActorComponent_Ai._Base.cpp" />
-    <ClCompile Include="ActorComponent_Ai_Basic.cpp" />
-    <ClCompile Include="ActorComponent_Base.cpp" />
-    <ClCompile Include="ActorComponent_Collidable_Base.cpp" />
-    <ClCompile Include="ActorComponent_Collidable_Circle.cpp" />
-    <ClCompile Include="ActorComponent_Sprite.cpp" />
-    <ClCompile Include="ActorComponent_Text.cpp" />
-    <ClCompile Include="ActorFactory.cpp" />
     <ClCompile Include="Actor_Base.cpp" />
     <ClCompile Include="BoundKeys.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp" />
     <ClCompile Include="dep_main.cpp" />
     <ClCompile Include="MathHelpers.cpp" />
+    <ClCompile Include="Organism.cpp" />
     <ClCompile Include="ResourceHolder.cpp" />
     <ClCompile Include="Scenario_Base.cpp" />
     <ClCompile Include="Scenario_Basic.cpp" />
@@ -47,22 +39,15 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActorComponent_Ai_Base.h" />
-    <ClInclude Include="ActorComponent_Ai_Basic.h" />
-    <ClInclude Include="ActorComponent_Base.h" />
-    <ClInclude Include="Collidable_Base.h" />
-    <ClInclude Include="ActorComponent_Collidable_Circle.h" />
-    <ClInclude Include="ActorComponent_Drawable.h" />
-    <ClInclude Include="ActorComponent_Text.h" />
-    <ClInclude Include="ActorFactory.h" />
-    <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h" />
+    <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="BoundKeys.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h" />
     <ClInclude Include="EngineTypes.h" />
+    <ClInclude Include="Food.h" />
     <ClInclude Include="MathHelpers.h" />
-    <ClInclude Include="ActorComponent_Sprite.h" />
+    <ClInclude Include="Organism.h" />
     <ClInclude Include="PreprocessorDirectves.h" />
     <ClInclude Include="ResourceHolder.h" />
     <ClInclude Include="Scenario_Base.h" />

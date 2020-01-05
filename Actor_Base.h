@@ -1,62 +1,57 @@
 #ifndef ACTOR_BASE_H
 #define ACTOR_BASE_H
 
-#include <unordered_map>
-#include <queue>
-#include <SFML/Graphics.hpp>
-#include "ActorComponent_Base.h"
-#include "SharedContext.h"
+#include <memory>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 
-using ActorComponentPtr = std::unique_ptr<ActorComponent_Base>;
-using ActorComponents = std::unordered_map<ActorComponentType, ActorComponentPtr>;
-class ActorComponent_Drawable;
-using DrawableComponents = std::deque<ActorComponent_Drawable*>;
-
-enum class OriginSetting {
-	TopRightCorner,
-	Center
-};
-
+struct SharedContext;
+class Actor_Base;
+using ActorPtr = std::unique_ptr<Actor_Base>;
 
 class Actor_Base {
-	friend class ActorFactory;
-public:
-
-	Actor_Base(const SharedContext& t_context, const sf::Vector2f& t_position, const float& t_rotationDeg);
-	void init();
-	void setPosition(const float& t_x, const float& t_y);
-	void setRotation(const float& t_r);
-	void rotate(const float& t_dr);
-	void incrementPosition(const float& t_dx, const float& t_dy);
-	bool insertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component);
-	void forceInsertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component);
-	bool removeComponent(const ActorComponentType& t_componentType);
-	ActorComponentPtr extractComponent(const ActorComponentType& t_componentType);
-	void purgeComponents();
-	SharedContext& getContext();
-	const sf::Vector2f& getPosition()const;
-	const float& getRotation()const;
-	bool hasComponent(const ActorComponentType& t_componentType)const;
-	
-	static void swapComponent(const ActorComponentType& t_componentType, Actor_Base* t_act1, Actor_Base* t_act2);
-
-
-	virtual void update();
-	virtual void reset();
-	virtual void draw();
-
 
 protected:
-	ActorComponent_Base* seeComponent(const ActorComponentType& t_componentType);
-	const ActorComponent_Base* seeComponent(const ActorComponentType& t_componentType)const;
-
 	sf::Vector2f m_position;
-	float m_rotation; // [0 360) clockwise
-	ActorComponents m_components;
-	DrawableComponents m_drawables;
+	float m_rotation; // [0 360)
+	sf::Sprite m_sprite;
+	sf::Color m_color;
+	sf::Text m_text;
+	SharedContext& m_context;
+	bool m_isSpriteVisible;
+	bool m_isTextVisible;
 
-	SharedContext m_context;
+public:
+	Actor_Base(
+		SharedContext& t_context,
+		const sf::Vector2f& t_position,
+		const float& t_rotation,
+		const sf::Color& t_color,
+		const std::string& t_texture,
+		const sf::IntRect& t_spriteRect,
+		bool t_isSpriteVisible = true,
+		bool t_isTextVisible = true);
+	const sf::Vector2f& getPosition()const;
+	void setPosition(const sf::Vector2f& t_position);
+	const float& getRotation()const;
+	void setRotation(const float& t_rotation);
+	const sf::Color& getColor()const;
+	void setColor(const sf::Color& t_color);
+	const sf::Sprite& getSprite()const;
+	void setSprite(const sf::Sprite& t_sprite);
+	void setSprite(const std::string& t_texture, const sf::IntRect t_spriteRect = sf::IntRect());
+	bool getIsSpriteVisible()const;
+	void setIsSpriteVisible(bool t_visible);
+	bool isTextVisible()const;
+	void setIsTextVisible(bool t_visible);
 
+	void move(const float& t_dx, const float& t_dy);
+	void rotate(const float& t_deg, bool t_leftRight);
+
+	virtual void update();
+	virtual void draw();
+
+	virtual ActorPtr clone();
 };
-
 #endif // !ACTOR_BASE_H

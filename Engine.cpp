@@ -2,6 +2,10 @@
 #include "Engine.h"
 #include "Utilities.h"
 #include "SharedContext.h"
+#include "Scenario_Basic.h"
+#include "Organism.h"
+
+static const sf::Color S_BG_COLOR{230,230,230};
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
@@ -9,10 +13,10 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_eventHandler{ EventHandler() },
 	m_state{ EngineState::Loading },
 	m_window{ sf::VideoMode(t_windowSize.x, t_windowSize.y), t_windowName },
+	m_scenario{ nullptr },
 	m_rng{},
 	m_resourceHolder{},
-	m_context{},
-	m_actorFactory{ SharedContext() }
+	m_context{}
 {
 	init();
 	m_state = EngineState::Paused;
@@ -20,7 +24,6 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_context.m_resourceHolder = &m_resourceHolder;
 	m_context.m_rng = &m_rng;
 	m_context.m_window = &m_window;
-	m_actorFactory.setContext(m_context);
 }
 
 
@@ -43,6 +46,27 @@ void Engine::init() {
 		std::exit(1);
 	}
 
+	// Initialize simulation scenario
+	m_scenario = std::make_unique<Scenario_Basic>(m_context, 5U, 100U);
+	m_scenario->init();
+
+}
+
+////////////////////////////////////////////////////////////
+void Engine::update() {
+	for (auto& actor : m_actors) {
+		actor->update();
+	}
+	m_scenario->update();
+
+}
+
+////////////////////////////////////////////////////////////
+void Engine::draw() {
+	m_window.clear(S_BG_COLOR);
+	for (auto& actor : m_actors) {
+		actor->draw();
+	}
 }
 
 
@@ -68,7 +92,7 @@ void Engine::run() {
 		// Restar the clock and capture elapsed time
 		m_elapsed = m_clock.restart();
 		pollEvents();
-
+		update();
 	}
 }
 
@@ -200,8 +224,6 @@ void Engine::resetView() {
 	m_view.setSize(static_cast<float>(m_windowSize.x), static_cast<float>(m_windowSize.y));
 }
 
-////////////////////////////////////////////////////////////
-ActorFactory& Engine::getActorFactory() { return m_actorFactory; }
 
 ////////////////////////////////////////////////////////////
 void Engine::spawnActor(ActorPtr t_actor) { m_actors.emplace_back(std::move(t_actor)); }

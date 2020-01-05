@@ -1,148 +1,140 @@
-#include <cassert>
 #include "Actor_Base.h"
-#include "ActorComponent_Base.h"
-#include "ActorComponent_Drawable.h"
 #include "MathHelpers.h"
+#include "SharedContext.h"
+#include "Utilities.h"
+#include "ResourceHolder.h"
 
+static const std::string S_DEFAULT_FONT{ "Font_consola" };
+static const sf::Color S_DEFAULT_TEXT_FILL_COLOR{ 25,25,25 };
+static const sf::Color S_DEFAILT_TEXT_OUTILINE_COLOR{ 250,250,250 };
+static const unsigned S_DEFAULT_TEXT_SIZE{ 10U };
 
 ////////////////////////////////////////////////////////////
-Actor_Base::Actor_Base(const SharedContext& t_context,const sf::Vector2f& t_position, const float& t_rotationDeg) :
-	m_context{t_context}, m_position{ t_position }, m_rotation{ t_rotationDeg }
+Actor_Base::Actor_Base(
+	SharedContext& t_context,
+	const sf::Vector2f& t_position,
+	const float& t_rotation,
+	const sf::Color& t_color,
+	const std::string& t_texture,
+	const sf::IntRect& t_spriteRect,
+	bool t_isSpriteVisible,
+	bool t_isTextVisible) :
+	m_context{ t_context },
+	m_position{ t_position },
+	m_rotation{ t_rotation },
+	m_color{ t_color },
+	m_isSpriteVisible{ t_isSpriteVisible },
+	m_isTextVisible{ t_isTextVisible }
 {
-	init();
-}
-
-////////////////////////////////////////////////////////////
-SharedContext& Actor_Base::getContext() { return m_context; }
-
-
-////////////////////////////////////////////////////////////
-void Actor_Base::init() {
-
-	// <-- TODO: Solve component initiliazation
-
-	// Put all drawable components in the drawing deque
-	if (!m_drawables.empty()) { m_drawables.clear(); }
-	for (auto& comp : m_components) {
-		if (ActorComponent_Base::isComponentDrawable(comp.first)) {
-			m_drawables.push_back(dynamic_cast<ActorComponent_Drawable*>(comp.second.get()));
-		}
+	// Initialize texture
+	Resource* texture_resource{ m_context.m_resourceHolder->getResource(ResourceType::Texture, t_texture) };
+	if (!texture_resource) {
+		throw(std::runtime_error(std::string("Organism::Organims: Texture " + t_texture + " was nullptr!")));
 	}
-}
+	auto& texture{ std::get<sf::Texture>(*texture_resource) };
+	m_sprite.setTexture(texture, false);
+	m_sprite.setTextureRect(t_spriteRect);
+	m_sprite.setPosition(m_position);
+	m_sprite.setRotation(m_rotation);
 
-////////////////////////////////////////////////////////////
-void Actor_Base::update() {
-	for (auto& it : m_components) {
-		it.second->update(this);
+	// Initialize text
+	Resource* font_resource{ m_context.m_resourceHolder->getResource(ResourceType::Font, S_DEFAULT_FONT) };
+	if (!font_resource) {
+		throw(std::runtime_error(std::string("Organism::Organims: Font " + S_DEFAULT_FONT + " was nullptr!")));
 	}
-}
-
-////////////////////////////////////////////////////////////
-void Actor_Base::reset() {
-	for (auto& it : m_components) {
-		it.second->reset(this);
-	}
-}
-
-////////////////////////////////////////////////////////////
-void Actor_Base::draw() {
-	for (auto& it : m_drawables) {
-		if (it->getVisibility()) { it->draw(this); }
-	}
+	auto& font{ std::get<sf::Font>(*font_resource) };
+	m_text.setFont(font);
+	m_text.setFillColor(S_DEFAULT_TEXT_FILL_COLOR);
+	m_text.setOutlineColor(S_DEFAILT_TEXT_OUTILINE_COLOR);
+	m_text.setPosition(m_position.x, m_position.y);
+	utilities::centerSFMLText(m_text);
 }
 
 ////////////////////////////////////////////////////////////
 const sf::Vector2f& Actor_Base::getPosition()const { return m_position; }
 
 ////////////////////////////////////////////////////////////
+void Actor_Base::setPosition(const sf::Vector2f& t_position) { m_position = t_position; }
+
+////////////////////////////////////////////////////////////
 const float& Actor_Base::getRotation()const { return m_rotation; }
 
 ////////////////////////////////////////////////////////////
-void Actor_Base::setPosition(const float& t_x, const float& t_y) { m_position.x = t_x; m_position.y = t_y; }
-
-////////////////////////////////////////////////////////////
-void Actor_Base::setRotation(const float& t_r) {
-	m_rotation = mat::normalizeAngle(t_r);
+void Actor_Base::setRotation(const float& t_rotation) {
+	m_rotation = mat::normalizeAngle(t_rotation);
 }
 
 ////////////////////////////////////////////////////////////
-void Actor_Base::rotate(const float& t_dr) {
-	m_rotation = mat::normalizeAngle(m_rotation + t_dr);
-}
+const sf::Color& Actor_Base::getColor()const { return m_color; }
 
 ////////////////////////////////////////////////////////////
-void Actor_Base::incrementPosition(const float& t_dx, const float& t_dy) { m_position.x += t_dx; m_position.y += t_dy; }
-
-
-////////////////////////////////////////////////////////////
-bool Actor_Base::insertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component) {
-	auto it{ m_components.emplace(t_componentType,std::move(t_component)) };
-	return it.second;
-}
+void Actor_Base::setColor(const sf::Color& t_color) { m_color = t_color; }
 
 ////////////////////////////////////////////////////////////
-void Actor_Base::forceInsertComponent(const ActorComponentType& t_componentType, std::unique_ptr<ActorComponent_Base> t_component) {
-	auto it{ m_components.find(t_componentType) };
-	if (it == m_components.end()) {
-		it->second = std::move(t_component);
+const sf::Sprite& Actor_Base::getSprite()const { return m_sprite; }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::setSprite(const sf::Sprite& t_sprite) { m_sprite = t_sprite; }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::setSprite(const std::string& t_texture, const sf::IntRect t_spriteRect){
+	Resource* texture_resource{ m_context.m_resourceHolder->getResource(ResourceType::Texture, t_texture) };
+	if (!texture_resource) {
+		throw(std::runtime_error(std::string("Organism::Organims: Texture " + t_texture + " was nullptr!")));
 	}
-	else {
-		m_components.emplace(t_componentType, std::move(t_component));
+	auto& texture{ std::get<sf::Texture>(*texture_resource) };
+	m_sprite.setTexture(texture, false);
+	m_sprite.setTextureRect(t_spriteRect);
+	m_sprite.setPosition(m_position);
+	m_sprite.setRotation(m_rotation);
+}
+
+////////////////////////////////////////////////////////////
+bool Actor_Base::getIsSpriteVisible()const { return m_isSpriteVisible; }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::setIsSpriteVisible(bool t_visible) { m_isSpriteVisible = t_visible; }
+
+////////////////////////////////////////////////////////////
+bool Actor_Base::isTextVisible()const { return m_isTextVisible; }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::setIsTextVisible(bool t_visible) { m_isTextVisible = t_visible; }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::draw() {
+	if (m_isSpriteVisible) {
+		m_context.m_window->draw(m_sprite);
 	}
-}
-
-////////////////////////////////////////////////////////////
-bool Actor_Base::removeComponent(const ActorComponentType& t_componentType) {
-	auto it{ m_components.find(t_componentType) };
-	if (it == m_components.end()) { return false; }
-	m_components.erase(it);
-	return true;
-}
-
-////////////////////////////////////////////////////////////
-bool Actor_Base::hasComponent(const ActorComponentType& t_componentType)const {
-	return (m_components.find(t_componentType) == m_components.cend());
-}
-
-////////////////////////////////////////////////////////////
-void Actor_Base::purgeComponents() {
-	m_components.clear();
-}
-
-////////////////////////////////////////////////////////////
-ActorComponentPtr Actor_Base::extractComponent(const ActorComponentType& t_componentType) {
-	auto it{ m_components.find(t_componentType) };
-	if (it == m_components.end()) { 
-		
-		return nullptr; }
-	auto component{ std::move(it->second) };
-	m_components.erase(it);
-	return std::move(component);
-}
-
-////////////////////////////////////////////////////////////
-void Actor_Base::swapComponent(const ActorComponentType& t_componentType, Actor_Base* t_act1, Actor_Base* t_act2) {
-	if (t_act1 == t_act2) { return; }
-	auto act1_comp{ t_act1->extractComponent(t_componentType) };
-	auto act2_comp{ t_act2->extractComponent(t_componentType) };
-	if (act1_comp) {
-		t_act2->insertComponent(t_componentType, std::move(act1_comp));
-	}
-	if (act2_comp) {
-		t_act1->insertComponent(t_componentType, std::move(act2_comp));
+	if (m_isTextVisible) {
+		m_context.m_window->draw(m_text);
 	}
 }
 
-////////////////////////////////////////////////////////////
-ActorComponent_Base* Actor_Base::seeComponent(const ActorComponentType& t_componentType) {
-	auto it{ m_components.find(t_componentType) };
-	if (it == m_components.end()) { return nullptr; }
-	return it->second.get();
+void Actor_Base::update() {
+	// Update sprite
+	m_sprite.setRotation(m_rotation);
+	m_sprite.setPosition(m_position);
+	m_sprite.setColor(m_color);
+
+	// Update text
+	m_text.setPosition(m_position.x, m_position.y);
+	utilities::centerSFMLText(m_text);
 }
 
 ////////////////////////////////////////////////////////////
-const ActorComponent_Base* Actor_Base::seeComponent(const ActorComponentType& t_componentType)const {
-	auto it{ m_components.find(t_componentType) };
-	if (it == m_components.cend()) { return nullptr; }
-	return it->second.get();
+void Actor_Base::move(const float& t_dx, const float& t_dy) {
+	m_position.x += t_dx;
+	m_position.y += t_dy;
+}
+
+////////////////////////////////////////////////////////////
+void Actor_Base::rotate(const float& t_deg, bool t_leftRight) {
+	m_rotation = mat::normalizeAngle(m_rotation + (t_leftRight ? -t_deg : t_deg));// Clockwise angle -> true = right = +angle; false = left = -angle
+}
+
+
+////////////////////////////////////////////////////////////
+ActorPtr Actor_Base::clone() {
+	return std::make_unique<Actor_Base>(*this);
 }

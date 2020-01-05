@@ -2,10 +2,17 @@
 #define SCENARIO_BASIC_H
 
 #include "Scenario_Base.h"
+#include "Actor_Base.h"
+
+class Organism;
 
 class Scenario_Basic : public Scenario_Base {
-	   
-	void init(SharedContext& t_context);
+
+	std::unique_ptr<Organism> m_firstOrganism;
+
+public:
+	Scenario_Basic(SharedContext& t_context, const unsigned& t_maxNumActors, const unsigned& t_initialNumOrganisms);
+	void init();
 	void update();
 
 

@@ -8,13 +8,15 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Keyboard.h"
-#include "Actor_Base.h"
 #include "EngineTypes.h"
 #include "EventHandler.h"
+#include "SharedContext.h"
 #include "RandomGenerator.h"
-#include "ActorFactory.h"
 #include "ResourceHolder.h"
+#include "Actor_Base.h"
+#include "Scenario_Base.h"
 
+using ActorPtr = std::unique_ptr<Actor_Base>;
 using Actors = std::vector<ActorPtr>; // contains all the actors in the current simulation
 using StateNames = std::map<std::string, EngineState>;
 struct EventInfo;
@@ -33,7 +35,6 @@ private:
 
 	Actors  m_actors;
 	SharedContext m_context;
-	ActorFactory m_actorFactory;
 
 	float m_viewSpeed;
 	float m_viewZoom;
@@ -48,6 +49,8 @@ private:
 
 	RandomGenerator m_rng;
 	ResourceHolder m_resourceHolder;
+
+	std::unique_ptr<Scenario_Base> m_scenario;
 
 	static const ActionFactory s_actions;
 	static const StateNames s_stateNames; // Map for engine states string names and ids
@@ -72,7 +75,6 @@ public:
 	unsigned getMaxFramerate()const;
 	void setMaxFramerate(const unsigned& t_fps);
 	sf::Time getElapsed()const;
-	ActorFactory& getActorFactory();
 	void spawnActor(ActorPtr t_actor);
 	void resetView();
 
@@ -82,7 +84,7 @@ public:
 	void pollEvents();
 	void render();
 	void update();
-	void lateUpdate();
+	void draw();
 
 	bool executeAction(const ActionId& t_id, const EventInfo& t_info); // Umbrella for all the actions
 	ActionCallback getActionCallback(const EngineState& t_state, const ActionId& t_id); // * See coment bellow

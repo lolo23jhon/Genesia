@@ -1,53 +1,37 @@
 #include "Scenario_Basic.h"
 #include "Engine.h"
-#include "ActorFactory.h"
+#include "Food.h"
+#include "Organism.h"
+#include "SharedContext.h"
 
-static const std::string S_TEXTURE_NAME{ "Texture_TriangleActorCyan" };
-static const std::string S_TEXTURE_FILENAME{ "resources\\triangle_actor_cyan.png" };
+Scenario_Basic::Scenario_Basic(SharedContext& t_context, const unsigned& t_maxNumActors, const unsigned& t_initialNumOrganisms) :
+	Scenario_Base(t_context, t_maxNumActors, t_initialNumOrganisms),
+	m_firstOrganism{ nullptr }
+{
+	m_firstOrganism = std::make_unique<Organism>(m_context, "Organism", 5, sf::Color(240, 200, 100), sf::Vector2f(0.f, 0.f), 0.f, 1.f, 1.f, 0.f);
+	init();
+}
 
 ////////////////////////////////////////////////////////////
-void init(SharedContext& t_context) {
+void Scenario_Basic::init() {
 
-	auto& factory{ t_context.m_engine->getActorFactory() };
+	auto& rng{ *m_context.m_rng };
+	auto simSize{ m_context.m_window->getSize() };
 
-	auto actor{ factory.newActor()
-		.addComponent(ActorComponentType::Sprite, S_TEXTURE_NAME)
-		.create() };
-	unsigned numCopies{ 4 };
-	Actors copies;
-	copies.reserve(numCopies);
-	factory.makeActorCopies(actor, copies, numCopies);
-	copies.emplace_back(std::move(actor));
 
-	auto& rng{ *t_context.m_rng };
-	auto size{ t_context.m_window->getSize() };
-	for (auto& it : copies) {
-		float x{ rng(0.f, (float)size.x) };
-		float y{ rng(0.f, (float)size.y) };
-		float rot{ rng(0.f,359.999f) };
+	for (unsigned i{ 0 }; i < m_initialNumOrganisms; i++) {
+		float x{ rng(0.f, (float)simSize.x) };
+		float y{ rng(0.f, (float)simSize.y) };
+		float rot{ rng(0.f, 359.999f) };
 
-		// Spawn them at random positions and facing angles
-		it->setPosition(x, y);
-		it->setRotation(rot);
-		t_context.m_engine->spawnActor(std::move(it));
+
+		auto organism{ m_firstOrganism->clone() };
+		organism->setPosition({ x,y });
+		organism->setRotation(rot);
+		m_context.m_engine->spawnActor(std::move(organism));
 	}
 
-
-
-	// Spawn initial amount of food
-
-
-
-	// Spanw initial amount of organisms
-		// Call the factory 
-
-
-
-
 }
 
 ////////////////////////////////////////////////////////////
-void update() {
-
-
-}
+void Scenario_Basic::update() {}
