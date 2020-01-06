@@ -37,6 +37,7 @@ public:
 	static ResourceType resourceTypeStrToId(const std::string& t_str);
 
 	ResourceHolder();
+	void init();
 	bool loadResources(const std::string& t_cfgFile, const std::string& t_resourceIdentifier = "RESOURCE");
 	bool loadResource(const ResourceType& t_type, const std::string& t_resourceName, const std::string& t_fileNameWithPath);
 	void releaseResource(const ResourceType& t_type, const std::string& t_resourceName);

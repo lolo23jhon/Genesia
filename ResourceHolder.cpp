@@ -1,6 +1,8 @@
 #include "ResourceHolder.h"
 #include "Utilities.h"
 
+static const std::string S_RESOURCE_DIR{ "\\resources\\" };
+
 ////////////////////////////////////////////////////////////
 const ResourceTypeStrings ResourceHolder::s_resourceTypeStrings{
 {"Texture",	ResourceType::Texture},
@@ -24,6 +26,23 @@ ResourceType ResourceHolder::resourceTypeStrToId(const std::string& t_str) {
 
 ////////////////////////////////////////////////////////////
 ResourceHolder::ResourceHolder() : m_workingDirPath{ utilities::getWorkingDirectory() }, m_mutex{}{}
+
+////////////////////////////////////////////////////////////
+void ResourceHolder::init() {
+	sf::Lock lock{ m_mutex };
+	std::string fullPath{ m_workingDirPath + S_RESOURCE_DIR };
+	auto resourceFilenames{ utilities::getFileList(fullPath) };
+
+	
+	for (auto& it : resourceFilenames) {
+		const auto& fileName{ it.first };
+		std::string resType{ fileName.substr(0,fileName.find('_')) };
+		auto resTypeId{ resourceTypeStrToId(resType) };
+		if (resTypeId == ResourceType::INVALID_RESOURCE_TYPE) { continue; }
+		std::string nameNoExt{ fileName.substr(0,fileName.find_last_of('.')) };
+		loadResource(resTypeId, nameNoExt, fullPath + fileName);
+	}
+}
 
 
 ////////////////////////////////////////////////////////////

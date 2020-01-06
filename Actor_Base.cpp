@@ -9,6 +9,7 @@ static const sf::Color S_DEFAULT_TEXT_FILL_COLOR{ 25,25,25 };
 static const sf::Color S_DEFAILT_TEXT_OUTILINE_COLOR{ 250,250,250 };
 static const unsigned S_DEFAULT_TEXT_SIZE{ 10U };
 
+
 ////////////////////////////////////////////////////////////
 Actor_Base::Actor_Base(
 	SharedContext& t_context,
@@ -26,14 +27,19 @@ Actor_Base::Actor_Base(
 	m_isSpriteVisible{ t_isSpriteVisible },
 	m_isTextVisible{ t_isTextVisible }
 {
+
 	// Initialize texture
 	Resource* texture_resource{ m_context.m_resourceHolder->getResource(ResourceType::Texture, t_texture) };
 	if (!texture_resource) {
 		throw(std::runtime_error(std::string("Organism::Organims: Texture " + t_texture + " was nullptr!")));
 	}
-	auto& texture{ std::get<sf::Texture>(*texture_resource) };
-	m_sprite.setTexture(texture, false);
-	m_sprite.setTextureRect(t_spriteRect);
+	m_sprite.setTexture(std::get<sf::Texture>(*texture_resource),true);
+	if (t_spriteRect.width && t_spriteRect.height) {
+		m_sprite.setTextureRect(t_spriteRect);
+
+	}
+	auto& spriteSize{ m_sprite.getTextureRect() };
+	m_sprite.setOrigin(static_cast<float>(spriteSize.width) / 2, static_cast<float>(spriteSize.height) / 2);
 	m_sprite.setPosition(m_position);
 	m_sprite.setRotation(m_rotation);
 
@@ -42,8 +48,7 @@ Actor_Base::Actor_Base(
 	if (!font_resource) {
 		throw(std::runtime_error(std::string("Organism::Organims: Font " + S_DEFAULT_FONT + " was nullptr!")));
 	}
-	auto& font{ std::get<sf::Font>(*font_resource) };
-	m_text.setFont(font);
+	m_text.setFont(std::get<sf::Font>(*font_resource));
 	m_text.setFillColor(S_DEFAULT_TEXT_FILL_COLOR);
 	m_text.setOutlineColor(S_DEFAILT_TEXT_OUTILINE_COLOR);
 	m_text.setPosition(m_position.x, m_position.y);
@@ -77,7 +82,7 @@ const sf::Sprite& Actor_Base::getSprite()const { return m_sprite; }
 void Actor_Base::setSprite(const sf::Sprite& t_sprite) { m_sprite = t_sprite; }
 
 ////////////////////////////////////////////////////////////
-void Actor_Base::setSprite(const std::string& t_texture, const sf::IntRect t_spriteRect){
+void Actor_Base::setSprite(const std::string& t_texture, const sf::IntRect t_spriteRect) {
 	Resource* texture_resource{ m_context.m_resourceHolder->getResource(ResourceType::Texture, t_texture) };
 	if (!texture_resource) {
 		throw(std::runtime_error(std::string("Organism::Organims: Texture " + t_texture + " was nullptr!")));

@@ -9,11 +9,11 @@ Scenario_Basic::Scenario_Basic(SharedContext& t_context, const unsigned& t_maxNu
 	m_firstOrganism{ nullptr }
 {
 	m_firstOrganism = std::make_unique<Organism>(m_context, "Organism", 5, sf::Color(240, 200, 100), sf::Vector2f(0.f, 0.f), 0.f, 1.f, 1.f, 0.f);
-	init();
 }
 
 ////////////////////////////////////////////////////////////
 void Scenario_Basic::init() {
+
 
 	auto& rng{ *m_context.m_rng };
 	auto simSize{ m_context.m_window->getSize() };

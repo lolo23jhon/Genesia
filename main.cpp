@@ -3,7 +3,7 @@
 
 int main() {
 
-	Engine engine{ sf::Vector2u(400,400),"Test" };
+	Engine engine{ sf::Vector2u(800,600),"Test" };
 	engine.run();
 
 #ifdef _DEBUG

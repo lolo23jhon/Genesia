@@ -1,3 +1,4 @@
+#include <iostream>
 #include "PreprocessorDirectves.h"
 #include "Engine.h"
 #include "Utilities.h"
@@ -5,10 +6,11 @@
 #include "Scenario_Basic.h"
 #include "Organism.h"
 
-static const sf::Color S_BG_COLOR{230,230,230};
+static const sf::Color S_BG_COLOR{ 240,240,240 };
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
+	m_windowSize{ t_windowSize },
 	m_keyboard{ Keyboard() },
 	m_eventHandler{ EventHandler() },
 	m_state{ EngineState::Loading },
@@ -18,19 +20,19 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_resourceHolder{},
 	m_context{}
 {
-	init();
 	m_state = EngineState::Paused;
 	m_context.m_engine = this;
 	m_context.m_resourceHolder = &m_resourceHolder;
 	m_context.m_rng = &m_rng;
 	m_context.m_window = &m_window;
+	init();
 }
 
 
 ////////////////////////////////////////////////////////////
 void Engine::init() {
 	// Set default view settins
-	m_viewSpeed = 250.f;
+	m_viewSpeed = 10000.f;
 	m_viewZoom = 0.05f;
 	resetView();
 
@@ -46,8 +48,11 @@ void Engine::init() {
 		std::exit(1);
 	}
 
+	// Read in all the resources in the dedicated directory
+	m_resourceHolder.init();
+
 	// Initialize simulation scenario
-	m_scenario = std::make_unique<Scenario_Basic>(m_context, 5U, 100U);
+	m_scenario = std::make_unique<Scenario_Basic>(m_context, 100U, 5U);
 	m_scenario->init();
 
 }
@@ -59,14 +64,6 @@ void Engine::update() {
 	}
 	m_scenario->update();
 
-}
-
-////////////////////////////////////////////////////////////
-void Engine::draw() {
-	m_window.clear(S_BG_COLOR);
-	for (auto& actor : m_actors) {
-		actor->draw();
-	}
 }
 
 
@@ -93,6 +90,7 @@ void Engine::run() {
 		m_elapsed = m_clock.restart();
 		pollEvents();
 		update();
+		render();
 	}
 }
 
@@ -150,8 +148,12 @@ void Engine::render() {
 	m_window.setView(m_view);
 
 	// Clear the window
-	m_window.clear();
-	m_window.setView(m_window.getDefaultView());
+	m_window.clear(S_BG_COLOR);
+
+	// Draw the actors
+	for (auto& actor : m_actors) {
+		actor->draw();
+	}
 
 	m_window.display();
 }
@@ -221,7 +223,6 @@ void Engine::setMaxFramerate(const unsigned& t_fps) { m_maxFramerate = t_fps; }
 void Engine::resetView() {
 	m_view = sf::View();
 	m_view.setCenter(static_cast<float>(m_windowSize.x) / 2, static_cast<float>(m_windowSize.y) / 2);
-	m_view.setSize(static_cast<float>(m_windowSize.x), static_cast<float>(m_windowSize.y));
 }
 
 
@@ -253,18 +254,26 @@ EngineState Engine::getStateId(const std::string& t_stateName) {
 
 //////////////////////////////////////////////////////////
 const ActionFactory Engine::s_actions{
-		{ActionId::Unpause,			{"Action_Unpause",			EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Unpause}},
-		{ActionId::Save,			{"Action_Save",				EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Save}},
-		{ActionId::Quit,			{"Action_Quit",				EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Quit}},
-		{ActionId::Pause,			{"Action_Pause",			EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Pause}},
-		{ActionId::MoveViewUp,		{"Action_MoveViewUp",		EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewUp}},
-		{ActionId::MoveViewDown,	{"Action_MoveViewDown",		EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewDown}},
-		{ActionId::MoveViewLeft,	{"Action_MoveViewLeft",		EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewLeft}},
-		{ActionId::MoveViewRight,	{"Action_MoveViewRight",	EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewRight}},
-		{ActionId::ResetView,		{"Action_ResetView",		EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_ResetView}},
-		{ActionId::ZoomIn,			{"Action_ZoomIn",			EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_ZoomIn}},
-		{ActionId::ZoomOut,			{"Action_ZoomOut",			EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_ZoomOut}},
-		{ActionId::ResetZoom,		{"Action_ResetZoom",		EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_ResetZoom}}
+		{ActionId::Unpause,					{"Action_Unpause",				EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Unpause}},
+		{ActionId::Save,					{"Action_Save",					EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Save}},
+		{ActionId::Quit,					{"Action_Quit",					EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Quit}},
+		{ActionId::Pause,					{"Action_Pause",				EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_Pause}},
+		{ActionId::MoveViewUp,				{"Action_MoveViewUp",			EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewUp}},
+		{ActionId::MoveViewUp_Paused,		{"Action_MoveViewUp_Paused",	EngineState::Paused,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewUp_Paused}},
+		{ActionId::MoveViewDown,			{"Action_MoveViewDown",			EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewDown}},
+		{ActionId::MoveViewDown_Paused,		{"Action_MoveViewDown_Paused",	EngineState::Paused,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewDown_Paused}},
+		{ActionId::MoveViewLeft,			{"Action_MoveViewLeft",			EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewLeft}},
+		{ActionId::MoveViewLeft_Paused,		{"Action_MoveViewLeft_Paused",	EngineState::Paused,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewLeft_Paused}},
+		{ActionId::MoveViewRight,			{"Action_MoveViewRight",		EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewRight}},
+		{ActionId::MoveViewRight_Paused,	{"Action_MoveViewRight_Paused",	EngineState::Paused,	ActionTrigger::ContinousKeyPress,	&Engine::Action_MoveViewRight_Paused}},
+		{ActionId::ResetView,				{"Action_ResetView",			EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_ResetView}},
+		{ActionId::ResetView_Paused,		{"Action_ResetView_Paused",		EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_ResetView_Paused}},
+		{ActionId::ZoomIn,					{"Action_ZoomIn",				EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_ZoomIn}},
+		{ActionId::ZoomIn_Paused,			{"Action_ZoomIn_Paused",		EngineState::Paused,	ActionTrigger::ContinousKeyPress,	&Engine::Action_ZoomIn_Paused}},
+		{ActionId::ZoomOut,					{"Action_ZoomOut",				EngineState::Running,	ActionTrigger::ContinousKeyPress,	&Engine::Action_ZoomOut}},
+		{ActionId::ZoomOut_Paused,			{"Action_ZoomOut_Paused",		EngineState::Paused,	ActionTrigger::ContinousKeyPress,	&Engine::Action_ZoomOut_Paused}},
+		{ActionId::ResetZoom,				{"Action_ResetZoom",			EngineState::Running,	ActionTrigger::SingleKeyRelease,	&Engine::Action_ResetZoom}},
+		{ActionId::ResetZoom_Paused,		{"Action_ResetZoom_Paused",		EngineState::Paused,	ActionTrigger::SingleKeyRelease,	&Engine::Action_ResetZoom_Paused}}
 };
 
 ////////////////////////////////////////////////////////////
@@ -293,36 +302,193 @@ std::unique_ptr<Action> Engine::createAction(const ActionId& t_id) {
 }
 
 
+// --------------------------------------------------------------------------------------------------- ACTIONS
+
+////////////////////////////////////////////////////////////
+void Engine::Action_Pause(const EventInfo& t_info) {
+	m_state = EngineState::Paused;
 #if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
-#include <iostream>
-void Engine::Action_Pause(const EventInfo& t_info) { m_state = EngineState::Paused; std::cout << "> ACTION\tPause" << std::endl; }
-void Engine::Action_Unpause(const EventInfo& t_info) { m_state = EngineState::Running; std::cout << "> ACTION\tUnpause" << std::endl; }
-void Engine::Action_MoveViewLeft(const EventInfo& t_info) { std::cout << "> ACTION\tMoveViewLeft" << std::endl; }
-void Engine::Action_MoveViewRight(const EventInfo& t_info) { std::cout << "> ACTION\tMoveViewRight" << std::endl; }
-void Engine::Action_MoveViewUp(const EventInfo& t_info) { std::cout << "> ACTION\tMoveViewUp" << std::endl; }
-void Engine::Action_MoveViewDown(const EventInfo& t_info) { std::cout << "> ACTION\tMoveViewDown" << std::endl; }
-void Engine::Action_ResetView(const EventInfo& t_info) { std::cout << "> ACTION\tResetView" << std::endl; }
-void Engine::Action_ZoomIn(const EventInfo& t_info) { m_view.zoom(1.f + m_viewZoom); std::cout << "> ACTION\tZoomIn" << std::endl; }
-void Engine::Action_ZoomOut(const EventInfo& t_info) { m_view.zoom(1.f - m_viewZoom); std::cout << "> ACTION\tZoomOut" << std::endl; }
-void Engine::Action_ResetZoom(const EventInfo& t_info) { resetView(); std::cout << "> ACTION\tResetZoom" << std::endl; }
-void Engine::Action_Save(const EventInfo& t_info) { std::cout << "> ACTION\tSave" << std::endl; }
-void Engine::Action_Quit(const EventInfo& t_info) { std::cout << "> ACTION\tQuit" << std::endl; }
-void Engine::Action_INVALID_ACTION(const EventInfo& t_info) { std::cout << "> ACTION\tINVALID_ACTION" << std::endl; }
-
-#else
-
-void Engine::Action_Pause(const EventInfo& t_info) { m_state = EngineState::Paused; }
-void Engine::Action_Unpause(const EventInfo& t_info) { m_state = EngineState::Running; }
-void Engine::Action_MoveViewLeft(const EventInfo& t_info) {}
-void Engine::Action_MoveViewRight(const EventInfo& t_info) {}
-void Engine::Action_MoveViewUp(const EventInfo& t_info) {}
-void Engine::Action_MoveViewDown(const EventInfo& t_info) {}
-void Engine::Action_ResetView(const EventInfo& t_info) {}
-void Engine::Action_ZoomIn(const EventInfo& t_info) { m_view.zoom(1.f + m_viewZoom); }
-void Engine::Action_ZoomOut(const EventInfo& t_info) { m_view.zoom(1.f - m_viewZoom); }
-void Engine::Action_ResetZoom(const EventInfo& t_info) { resetView(); }
-void Engine::Action_Save(const EventInfo& t_info) {}
-void Engine::Action_Quit(const EventInfo& t_info) {}
-void Engine::Action_INVALID_ACTION(const EventInfo& t_info) {}
-
+	std::cout << "> ACTION\tPause" << std::endl;
 #endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_Unpause(const EventInfo& t_info) {
+	m_state = EngineState::Running;
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tUnpause" << std::endl;
+#endif
+
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_MoveViewLeft(const EventInfo& t_info) {
+	m_view.move(-m_viewSpeed * getElapsed().asSeconds(), 0.f);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tMoveViewLeft" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_MoveViewLeft_Paused(const EventInfo& t_info) {
+	m_view.move(-m_viewSpeed * getElapsed().asSeconds(), 0.f);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tMoveViewLeft_Paused" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_MoveViewRight(const EventInfo& t_info) {
+	m_view.move(m_viewSpeed * getElapsed().asSeconds(), 0.f);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tMoveViewRight" << std::endl;
+#endif
+}
+
+
+////////////////////////////////////////////////////////////
+void Engine::Action_MoveViewRight_Paused(const EventInfo& t_info) {
+	m_view.move(m_viewSpeed * getElapsed().asSeconds(), 0.f);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tMoveViewRight_Paused" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_MoveViewUp(const EventInfo& t_info) {
+	m_view.move(0.f, -m_viewSpeed * getElapsed().asSeconds()); // -y = up
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tMoveViewUp" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_MoveViewUp_Paused(const EventInfo& t_info) {
+	m_view.move(0.f, -m_viewSpeed * getElapsed().asSeconds()); // -y = up
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tMoveViewUp_Paused" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_MoveViewDown(const EventInfo& t_info) {
+	m_view.move(0.f, m_viewSpeed * getElapsed().asSeconds()); // +y = down
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tMoveViewDown" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_MoveViewDown_Paused(const EventInfo& t_info) {
+	m_view.move(0.f, m_viewSpeed * getElapsed().asSeconds()); // +y = down
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tMoveViewDown_Paused" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_ResetView(const EventInfo& t_info) {
+	m_view = sf::View();
+	m_view.setCenter(static_cast<float>(m_windowSize.x) / 2, static_cast<float>(m_windowSize.y) / 2);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tResetView" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_ResetView_Paused(const EventInfo& t_info) {
+	m_view = sf::View();
+	m_view.setCenter(static_cast<float>(m_windowSize.x) / 2, static_cast<float>(m_windowSize.y) / 2);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tResetView_Paused" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_ZoomIn(const EventInfo& t_info) {
+	m_view.zoom(1.f - m_viewZoom);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tZoomIn" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_ZoomIn_Paused(const EventInfo& t_info) {
+	m_view.zoom(1.f - m_viewZoom);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tZoomIn_Paused" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_ZoomOut(const EventInfo& t_info) {
+	m_view.zoom(1.f + m_viewZoom);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tZoomOut" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_ZoomOut_Paused(const EventInfo& t_info) {
+	m_view.zoom(1.f + m_viewZoom);
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tZoomOut_Paused" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_ResetZoom(const EventInfo& t_info) {
+	resetView();
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tResetZoom" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_ResetZoom_Paused(const EventInfo& t_info) {
+	resetView();
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tResetZoom_Paused" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_Save(const EventInfo& t_info) {
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tSave" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_Quit(const EventInfo& t_info) {
+
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tQuit" << std::endl;
+#endif
+}
+
+////////////////////////////////////////////////////////////
+void Engine::Action_INVALID_ACTION(const EventInfo& t_info) {
+#if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
+	std::cout << "> ACTION\tINVALID_ACTION" << std::endl;
+#endif
+}
+
+// --------------------------------------------------------------------------------------------------- ACTIONS
