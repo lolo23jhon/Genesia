@@ -49,6 +49,9 @@
     <Filter Include="src\ActorSystem\ActorInstances">
       <UniqueIdentifier>{13c70910-8fae-40e5-a9a9-410c20b17416}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Ai">
+      <UniqueIdentifier>{a5fd1180-5fcd-4ae7-8edf-fa0955af004f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="Actor_Base.cpp">
       <Filter>src\ActorSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Ai_Base.cpp">
+      <Filter>src\Ai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="Food.h">
       <Filter>src\ActorSystem\ActorInstances</Filter>
+    </ClInclude>
+    <ClInclude Include="Ai._Base.h">
+      <Filter>src\Ai</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

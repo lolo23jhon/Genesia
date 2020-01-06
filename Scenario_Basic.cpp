@@ -8,7 +8,7 @@ Scenario_Basic::Scenario_Basic(SharedContext& t_context, const unsigned& t_maxNu
 	Scenario_Base(t_context, t_maxNumActors, t_initialNumOrganisms),
 	m_firstOrganism{ nullptr }
 {
-	m_firstOrganism = std::make_unique<Organism>(m_context, "Organism", 5, sf::Color(240, 200, 100), sf::Vector2f(0.f, 0.f), 0.f, 1.f, 1.f, 0.f);
+	m_firstOrganism = std::make_unique<Organism>(m_context, "Organism", 5.f, sf::Color::Green, sf::Vector2f(0.f, 0.f), 0.f, 1.f, 1.f, 0.f);
 }
 
 ////////////////////////////////////////////////////////////

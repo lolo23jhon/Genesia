@@ -4,10 +4,10 @@
 #include "Utilities.h"
 #include "ResourceHolder.h"
 
-static const std::string S_DEFAULT_FONT{ "Font_consola" };
+static const std::string S_DEFAULT_FONT{ "Font_helvetica" };
 static const sf::Color S_DEFAULT_TEXT_FILL_COLOR{ 25,25,25 };
 static const sf::Color S_DEFAILT_TEXT_OUTILINE_COLOR{ 250,250,250 };
-static const unsigned S_DEFAULT_TEXT_SIZE{ 10U };
+static const unsigned S_DEFAULT_TEXT_SIZE{ 2U };
 
 
 ////////////////////////////////////////////////////////////
@@ -40,8 +40,6 @@ Actor_Base::Actor_Base(
 	}
 	auto& spriteSize{ m_sprite.getTextureRect() };
 	m_sprite.setOrigin(static_cast<float>(spriteSize.width) / 2, static_cast<float>(spriteSize.height) / 2);
-	m_sprite.setPosition(m_position);
-	m_sprite.setRotation(m_rotation);
 
 	// Initialize text
 	Resource* font_resource{ m_context.m_resourceHolder->getResource(ResourceType::Font, S_DEFAULT_FONT) };
@@ -51,8 +49,8 @@ Actor_Base::Actor_Base(
 	m_text.setFont(std::get<sf::Font>(*font_resource));
 	m_text.setFillColor(S_DEFAULT_TEXT_FILL_COLOR);
 	m_text.setOutlineColor(S_DEFAILT_TEXT_OUTILINE_COLOR);
-	m_text.setPosition(m_position.x, m_position.y);
-	utilities::centerSFMLText(m_text);
+
+	update(); // Set sprite and text position
 }
 
 ////////////////////////////////////////////////////////////
@@ -107,6 +105,13 @@ bool Actor_Base::isTextVisible()const { return m_isTextVisible; }
 void Actor_Base::setIsTextVisible(bool t_visible) { m_isTextVisible = t_visible; }
 
 ////////////////////////////////////////////////////////////
+SharedContext& Actor_Base::getContext() {return m_context;}
+
+////////////////////////////////////////////////////////////
+const SharedContext& Actor_Base::getContext() const { return m_context; }
+
+
+////////////////////////////////////////////////////////////
 void Actor_Base::draw() {
 	if (m_isSpriteVisible) {
 		m_context.m_window->draw(m_sprite);
@@ -122,9 +127,11 @@ void Actor_Base::update() {
 	m_sprite.setPosition(m_position);
 	m_sprite.setColor(m_color);
 
-	// Update text
-	m_text.setPosition(m_position.x, m_position.y);
+	// Put text origin in text's center (just in case it changes of string; remember this is a base)
 	utilities::centerSFMLText(m_text);
+
+	// Put text above sprite (-y = up; +y = down):
+	m_text.setPosition(m_position.x, m_position.y - (m_sprite.getGlobalBounds().height*1.4 + utilities::getSFMLTextMaxHeight(m_text))/2); // 
 }
 
 ////////////////////////////////////////////////////////////

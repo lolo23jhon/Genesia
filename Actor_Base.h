@@ -45,6 +45,8 @@ public:
 	void setIsSpriteVisible(bool t_visible);
 	bool isTextVisible()const;
 	void setIsTextVisible(bool t_visible);
+	SharedContext& getContext();
+	const SharedContext& getContext() const;
 
 	void move(const float& t_dx, const float& t_dy);
 	void rotate(const float& t_deg, bool t_leftRight);

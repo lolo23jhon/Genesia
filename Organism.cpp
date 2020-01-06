@@ -27,6 +27,7 @@ Organism::Organism(
 	const auto& textPos{ m_text.getPosition() };
 	// Display text on top of the sprite
 	m_text.setPosition(textPos.x, textPos.y - (m_size / 2) * S_TEXT_OFFSET_FACTOR);
+	m_text.setString(m_name);
 }
 
 ////////////////////////////////////////////////////////////
@@ -62,9 +63,6 @@ void Organism::setSize(const float& t_size) { m_size = t_size; }
 ////////////////////////////////////////////////////////////
 void Organism::update() {
 	Actor_Base::update();
-	const auto& textPos{ m_text.getPosition() };
-	// Display text on top of the sprite
-	m_text.setPosition(textPos.x, textPos.y - (m_size / 2) * S_TEXT_OFFSET_FACTOR);
 }
 
 ////////////////////////////////////////////////////////////

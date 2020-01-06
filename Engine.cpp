@@ -7,6 +7,7 @@
 #include "Organism.h"
 
 static const sf::Color S_BG_COLOR{ 240,240,240 };
+static const unsigned S_FPS{30};
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
@@ -18,13 +19,15 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_scenario{ nullptr },
 	m_rng{},
 	m_resourceHolder{},
-	m_context{}
+	m_context{},
+	m_maxFramerate{S_FPS}
 {
 	m_state = EngineState::Paused;
 	m_context.m_engine = this;
 	m_context.m_resourceHolder = &m_resourceHolder;
 	m_context.m_rng = &m_rng;
 	m_context.m_window = &m_window;
+	m_window.setFramerateLimit(m_maxFramerate);
 	init();
 }
 
@@ -32,7 +35,7 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 ////////////////////////////////////////////////////////////
 void Engine::init() {
 	// Set default view settins
-	m_viewSpeed = 10000.f;
+	m_viewSpeed = 300.f;
 	m_viewZoom = 0.05f;
 	resetView();
 
@@ -217,7 +220,10 @@ void  Engine::setZoom(const float& t_zoom) { m_viewZoom = t_zoom; }
 unsigned Engine::getMaxFramerate()const { return m_maxFramerate; }
 
 ////////////////////////////////////////////////////////////
-void Engine::setMaxFramerate(const unsigned& t_fps) { m_maxFramerate = t_fps; }
+void Engine::setMaxFramerate(const unsigned& t_fps) { 
+	m_maxFramerate = t_fps; 
+	m_window.setFramerateLimit(m_maxFramerate);
+}
 
 ////////////////////////////////////////////////////////////
 void Engine::resetView() {
