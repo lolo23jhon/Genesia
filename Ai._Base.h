@@ -24,7 +24,7 @@ using TaskQueue = std::queue<std::string>;
 using TaskMap = std::unordered_map<std::string, TaskCallback>;
 
 class Ai_Base {
-
+protected:
 	TaskMap m_taskMap;					// Includes all the tasks or actions the actor is capable of doing
 	TaskQueue m_taskQueue;				// Contains the currently queued tasks 
 	const std::string* m_currentTask;	// Used for keeping track of tasks, considering these could take more than one tick

@@ -30,7 +30,7 @@ void Ai_Base::pollTasks() {
 		return;
 	}
 
-	if (!m_isDone) { return; }
+	if (m_isDone) { return; }
 	// Current task is at front always
 	m_taskQueue.pop();
 	if (m_taskQueue.empty()) {

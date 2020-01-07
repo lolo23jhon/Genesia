@@ -14,7 +14,7 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_windowSize{ t_windowSize },
 	m_keyboard{ Keyboard() },
 	m_eventHandler{ EventHandler() },
-	m_state{ EngineState::Loading },
+	m_state{ EngineState::Init },
 	m_window{ sf::VideoMode(t_windowSize.x, t_windowSize.y), t_windowName },
 	m_scenario{ nullptr },
 	m_rng{},
@@ -22,13 +22,15 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_context{},
 	m_maxFramerate{S_FPS}
 {
-	m_state = EngineState::Paused;
 	m_context.m_engine = this;
 	m_context.m_resourceHolder = &m_resourceHolder;
 	m_context.m_rng = &m_rng;
 	m_context.m_window = &m_window;
 	m_window.setFramerateLimit(m_maxFramerate);
 	init();
+	update(); // Run a single tick to place verything
+	m_state = EngineState::Paused;
+	
 }
 
 
@@ -62,13 +64,13 @@ void Engine::init() {
 
 ////////////////////////////////////////////////////////////
 void Engine::update() {
+	if (m_state == EngineState::Paused) { return; }
 	for (auto& actor : m_actors) {
 		actor->update();
 	}
 	m_scenario->update();
 
 }
-
 
 ////////////////////////////////////////////////////////////
 const EngineState& Engine::getState()const { return m_state; }
@@ -239,7 +241,7 @@ void Engine::spawnActor(ActorPtr t_actor) { m_actors.emplace_back(std::move(t_ac
 static const std::string S_EMPTY_STR{ "" };
 
 const StateNames Engine::s_stateNames{
-	{"EngineState_Loading", EngineState::Loading},
+	{"EngineState_Init", EngineState::Init},
 	{"EngineState_Paused", EngineState::Paused},
 	{"EngineState_Running", EngineState::Running}
 };

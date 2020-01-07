@@ -11,10 +11,20 @@ Ai_Organism::Ai_Organism() : Ai_Base() {
 
 ////////////////////////////////////////////////////////////
 void Ai_Organism::Task_Idle(Actor_Base* t_owner) {
-	auto owner{ dynamic_cast<Organism*>(t_owner) };
+	auto owner{ static_cast<Organism*>(t_owner) };
 	float dt{ owner->getContext().m_engine->getElapsed().asSeconds() };
 	float dx{ 0 };
 	float dy{ 0 };
-	mat::to_cartesian(owner->getMovementSpeed(), owner->getRotation(), dx, dy);
-	owner->move(dx* dt, dy* dt);
+	const auto& disp{ owner->getMovementSpeed()*dt };
+
+	mat::to_cartesian(disp, owner->getRotation(), dx, dy);
+	owner->move(dx, dy);
+	owner->rotate(owner->getRotationSpeed()* dt);
+	owner->setTextSring(owner->getName() + " : " + *m_currentTask + " Rot: " + std::to_string(owner->getRotation()));
+}
+
+void Ai_Organism::update(Actor_Base* t_owner) {
+	auto owner{ static_cast<Organism*>(t_owner) };
+	pollTasks();
+	executeTask(*m_currentTask, t_owner);
 }

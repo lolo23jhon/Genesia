@@ -9,6 +9,7 @@
 class Ai_Organism : public Ai_Base {
 public:
 	Ai_Organism();
+	void update(Actor_Base* t_owner);
 
 protected:
 	void Task_Idle(Actor_Base* t_owner);

@@ -99,6 +99,12 @@ bool Actor_Base::getIsSpriteVisible()const { return m_isSpriteVisible; }
 void Actor_Base::setIsSpriteVisible(bool t_visible) { m_isSpriteVisible = t_visible; }
 
 ////////////////////////////////////////////////////////////
+const std::string& Actor_Base::getTextString()const { return m_text.getString(); }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::setTextSring(const std::string& t_str) { m_text.setString(t_str); }
+
+////////////////////////////////////////////////////////////
 bool Actor_Base::isTextVisible()const { return m_isTextVisible; }
 
 ////////////////////////////////////////////////////////////
@@ -141,8 +147,8 @@ void Actor_Base::move(const float& t_dx, const float& t_dy) {
 }
 
 ////////////////////////////////////////////////////////////
-void Actor_Base::rotate(const float& t_deg, bool t_leftRight) {
-	m_rotation = mat::normalizeAngle(m_rotation + (t_leftRight ? -t_deg : t_deg));// Clockwise angle -> true = right = +angle; false = left = -angle
+void Actor_Base::rotate(const float& t_deg) {
+	m_rotation = mat::normalizeAngle(m_rotation + t_deg);
 }
 
 

@@ -22,7 +22,8 @@ Organism::Organism(
 	m_size{ t_size },
 	m_movementSpeed{ t_movSpeed },
 	m_rotationSpeed{ t_rotSpeed },
-	m_age{ t_age }
+	m_age{ t_age },
+	m_ai{ std::make_unique<Ai_Organism>() }
 {
 	const auto& textPos{ m_text.getPosition() };
 	// Display text on top of the sprite
@@ -43,12 +44,6 @@ const float& Organism::getRotationSpeed()const { return m_rotationSpeed; }
 void Organism::setRotationSpeed(const float& t_rotationSpeed) { m_rotationSpeed = t_rotationSpeed; }
 
 ////////////////////////////////////////////////////////////
-const std::string& Organism::getName()const { return m_name; }
-
-////////////////////////////////////////////////////////////
-void Organism::setName(const std::string& t_name) { m_name = t_name; }
-
-////////////////////////////////////////////////////////////
 const float& Organism::getAge()const { return m_age; }
 
 ////////////////////////////////////////////////////////////
@@ -61,6 +56,12 @@ const float& Organism::getSize()const { return m_size; }
 void Organism::setSize(const float& t_size) { m_size = t_size; }
 
 ////////////////////////////////////////////////////////////
+const std::string& Organism::getName()const { return m_name; }
+
+////////////////////////////////////////////////////////////
+void Organism::setName(const std::string& t_name) { m_name = t_name; }
+
+////////////////////////////////////////////////////////////
 void Organism::update() {
 	m_ai->update(this);
 	Actor_Base::update();
@@ -70,5 +71,3 @@ void Organism::update() {
 ActorPtr Organism::clone() {
 	return std::make_unique<Organism>(m_context, m_name, m_size, m_color, m_position, m_rotation, m_movementSpeed, m_rotationSpeed, m_age);
 }
-
-void Organism::eat() {}

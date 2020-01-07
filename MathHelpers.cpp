@@ -122,8 +122,8 @@ namespace mat {
 
 	////////////////////////////////////////////////////////////
 	void to_cartesian(const float& t_radius, const float& t_degrees, float& t_out_i, float& t_out_j) {
-		t_out_i = t_radius * std::cos(t_degrees);
-		t_out_j = t_radius * std::sin(t_degrees);
+		t_out_i = t_radius * std::cos(t_degrees * TO_RADIANS);
+		t_out_j = t_radius * std::sin(t_degrees * TO_RADIANS);
 	}
 
 	////////////////////////////////////////////////////////////

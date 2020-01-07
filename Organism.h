@@ -47,8 +47,5 @@ public:
 
 	ActorPtr clone();
 
-	virtual void eat();
-
-
 };
 #endif // !ORGANISM_H

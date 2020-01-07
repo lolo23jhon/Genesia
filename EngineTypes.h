@@ -20,7 +20,7 @@ enum ActionTupleTypes {
 
 enum class EngineState {
 	INVALID_STATE = -1,
-	Loading,
+	Init,
 	Paused,
 	Running,
 	STATE_COUNT
