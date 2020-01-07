@@ -1,12 +1,15 @@
 #ifndef ORGANISM_H
 #define ORGANIS_H
 
+#include <memory>
 #include <string>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "ResourceHolder.h"
 #include "Actor_Base.h"
+#include "Ai_Organism.h"
+
 
 class Organism : public Actor_Base {
 protected:
@@ -17,6 +20,7 @@ protected:
 	float m_movementSpeed;
 	float m_rotationSpeed;
 
+	std::unique_ptr<Ai_Organism> m_ai;
 
 public:
 	Organism(SharedContext& t_context,

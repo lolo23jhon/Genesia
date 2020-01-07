@@ -131,7 +131,7 @@ void Actor_Base::update() {
 	utilities::centerSFMLText(m_text);
 
 	// Put text above sprite (-y = up; +y = down):
-	m_text.setPosition(m_position.x, m_position.y - (m_sprite.getGlobalBounds().height*1.4 + utilities::getSFMLTextMaxHeight(m_text))/2); // 
+	m_text.setPosition(m_position.x, m_position.y - (m_sprite.getGlobalBounds().height*1.4f + utilities::getSFMLTextMaxHeight(m_text))/2); // 
 }
 
 ////////////////////////////////////////////////////////////

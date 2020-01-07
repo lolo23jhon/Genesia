@@ -111,6 +111,9 @@
     <ClCompile Include="Ai_Base.cpp">
       <Filter>src\Ai</Filter>
     </ClCompile>
+    <ClCompile Include="Ai_Organism.cpp">
+      <Filter>src\Ai</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">
@@ -177,6 +180,9 @@
       <Filter>src\ActorSystem\ActorInstances</Filter>
     </ClInclude>
     <ClInclude Include="Ai._Base.h">
+      <Filter>src\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Ai_Organism.h">
       <Filter>src\Ai</Filter>
     </ClInclude>
   </ItemGroup>

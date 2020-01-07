@@ -15,8 +15,9 @@
 class Actor_Base;
 
 template <class TDerived>
-using TaskFunctor = void (TDerived::*)(Actor_Base* t_owner);
-using TaskCallback = std::function<void>(Actor_Base * t_owner);
+using TaskFunctor = void(TDerived::*)(Actor_Base*);
+
+using TaskCallback = std::function<void(Actor_Base * t_owner)>;
 
 using TaskQueue = std::queue<std::string>;
 
@@ -24,17 +25,17 @@ using TaskMap = std::unordered_map<std::string, TaskCallback>;
 
 class Ai_Base {
 
-	TaskMap m_taskMap;			// Includes all the tasks or actions the actor is capable of doing
-	TaskQueue m_taskQueue;		// Contains the currently queued tasks 
-	std::string& m_currentTask;	// Used for keeping track of tasks, considering these could take more than one tick
-	float m_waitCoundown;		// seconds
-	bool m_isDone;				// Whether or not the current action was completed
+	TaskMap m_taskMap;					// Includes all the tasks or actions the actor is capable of doing
+	TaskQueue m_taskQueue;				// Contains the currently queued tasks 
+	const std::string* m_currentTask;	// Used for keeping track of tasks, considering these could take more than one tick
+	float m_waitCoundown;				// seconds
+	bool m_isDone;						// Whether or not the current action was completed
 
 public:
 	Ai_Base();
 	////////////////////////////////////////////////////////////
 	template <class TDerived> void registerTask(const std::string& t_taskId, TaskFunctor<TDerived> t_functor) {
-		m_taskMap[t_taskId] = std::bind(t_functor, dynamic_cast<TDerived>(this), std::placeholders::_1);
+		m_taskMap[t_taskId] = std::bind(t_functor, dynamic_cast<TDerived*>(this), std::placeholders::_1);
 	}
 	
 	bool executeTask(const std::string& t_taskName, Actor_Base* t_owner);		// Return false if task does not exist
@@ -48,6 +49,7 @@ public:
 	
 	virtual void update(Actor_Base* t_owner); // Called from Actor_Base::update; this is bridge of the Ai with the system
 
+protected:
 	virtual void Task_Idle(Actor_Base* t_owner); // Special task: default of no actions in queue and no wait timer
 	virtual void Task_Waiting(Actor_Base* t_owner); // Special task: the actor is freezed until the countdown reaches 0; decreased on update
 };

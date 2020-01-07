@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.cpp" />
     <ClCompile Include="Actor_Base.cpp" />
     <ClCompile Include="Ai_Base.cpp" />
+    <ClCompile Include="Ai_Organism.cpp" />
     <ClCompile Include="BoundKeys.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h" />
     <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="Ai._Base.h" />
+    <ClInclude Include="Ai_Organism.h" />
     <ClInclude Include="BoundKeys.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h" />

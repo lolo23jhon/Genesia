@@ -62,12 +62,13 @@ void Organism::setSize(const float& t_size) { m_size = t_size; }
 
 ////////////////////////////////////////////////////////////
 void Organism::update() {
+	m_ai->update(this);
 	Actor_Base::update();
 }
 
 ////////////////////////////////////////////////////////////
 ActorPtr Organism::clone() {
-	return std::make_unique<Organism>(*this);
+	return std::make_unique<Organism>(m_context, m_name, m_size, m_color, m_position, m_rotation, m_movementSpeed, m_rotationSpeed, m_age);
 }
 
 void Organism::eat() {}
