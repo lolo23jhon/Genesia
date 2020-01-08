@@ -60,9 +60,6 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.cpp">
-      <Filter>src\PerlinNoise</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp">
       <Filter>src\EngineSystem</Filter>
     </ClCompile>
@@ -114,11 +111,11 @@
     <ClCompile Include="Ai_Organism.cpp">
       <Filter>src\Ai</Filter>
     </ClCompile>
+    <ClCompile Include="PerlinNoise.cpp">
+      <Filter>src\PerlinNoise</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h">
-      <Filter>src\PerlinNoise</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h">
       <Filter>src\InputSystem</Filter>
     </ClInclude>
@@ -184,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="Ai_Organism.h">
       <Filter>src\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoise.h">
+      <Filter>src\PerlinNoise</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

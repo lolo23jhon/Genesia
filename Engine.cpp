@@ -7,7 +7,8 @@
 #include "Organism.h"
 
 static const sf::Color S_BG_COLOR{ 240,240,240 };
-static const unsigned S_FPS{30};
+static const unsigned S_FPS{ 30 };
+static const unsigned S_NUM_ACTORS{ 10U };
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
@@ -20,7 +21,7 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_rng{},
 	m_resourceHolder{},
 	m_context{},
-	m_maxFramerate{S_FPS}
+	m_maxFramerate{ S_FPS }
 {
 	m_context.m_engine = this;
 	m_context.m_resourceHolder = &m_resourceHolder;
@@ -30,7 +31,6 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	init();
 	update(); // Run a single tick to place verything
 	m_state = EngineState::Paused;
-	
 }
 
 
@@ -57,7 +57,7 @@ void Engine::init() {
 	m_resourceHolder.init();
 
 	// Initialize simulation scenario
-	m_scenario = std::make_unique<Scenario_Basic>(m_context, 100U, 5U);
+	m_scenario = std::make_unique<Scenario_Basic>(m_context, 100U, S_NUM_ACTORS);
 	m_scenario->init();
 
 }
@@ -155,10 +155,14 @@ void Engine::render() {
 	// Clear the window
 	m_window.clear(S_BG_COLOR);
 
+	// Draw any scenery placed by the scenario
+	m_scenario->draw();
+
 	// Draw the actors
 	for (auto& actor : m_actors) {
 		actor->draw();
 	}
+
 
 	m_window.display();
 }
@@ -222,8 +226,8 @@ void  Engine::setZoom(const float& t_zoom) { m_viewZoom = t_zoom; }
 unsigned Engine::getMaxFramerate()const { return m_maxFramerate; }
 
 ////////////////////////////////////////////////////////////
-void Engine::setMaxFramerate(const unsigned& t_fps) { 
-	m_maxFramerate = t_fps; 
+void Engine::setMaxFramerate(const unsigned& t_fps) {
+	m_maxFramerate = t_fps;
 	m_window.setFramerateLimit(m_maxFramerate);
 }
 

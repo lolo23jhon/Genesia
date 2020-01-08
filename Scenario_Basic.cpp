@@ -4,12 +4,12 @@
 #include "Organism.h"
 #include "SharedContext.h"
 
-Scenario_Basic::Scenario_Basic(SharedContext& t_context, const unsigned& t_maxNumActors, const unsigned& t_initialNumOrganisms) :
-	Scenario_Base(t_context, t_maxNumActors, t_initialNumOrganisms),
+Scenario_Basic::Scenario_Basic(SharedContext& t_context, const unsigned& t_maxNumActors, const unsigned& t_initialNumOrganisms, const float& t_width, const float& t_height) :
+	Scenario_Base(t_context, t_maxNumActors, t_initialNumOrganisms,t_width, t_height),
 	m_firstOrganism{ nullptr }
 {
 	const float movementSpeed{150.f}; // unit/second
-	const float rotationSpeed{10.f}; // deg/second
+	const float rotationSpeed{50.f}; // deg/second
 	
 	m_firstOrganism = std::make_unique<Organism>(m_context, "Organism", 5.f, sf::Color::Green, sf::Vector2f(0.f, 0.f), 0.f, movementSpeed, rotationSpeed, 0.f);
 }
@@ -35,6 +35,3 @@ void Scenario_Basic::init() {
 	}
 
 }
-
-////////////////////////////////////////////////////////////
-void Scenario_Basic::update() {}

@@ -1,6 +1,7 @@
 #ifndef  ENGINE_H
 #define	 ENGINE_H
 
+#include <algorithm>
 #include <memory>
 #include <string>
 #include <functional>
@@ -88,6 +89,11 @@ public:
 
 	bool executeAction(const ActionId& t_id, const EventInfo& t_info); // Umbrella for all the actions
 	ActionCallback getActionCallback(const EngineState& t_state, const ActionId& t_id); // * See coment bellow
+
+	
+	template <class UnaryFunction> UnaryFunction actorsForEach(UnaryFunction t_fn) {
+		return std::for_each(m_actors.begin(), m_actors.end(), t_fn);
+	}
 
 	static ActionId actionStrToId(const std::string& t_name);
 	static const std::string& actionIdToStr(const ActionId& t_id);

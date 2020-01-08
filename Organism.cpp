@@ -2,6 +2,8 @@
 #include "Organism.h"
 #include "MathHelpers.h"
 #include "Utilities.h"
+#include "SharedContext.h"
+#include "Engine.h"
 
 static const std::string S_DEFAULT_TEXTURE{ "Texture_organism" };
 static const float S_TEXT_OFFSET_FACTOR{ 1.1f };
@@ -23,8 +25,9 @@ Organism::Organism(
 	m_movementSpeed{ t_movSpeed },
 	m_rotationSpeed{ t_rotSpeed },
 	m_age{ t_age },
-	m_ai{ std::make_unique<Ai_Organism>() }
+	m_ai{ nullptr }
 {
+	m_ai = std::make_unique<Ai_Organism>(this);
 	const auto& textPos{ m_text.getPosition() };
 	// Display text on top of the sprite
 	m_text.setPosition(textPos.x, textPos.y - (m_size / 2) * S_TEXT_OFFSET_FACTOR);
@@ -63,6 +66,7 @@ void Organism::setName(const std::string& t_name) { m_name = t_name; }
 
 ////////////////////////////////////////////////////////////
 void Organism::update() {
+	m_age += m_context.m_engine->getElapsed().asSeconds();
 	m_ai->update(this);
 	Actor_Base::update();
 }

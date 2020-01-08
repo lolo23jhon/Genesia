@@ -37,7 +37,7 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp" />
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.cpp" />
+    <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -61,7 +61,7 @@
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.h" />
-    <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\PerlinNoise.h" />
+    <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\RandomGenerator.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Utilities.h" />
   </ItemGroup>
