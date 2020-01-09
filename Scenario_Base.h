@@ -24,7 +24,7 @@ public:
 
 
 	virtual void init() = 0; // Anything that happens when the simulation begins, like spawning the first characters
-	virtual void update(); // Anything that happens every frame, such as spawning x actor on condition y at time z
+	virtual void update(const float& t_elapsed); // Anything that happens every frame, such as spawning x actor on condition y at time z
 	virtual void draw();  // Draw scenery like a background for example.
 
 };

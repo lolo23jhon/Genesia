@@ -65,10 +65,10 @@ const std::string& Organism::getName()const { return m_name; }
 void Organism::setName(const std::string& t_name) { m_name = t_name; }
 
 ////////////////////////////////////////////////////////////
-void Organism::update() {
-	m_age += m_context.m_engine->getElapsed().asSeconds();
-	m_ai->update(this);
-	Actor_Base::update();
+void Organism::update(const float& t_elapsed) {
+	m_age += t_elapsed;
+	m_ai->update(this, t_elapsed);
+	Actor_Base::update(t_elapsed);
 }
 
 ////////////////////////////////////////////////////////////

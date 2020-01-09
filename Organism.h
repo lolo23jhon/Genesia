@@ -3,22 +3,33 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "ResourceHolder.h"
 #include "Actor_Base.h"
 #include "Ai_Organism.h"
+#include "Trait.h"
 
 
 class Organism : public Actor_Base {
 protected:
-	std::string m_name;
+	
+
+		std::string m_name;
 	float m_size;
 	float m_age;
 
-	float m_movementSpeed;
-	float m_rotationSpeed;
+	float m_energy; // Expended on every activity; Death when <= 0
+
+	// ------------------------------ Traits ------------------------------
+	Trait<float> m_Trait_maxEnergy;
+	Trait<float> m_Trait_digestiveEfficiency;
+	Trait<float> m_Trait_restingMetabolicRate;
+	Trait<float> m_Trait_movementSpeed;
+	Trait<float> m_Trait_foodDetectionRange;
+	Trait<float> m_Trait_lifespan;				// (s)	   
 
 	std::unique_ptr<Ai_Organism> m_ai;
 
@@ -42,8 +53,13 @@ public:
 	void setAge(const float& t_age);
 	const float& getSize()const;
 	void setSize(const float& t_size);
+	const float& getEnergy()const;
+	void setEnergy(const float& t_energy);
+	void addEnergy(const float& t_energy);
+	const float& getRestingMetabolicRate()const;
+	void setRestingMetabolicRate(const float& t_rmr);
 
-	void update();
+	void update(const float& t_elapsed);
 
 	ActorPtr clone();
 

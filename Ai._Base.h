@@ -15,9 +15,9 @@
 class Actor_Base;
 
 template <class TDerived>
-using TaskFunctor = void(TDerived::*)(Actor_Base*);
+using TaskFunctor = void(TDerived::*)(Actor_Base*, const float& );
 
-using TaskCallback = std::function<void(Actor_Base * t_owner)>;
+using TaskCallback = std::function<void(Actor_Base *, const float&)>;
 
 using TaskQueue = std::queue<std::string>;
 
@@ -35,10 +35,10 @@ public:
 	Ai_Base();
 	////////////////////////////////////////////////////////////
 	template <class TDerived> void registerTask(const std::string& t_taskId, TaskFunctor<TDerived> t_functor) {
-		m_taskMap[t_taskId] = std::bind(t_functor, dynamic_cast<TDerived*>(this), std::placeholders::_1);
+		m_taskMap[t_taskId] = std::bind(t_functor, dynamic_cast<TDerived*>(this), std::placeholders::_1, std::placeholders::_2);
 	}
 	
-	bool executeTask(const std::string& t_taskName, Actor_Base* t_owner);		// Return false if task does not exist
+	bool executeTask(const std::string& t_taskName, Actor_Base* t_owner, const float& t_elapsed);		// Return false if task does not exist
 	void pollTasks();							// Checks if the current task is finished. If so, pops a task from the queue and makes the current goal
 	const float& getWaitCountDown()const;
 	void setWaitCountDown(const float& t_seconds);
@@ -47,11 +47,11 @@ public:
 	bool getIsDone()const;
 
 	
-	virtual void update(Actor_Base* t_owner); // Called from Actor_Base::update; this is bridge of the Ai with the system
+	virtual void update(Actor_Base* t_owner, const float& t_elapsed); // Called from Actor_Base::update; this is bridge of the Ai with the system
 
 protected:
-	virtual void Task_Idle(Actor_Base* t_owner); // Special task: default of no actions in queue and no wait timer
-	virtual void Task_Waiting(Actor_Base* t_owner); // Special task: the actor is freezed until the countdown reaches 0; decreased on update
+	virtual void Task_Idle(Actor_Base* t_owner, const float& t_elapsed); // Special task: default of no actions in queue and no wait timer
+	virtual void Task_Waiting(Actor_Base* t_owner, const float& t_elapsed); // Special task: the actor is freezed until the countdown reaches 0; decreased on update
 };
 
 

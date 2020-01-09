@@ -50,7 +50,7 @@ Actor_Base::Actor_Base(
 	m_text.setFillColor(S_DEFAULT_TEXT_FILL_COLOR);
 	m_text.setOutlineColor(S_DEFAILT_TEXT_OUTILINE_COLOR);
 
-	update(); // Set sprite and text position
+	update(0.f); // Set sprite and text position
 }
 
 ////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ bool Actor_Base::getIsSpriteVisible()const { return m_isSpriteVisible; }
 void Actor_Base::setIsSpriteVisible(bool t_visible) { m_isSpriteVisible = t_visible; }
 
 ////////////////////////////////////////////////////////////
-const std::string& Actor_Base::getTextString()const { return m_text.getString(); }
+std::string Actor_Base::getTextString()const { return m_text.getString(); }
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::setTextSring(const std::string& t_str) { m_text.setString(t_str); }
@@ -127,7 +127,7 @@ void Actor_Base::draw() {
 	}
 }
 
-void Actor_Base::update() {
+void Actor_Base::update(const float& t_elapsed) {
 	// Update sprite
 	m_sprite.setRotation(m_rotation);
 	m_sprite.setPosition(m_position);

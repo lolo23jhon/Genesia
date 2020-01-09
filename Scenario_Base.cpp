@@ -24,7 +24,7 @@ void Scenario_Base::setMaxNumActors(const unsigned& t_num) { m_maxNumActors = t_
 const unsigned& Scenario_Base::getInitialNumOrganisms()const { return m_initialNumOrganisms; }
 
 ////////////////////////////////////////////////////////////
-void Scenario_Base::update() {
+void Scenario_Base::update(const float& t_elapsed) {
 
 	// Keep all the actors within the boudaries of the simation; Loo´p around when outside it
 	m_context.m_engine->actorsForEach(

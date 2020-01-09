@@ -52,6 +52,9 @@
     <Filter Include="src\Ai">
       <UniqueIdentifier>{a5fd1180-5fcd-4ae7-8edf-fa0955af004f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\OrganismTraits">
+      <UniqueIdentifier>{00847ed3-8314-4939-bc4f-1eb00fb1bd09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -113,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="PerlinNoise.cpp">
       <Filter>src\PerlinNoise</Filter>
+    </ClCompile>
+    <ClCompile Include="Food.cpp">
+      <Filter>src\ActorSystem\ActorInstances</Filter>
+    </ClCompile>
+    <ClCompile Include="Traits.cpp">
+      <Filter>src\OrganismTraits</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +193,12 @@
     </ClInclude>
     <ClInclude Include="PerlinNoise.h">
       <Filter>src\PerlinNoise</Filter>
+    </ClInclude>
+    <ClInclude Include="Traits.h">
+      <Filter>src\OrganismTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="unordered_bimap.h">
+      <Filter>src\Types</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

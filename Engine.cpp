@@ -64,12 +64,12 @@ void Engine::init() {
 
 ////////////////////////////////////////////////////////////
 void Engine::update() {
+	const float elapsed{m_elapsed.asSeconds()};
 	if (m_state == EngineState::Paused) { return; }
 	for (auto& actor : m_actors) {
-		actor->update();
+		actor->update(elapsed);
 	}
-	m_scenario->update();
-
+	m_scenario->update(elapsed);
 }
 
 ////////////////////////////////////////////////////////////

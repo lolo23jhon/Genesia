@@ -43,7 +43,7 @@ public:
 	void setSprite(const std::string& t_texture, const sf::IntRect t_spriteRect = sf::IntRect());
 	bool getIsSpriteVisible()const;
 	void setIsSpriteVisible(bool t_visible);
-	const std::string& getTextString()const;
+	std::string getTextString()const;
 	void setTextSring(const std::string& t_str);
 	bool isTextVisible()const;
 	void setIsTextVisible(bool t_visible);
@@ -53,7 +53,7 @@ public:
 	void move(const float& t_dx, const float& t_dy);
 	void rotate(const float& t_deg);
 
-	virtual void update();
+	virtual void update(const float& t_elapsed);
 	virtual void draw();
 
 	virtual ActorPtr clone();

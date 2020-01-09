@@ -13,10 +13,10 @@ Ai_Base::Ai_Base() : m_currentTask{ &S_TASK_IDLE }, m_isDone{ true }, m_waitCoun
 }
 
 ////////////////////////////////////////////////////////////
-bool Ai_Base::executeTask(const std::string& t_taskName, Actor_Base* t_owner) {
+bool Ai_Base::executeTask(const std::string& t_taskName, Actor_Base* t_owner, const float& t_elapsed) {
 	auto it{ m_taskMap.find(t_taskName) };
 	if (it == m_taskMap.end()) { return false; }
-	it->second(t_owner);
+	it->second(t_owner, t_elapsed);
 	return true;
 }
 
@@ -58,15 +58,15 @@ bool Ai_Base::getIsDone()const { return m_isDone; }
 
 
 ////////////////////////////////////////////////////////////
-void Ai_Base::update(Actor_Base* t_owner) {
+void Ai_Base::update(Actor_Base* t_owner, const float& t_elapsed) {
 	pollTasks();
-	executeTask(*m_currentTask,t_owner);
+	executeTask(*m_currentTask,t_owner, t_elapsed);
 }
 
 ////////////////////////////////////////////////////////////
-void Ai_Base::Task_Idle(Actor_Base* t_owner) {}
+void Ai_Base::Task_Idle(Actor_Base* t_owner, const float& t_elapsed) {}
 
 ////////////////////////////////////////////////////////////
-void Ai_Base::Task_Waiting(Actor_Base* t_owner) {
+void Ai_Base::Task_Waiting(Actor_Base* t_owner, const float& t_elapsed) {
 	m_waitCoundown -= t_owner->getContext().m_engine->getElapsed().asSeconds();
 }

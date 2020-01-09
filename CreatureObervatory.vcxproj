@@ -27,6 +27,7 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp" />
     <ClCompile Include="dep_main.cpp" />
+    <ClCompile Include="Food.cpp" />
     <ClCompile Include="MathHelpers.cpp" />
     <ClCompile Include="Organism.cpp" />
     <ClCompile Include="ResourceHolder.cpp" />
@@ -39,12 +40,14 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp" />
+    <ClCompile Include="Traits.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h" />
     <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="Ai._Base.h" />
     <ClInclude Include="Ai_Organism.h" />
+    <ClInclude Include="unordered_bimap.h" />
     <ClInclude Include="BoundKeys.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h" />
@@ -64,6 +67,7 @@
     <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\RandomGenerator.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Utilities.h" />
+    <ClInclude Include="Traits.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
