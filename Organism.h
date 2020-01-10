@@ -10,26 +10,33 @@
 #include "ResourceHolder.h"
 #include "Actor_Base.h"
 #include "Ai_Organism.h"
-#include "Trait.h"
+#include "Traits.h"
 
 
 class Organism : public Actor_Base {
-protected:
-	
+	friend class Traits;
 
-		std::string m_name;
+protected:
+	std::string m_name;
 	float m_size;
 	float m_age;
+
+	bool m_isDead;
+	float m_destructionDelay; // Time after death the organism's physical body remains after it has remerged with inifite conciousness
 
 	float m_energy; // Expended on every activity; Death when <= 0
 
 	// ------------------------------ Traits ------------------------------
-	Trait<float> m_Trait_maxEnergy;
-	Trait<float> m_Trait_digestiveEfficiency;
-	Trait<float> m_Trait_restingMetabolicRate;
-	Trait<float> m_Trait_movementSpeed;
-	Trait<float> m_Trait_foodDetectionRange;
-	Trait<float> m_Trait_lifespan;				// (s)	   
+	Traits m_traits;
+	
+	// ------------------------ Traits-based values -----------------------
+	float m_trait_maxEnergy;
+	float m_trait_digestiveEfficiency;
+	float m_trait_restingMetabolicRate;
+	float m_trait_movementSpeed;
+	float m_trait_turningSpeed;
+	float m_trait_foodDetectionRange;
+	float m_trait_lifespan;
 
 	std::unique_ptr<Ai_Organism> m_ai;
 
@@ -62,6 +69,8 @@ public:
 	void update(const float& t_elapsed);
 
 	ActorPtr clone();
+
+	void die();
 
 };
 #endif // !ORGANISM_H

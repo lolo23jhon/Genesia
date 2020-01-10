@@ -22,6 +22,8 @@ protected:
 	bool m_isSpriteVisible;
 	bool m_isTextVisible;
 
+	bool m_destroy; // If the actor shold be removed from the system on the nect tick
+
 public:
 	Actor_Base(
 		SharedContext& t_context,
@@ -47,6 +49,8 @@ public:
 	void setTextSring(const std::string& t_str);
 	bool isTextVisible()const;
 	void setIsTextVisible(bool t_visible);
+	bool shouldBeDestroyed()const;
+	void setShouldBeDestroyed(bool t_destroy);
 	SharedContext& getContext();
 	const SharedContext& getContext() const;
 
@@ -57,5 +61,6 @@ public:
 	virtual void draw();
 
 	virtual ActorPtr clone();
+	virtual void onDestruction(SharedContext* t_context); // Anythung that happens when the actor is aihiated i. g. spawning something
 };
 #endif // !ACTOR_BASE_H

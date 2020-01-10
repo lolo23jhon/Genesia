@@ -151,8 +151,16 @@ void Actor_Base::rotate(const float& t_deg) {
 	m_rotation = mat::normalizeAngle(m_rotation + t_deg);
 }
 
+////////////////////////////////////////////////////////////
+bool Actor_Base::shouldBeDestroyed()const { return m_destroy; }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::setShouldBeDestroyed(bool t_destroy) { m_destroy = t_destroy; }
 
 ////////////////////////////////////////////////////////////
 ActorPtr Actor_Base::clone() {
 	return std::make_unique<Actor_Base>(*this);
 }
+
+////////////////////////////////////////////////////////////
+ void Actor_Base::onDestruction(SharedContext* t_context) {}

@@ -20,7 +20,6 @@ void Ai_Organism::Task_Idle(Actor_Base* t_owner, const float& t_elapsed) {
 	mat::to_cartesian(disp, owner->getRotation(), dx, dy);
 	owner->move(dx, dy);
 	owner->rotate(PerlinNoise::noise(m_noiseIncrement + owner->getAge())* owner->getRotationSpeed()* t_elapsed); // Use perlin noise for natural-looking movement
-	owner->setTextSring(owner->getName() + " : " + *m_currentTask + " Rot: " + std::to_string(owner->getRotation()));
 }
 
 ////////////////////////////////////////////////////////////

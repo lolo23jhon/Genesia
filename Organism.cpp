@@ -66,12 +66,26 @@ void Organism::setName(const std::string& t_name) { m_name = t_name; }
 
 ////////////////////////////////////////////////////////////
 void Organism::update(const float& t_elapsed) {
+	// Update the organism's age
 	m_age += t_elapsed;
+
+	// Update all the traits' effects
+	m_traits.update(this, t_elapsed);
+
+	// Update the organim's ai
 	m_ai->update(this, t_elapsed);
+	
+	// Lower level update (position, rotation ...)
 	Actor_Base::update(t_elapsed);
 }
 
 ////////////////////////////////////////////////////////////
 ActorPtr Organism::clone() {
 	return std::make_unique<Organism>(m_context, m_name, m_size, m_color, m_position, m_rotation, m_movementSpeed, m_rotationSpeed, m_age);
+}
+
+////////////////////////////////////////////////////////////
+void Organism::die() {
+	m_isDead = true;
+	m_name += " (dead)";
 }
