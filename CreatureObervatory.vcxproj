@@ -40,13 +40,15 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp" />
-    <ClCompile Include="Traits.cpp" />
+    <ClCompile Include="Trait.cpp" />
+    <ClCompile Include="TraitCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h" />
     <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="Ai._Base.h" />
     <ClInclude Include="Ai_Organism.h" />
+    <ClInclude Include="Trait.h" />
     <ClInclude Include="unordered_bimap.h" />
     <ClInclude Include="BoundKeys.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h" />
@@ -67,7 +69,7 @@
     <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\RandomGenerator.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Utilities.h" />
-    <ClInclude Include="Traits.h" />
+    <ClInclude Include="TraitCollection.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -9,6 +9,7 @@ class RandomGenerator {
 
 	std::random_device m_device;
 	std::mt19937 m_engine;
+	std::normal_distribution<float> m_normalDistribution;
 	std::uniform_int_distribution<int> m_intDistribution;
 	std::uniform_real_distribution<float> m_floatDistribution;
 	sf::Mutex m_mutex;
@@ -17,6 +18,15 @@ public:
 	////////////////////////////////////////////////////////////
 	RandomGenerator() : m_engine(m_device()) {}
 
+
+	////////////////////////////////////////////////////////////
+	float normalDisttribution(const float& t_mean, const float& t_stdDev) {
+		sf::Lock lock{ m_mutex };
+		if (t_mean != m_normalDistribution.mean() || t_stdDev != m_normalDistribution.stddev()) {
+			m_normalDistribution = std::normal_distribution<float>(t_mean,t_stdDev);
+		}
+		return m_normalDistribution(m_engine);
+	}
 
 	////////////////////////////////////////////////////////////
 	int generate(int t_min, int t_max) {

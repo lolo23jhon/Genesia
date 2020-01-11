@@ -120,7 +120,10 @@
     <ClCompile Include="Food.cpp">
       <Filter>src\ActorSystem\ActorInstances</Filter>
     </ClCompile>
-    <ClCompile Include="Traits.cpp">
+    <ClCompile Include="TraitCollection.cpp">
+      <Filter>src\OrganismTraits</Filter>
+    </ClCompile>
+    <ClCompile Include="Trait.cpp">
       <Filter>src\OrganismTraits</Filter>
     </ClCompile>
   </ItemGroup>
@@ -194,11 +197,14 @@
     <ClInclude Include="PerlinNoise.h">
       <Filter>src\PerlinNoise</Filter>
     </ClInclude>
-    <ClInclude Include="Traits.h">
-      <Filter>src\OrganismTraits</Filter>
-    </ClInclude>
     <ClInclude Include="unordered_bimap.h">
       <Filter>src\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="TraitCollection.h">
+      <Filter>src\OrganismTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="Trait.h">
+      <Filter>src\OrganismTraits</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

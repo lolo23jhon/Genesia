@@ -10,15 +10,14 @@
 #include "ResourceHolder.h"
 #include "Actor_Base.h"
 #include "Ai_Organism.h"
-#include "Traits.h"
+#include "Trait.h"
 
 
 class Organism : public Actor_Base {
-	friend class Traits;
+	friend class Trait_Base;
 
 protected:
 	std::string m_name;
-	float m_size;
 	float m_age;
 
 	bool m_isDead;
@@ -27,7 +26,7 @@ protected:
 	float m_energy; // Expended on every activity; Death when <= 0
 
 	// ------------------------------ Traits ------------------------------
-	Traits m_traits;
+	TraitCollection m_traits;
 	
 	// ------------------------ Traits-based values -----------------------
 	float m_trait_maxEnergy;
@@ -37,13 +36,13 @@ protected:
 	float m_trait_turningSpeed;
 	float m_trait_foodDetectionRange;
 	float m_trait_lifespan;
+	float m_trait_size;
 
 	std::unique_ptr<Ai_Organism> m_ai;
 
 public:
 	Organism(SharedContext& t_context,
 		const std::string& t_name,
-		const float& t_size,
 		const sf::Color& t_color,
 		const sf::Vector2f& t_position,
 		const float& t_rotation,
