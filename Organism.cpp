@@ -35,6 +35,18 @@ Organism::Organism(
 }
 
 ////////////////////////////////////////////////////////////
+const HSL& Organism::getColorHLS()const { return m_hslColor; }
+
+////////////////////////////////////////////////////////////
+void Organism::setColorHSL(const float& t_h, const float& t_s, const float& t_l) {
+	m_hslColor.Hue = t_h;
+	m_hslColor.Saturation = t_h;
+	m_hslColor.Luminance = t_l;
+	m_color = m_hslColor.TurnToRGB();
+}
+
+
+////////////////////////////////////////////////////////////
 const float& Organism::getMovementSpeed()const { return m_movementSpeed; }
 
 ////////////////////////////////////////////////////////////

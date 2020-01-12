@@ -126,6 +126,9 @@
     <ClCompile Include="Trait.cpp">
       <Filter>src\OrganismTraits</Filter>
     </ClCompile>
+    <ClCompile Include="HSLColor.cpp">
+      <Filter>src\Utitlities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="Trait.h">
       <Filter>src\OrganismTraits</Filter>
+    </ClInclude>
+    <ClInclude Include="HSLColor.h">
+      <Filter>src\Utitlities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,9 +7,11 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "HSLColor.h"
 #include "ResourceHolder.h"
 #include "Actor_Base.h"
 #include "Ai_Organism.h"
+#include "TraitCollection.h"
 #include "Trait.h"
 
 
@@ -17,6 +19,8 @@ class Organism : public Actor_Base {
 	friend class Trait_Base;
 
 protected:
+	HSL m_hslColor; // Contains the HSL copy of it's parent class RGB color for more better color manipulation
+
 	std::string m_name;
 	float m_age;
 
@@ -49,6 +53,9 @@ public:
 		const float& t_movSpeed,
 		const float& t_rotSpeed,
 		const float& t_age = 0.f);
+	const HSL& getColorHLS()const;
+	void setColorHSL(const float& t_h, const float& t_s, const float&t_l); // Also overwrites the SFML rgb color
+
 	const float& getMovementSpeed()const;
 	void setMovementSpeed(const float& t_movementSpeed);
 	const float& getRotationSpeed()const;

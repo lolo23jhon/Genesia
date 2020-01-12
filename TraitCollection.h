@@ -10,7 +10,7 @@
 
 
 using TraitCollectionPtr = std::unique_ptr<TraitCollection>;
-using TraitsMap = std::unordered_map<TraitId, Trait_Base>; // Group by id
+using TraitsMap = std::unordered_map<TraitId, TraitPtr>; // Group by id
 using TraitsContainer = std::unordered_map<TraitEffectTime, TraitsMap>; // Subdivide by effect time
 
 class TraitCollection {
@@ -30,10 +30,12 @@ public:
 
 	bool hasTrait(const TraitId& t_id)const;
 	void removeTrait(const TraitId& t_id); // Fails if trait is vital (does nothing if trait is not present)
-	void addTrait(const Trait_Base& t_trait); // Overwrites any existent trait in the same slot
+	void addTrait(TraitPtr t_trait); // Overwrites any existent trait in the same slot
 
 	bool setTraitValue(const TraitId& t_id, const float& t_value);
 	bool getTraitValue(const TraitId& t_id, float& t_out_value)const;
+	bool setTraitColor(const TraitId& t_id, const sf::Color& t_color);
+	bool getTraitColor(const TraitId& t_id, sf::Color& t_out_color)const;
 
 	bool isTraitActive(const TraitId& t_id, bool& t_out_isActive)const;
 	bool activateTrait(const TraitId& t_id); // Returns the finding result of the trait

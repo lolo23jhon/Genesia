@@ -50,6 +50,8 @@ class Trait_Base {
 protected:
 	static const TraitTable s_defaultTraits;
 	static const TraitSet s_vitalTraits;
+	static const TraitSet s_floatTraits;
+	static const TraitSet s_colorTraits;
 	static const float s_traitsStdDev; // Describes the height if the bell curve of percentual change when traits are inherited
 	static const float s_minTraitFactor;
 
@@ -58,29 +60,18 @@ public:
 	static const std::string& getTraitName(const TraitId& t_id);
 	static TraitFunctor getTraitFunctor(const TraitId& t_id);
 	static bool isTraitVital(const TraitId& t_id);
+	static bool isTraitFloat(const TraitId& t_id);
+	static bool isTraitColor(const TraitId& t_id);
 	static const TraitSet& getVitalTraits();
 	static const float& getTraitStdDev();
 	static TraitPtr cloneDefaultTrait(const TraitId& t_id);		// Returns perfect copy of a default trait
-	static TraitPtr reproduceDefaultTrait(const TraitId& t_id); // Returns a slightly altered copy of a default trait, as to simulate reproduction
-	/*
-
-	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	TODO: 
-		- Finish the trait callback system <-
-		- Finish the trait inhertiance system <-
-		- Implement food generation
-		- Implement energy system
-		- Tweak inheritance system to create engaging narrative
-		- Flesh out test cases
-	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-	*/
+	static TraitPtr reproduceDefaultTrait(SharedContext& t_context,const TraitId& t_id); // Returns a slightly altered copy of a default trait, as to simulate reproduction
 
 	Trait_Base(const TraitId& t_id, bool t_isActive, const float& t_inheritChance);
 
 	const TraitId& getId()const;
 	bool getIsActive()const;
-	void setisActive(bool t_isActive);
+	void setIsActive(bool t_isActive);
 	bool getIsVital()const;
 	const float& getInheritChance()const;
 	void setInheritChance(const float& t_inheritChance);
@@ -100,7 +91,7 @@ protected:
 
 
 
-
+private:
 	// --------------------------------------------- TRAITS ---------------------------------------------------------
 	static void TraitFn_MaxEnergy(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
 	static void TraitFn_DigestiveEfficiency(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
@@ -134,13 +125,10 @@ class Trait_Color : public Trait_Base {
 
 	sf::Color m_color;
 public:
-	Trait_Color(TraitCollection* t_traitsObj,
-		const TraitId& t_id,
+	Trait_Color(const TraitId& t_id,
 		bool t_isActive,
 		const float& t_inheritChance,
-		const TraitEffectTime& t_effectTime,
-		TraitFunctor t_effect,
-		const float& t_value);
+		const sf::Color& t_color);
 
 	const sf::Color& getColor()const;
 	void setColor(const sf::Color& t_color);

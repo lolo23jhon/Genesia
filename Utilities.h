@@ -129,6 +129,5 @@ namespace utilities {
 		return true;
 	}
 
-
 };
 #endif // ! UTILITIES_H
