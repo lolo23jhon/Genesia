@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include <SFML/Graphics/Color.hpp>
 
+struct SharedContext;
 class Organism;
 class TraitCollection;
 class Trait_Base;
@@ -18,15 +19,15 @@ enum class TraitEffectTime;
 using VitalTraits = std::unordered_set<TraitId>;
 using TraitStrings = std::unordered_map<std::string, TraitId>;
 using TraitPtr = std::unique_ptr<Trait_Base>;
-using TraitFunctor = void(TraitCollection::*)(Trait_Base*, Organism*, const float&);
+using TraitFunctor = void(*)(Trait_Base*, Organism*, const float&);
 using TraitCallback = std::function<void(Trait_Base*, Organism*, const float&)>;
-using TraitTuple = std::tuple<std::string, TraitFunctor, TraitPtr>;
-using TraitTable = std::unordered_map<TraitId, TraitTuple>;
+using TraitTable = std::unordered_map<TraitId , std::tuple<std::string, TraitCallback, TraitEffectTime>>;
+using TraitMap = std::unordered_map<TraitId, TraitPtr>;
 using TraitSet = std::unordered_set<TraitId>;
 
 
 enum class TraitId {
-	INVALID_TRAID_ID = -1,
+	INVALID_TRAIT_ID = -1,
 
 	// ----------------------  Vital Traits ----------------------
 	MaxEnergy,				// (eu)		Energy storage capacity.
@@ -48,7 +49,8 @@ enum class TraitEffectTime {
 
 class Trait_Base {
 protected:
-	static const TraitTable s_defaultTraits;
+	static const TraitTable s_traitNamesAndCallbacks; // Stores the string names of the trait and the bound callback
+	static const TraitMap s_defaultTraits;
 	static const TraitSet s_vitalTraits;
 	static const TraitSet s_floatTraits;
 	static const TraitSet s_colorTraits;
@@ -58,7 +60,8 @@ protected:
 public:
 
 	static const std::string& getTraitName(const TraitId& t_id);
-	static TraitFunctor getTraitFunctor(const TraitId& t_id);
+	static TraitCallback getTraitCallback(const TraitId& t_id);
+	static const TraitEffectTime& getTraitEffectTime(const TraitId& t_id);
 	static bool isTraitVital(const TraitId& t_id);
 	static bool isTraitFloat(const TraitId& t_id);
 	static bool isTraitColor(const TraitId& t_id);
@@ -93,15 +96,15 @@ protected:
 
 private:
 	// --------------------------------------------- TRAITS ---------------------------------------------------------
-	static void TraitFn_MaxEnergy(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
-	static void TraitFn_DigestiveEfficiency(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
-	static void TraitFn_RestingMetabolicRate(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
-	static void TraitFn_MovementSpeed(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
-	static void TraitFn_TurningSpeed(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
-	static void TraitFn_Lifespan(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
-	static void TraitFn_Size(Trait_Float* t_trait, Organism* t_organism, const float& t_elapsed);
+	static void TraitFn_MaxEnergy(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed);
+	static void TraitFn_DigestiveEfficiency(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed);
+	static void TraitFn_RestingMetabolicRate(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed);
+	static void TraitFn_MovementSpeed(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed);
+	static void TraitFn_TurningSpeed(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed);
+	static void TraitFn_Lifespan(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed);
+	static void TraitFn_Size(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed);
 
-	static void TraitFn_Color(Trait_Color* t_trait, Organism* t_organism, const float& t_elapsed);
+	static void TraitFn_Color(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed);
 	// --------------------------------------------- traits ---------------------------------------------------------
 };
 

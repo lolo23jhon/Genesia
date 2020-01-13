@@ -1,0 +1,8 @@
+#ifndef ACTOR_PRESETS_H
+#define ACTOR_PRESETS_H
+
+#define MAKE_ORGANISM_BASIC 
+
+
+
+#endif // !ACTOR_PRESETS_H

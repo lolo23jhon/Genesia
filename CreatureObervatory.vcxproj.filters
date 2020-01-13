@@ -52,7 +52,7 @@
     <Filter Include="src\Ai">
       <UniqueIdentifier>{a5fd1180-5fcd-4ae7-8edf-fa0955af004f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\OrganismTraits">
+    <Filter Include="src\Traits">
       <UniqueIdentifier>{00847ed3-8314-4939-bc4f-1eb00fb1bd09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -121,10 +121,10 @@
       <Filter>src\ActorSystem\ActorInstances</Filter>
     </ClCompile>
     <ClCompile Include="TraitCollection.cpp">
-      <Filter>src\OrganismTraits</Filter>
+      <Filter>src\Traits</Filter>
     </ClCompile>
     <ClCompile Include="Trait.cpp">
-      <Filter>src\OrganismTraits</Filter>
+      <Filter>src\Traits</Filter>
     </ClCompile>
     <ClCompile Include="HSLColor.cpp">
       <Filter>src\Utitlities</Filter>
@@ -204,13 +204,16 @@
       <Filter>src\Types</Filter>
     </ClInclude>
     <ClInclude Include="TraitCollection.h">
-      <Filter>src\OrganismTraits</Filter>
+      <Filter>src\Traits</Filter>
     </ClInclude>
     <ClInclude Include="Trait.h">
-      <Filter>src\OrganismTraits</Filter>
+      <Filter>src\Traits</Filter>
     </ClInclude>
     <ClInclude Include="HSLColor.h">
       <Filter>src\Utitlities</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorPresets.h">
+      <Filter>src\ActorSystem\ActorInstances</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

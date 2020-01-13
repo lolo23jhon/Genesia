@@ -9,7 +9,6 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "HSLColor.h"
 #include "ResourceHolder.h"
-#include "Actor_Base.h"
 #include "Ai_Organism.h"
 #include "TraitCollection.h"
 #include "Trait.h"
@@ -47,11 +46,8 @@ protected:
 public:
 	Organism(SharedContext& t_context,
 		const std::string& t_name,
-		const sf::Color& t_color,
 		const sf::Vector2f& t_position,
 		const float& t_rotation,
-		const float& t_movSpeed,
-		const float& t_rotSpeed,
 		const float& t_age = 0.f);
 	const HSL& getColorHLS()const;
 	void setColorHSL(const float& t_h, const float& t_s, const float&t_l); // Also overwrites the SFML rgb color
