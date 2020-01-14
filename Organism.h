@@ -52,7 +52,7 @@ public:
 		const float& t_rotation,
 		const float& t_age); // Makes an organism with clones of the default traits
 	
-	static OrganismPtr makeDefaultOffpring(SharedContext& t_context,
+	static OrganismPtr makeDefaultOffspring(SharedContext& t_context,
 		const std::string& t_name,
 		const sf::Vector2f& t_position,
 		const float& t_rotation,
@@ -87,6 +87,7 @@ public:
 	void update(const float& t_elapsed);
 
 	ActorPtr clone();
+	ActorPtr reproduce(SharedContext& t_context);
 
 	void die();
 

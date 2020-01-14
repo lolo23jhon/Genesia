@@ -24,9 +24,9 @@ Organism::Organism(
 	m_name{ t_name },
 	m_age{ t_age },
 	m_ai{ nullptr },
-	m_destructionDelay{S_DEFAULT_DESTRUCTION_DELAY}
+	m_destructionDelay{ S_DEFAULT_DESTRUCTION_DELAY }
 {
-	m_text.setString(m_name);
+	setTextString(m_name);
 	setColorRGB(m_color); //Also write the HSL color
 	m_ai = std::make_unique<Ai_Organism>(this);
 }
@@ -42,7 +42,7 @@ OrganismPtr Organism::makeDefaultClone(SharedContext& t_context, const std::stri
 }
 
 ////////////////////////////////////////////////////////////
-OrganismPtr Organism::makeDefaultOffpring(SharedContext& t_context, const std::string& t_name, const sf::Vector2f& t_position, const float& t_rotation, const float& t_age) {
+OrganismPtr Organism::makeDefaultOffspring(SharedContext& t_context, const std::string& t_name, const sf::Vector2f& t_position, const float& t_rotation, const float& t_age) {
 	auto o{ std::make_unique<Organism>(t_context, t_name, t_position, t_rotation, t_age) };
 	for (const auto& it : Trait_Base::getVitalTraits()) {
 		o->m_traits.addTrait(std::move(Trait_Base::reproduceDefaultTrait(t_context, it)));
@@ -126,7 +126,15 @@ void Organism::update(const float& t_elapsed) {
 ActorPtr Organism::clone() {
 	auto o{ std::make_unique<Organism>(m_context, m_name, m_position, m_rotation, m_age) };
 	o->m_traits = std::move(*m_traits.clone().release()); // Pass unique ptr to regular member
-	o->m_traits.onOrganismConstruction(o.get(),0.f); // Update "OnConstruction" traits
+	o->m_traits.onOrganismConstruction(o.get(), 0.f); // Update "OnConstruction" traits
+	return std::move(o);
+}
+
+////////////////////////////////////////////////////////////
+ActorPtr Organism::reproduce(SharedContext& t_context) {
+	auto o{ std::make_unique<Organism>(m_context, m_name, m_position, m_rotation, 0.f) }; // Reset the organism's age
+	o->m_traits = std::move(*m_traits.reproduce(t_context).release());
+	o->m_traits.onOrganismConstruction(o.get(), 0.f);
 	return std::move(o);
 }
 
@@ -134,5 +142,5 @@ ActorPtr Organism::clone() {
 void Organism::die() {
 	m_isDead = true;
 	m_name += " (dead)";
-	m_text.setString(m_name);
+	setTextString(m_name);
 }

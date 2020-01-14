@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h" />
-    <ClInclude Include="ActorPresets.h" />
     <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="Ai._Base.h" />
     <ClInclude Include="Ai_Organism.h" />

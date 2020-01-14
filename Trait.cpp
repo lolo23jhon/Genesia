@@ -158,7 +158,7 @@ const TraitTable Trait_Base::s_traitNamesAndCallbacks{
 
 ////////////////////////////////////////////////////////////
 
-static const sf::Color S_WHITE{ 0,0,255,255 };
+static const sf::Color S_WHITE{ 0,255,0,255 };
 
 ////////////////////////////////////////////////////////////
 const TraitMap Trait_Base::s_defaultTraits{ []() {

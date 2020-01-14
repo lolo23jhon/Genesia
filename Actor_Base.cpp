@@ -99,12 +99,6 @@ bool Actor_Base::getIsSpriteVisible()const { return m_isSpriteVisible; }
 void Actor_Base::setIsSpriteVisible(bool t_visible) { m_isSpriteVisible = t_visible; }
 
 ////////////////////////////////////////////////////////////
-std::string Actor_Base::getTextString()const { return m_text.getString(); }
-
-////////////////////////////////////////////////////////////
-void Actor_Base::setTextSring(const std::string& t_str) { m_text.setString(t_str); }
-
-////////////////////////////////////////////////////////////
 bool Actor_Base::isTextVisible()const { return m_isTextVisible; }
 
 ////////////////////////////////////////////////////////////
@@ -156,6 +150,12 @@ bool Actor_Base::shouldBeDestroyed()const { return m_destroy; }
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::setShouldBeDestroyed(bool t_destroy) { m_destroy = t_destroy; }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::setTextString(const std::string& t_str) { m_text.setString(t_str); utilities::centerSFMLText(m_text); }
+
+////////////////////////////////////////////////////////////
+std::string Actor_Base::getTextString()const { return m_text.getString(); }
 
 ////////////////////////////////////////////////////////////
 ActorPtr Actor_Base::clone() {

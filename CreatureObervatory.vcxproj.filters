@@ -46,14 +46,17 @@
     <Filter Include="src\ScenarioSystem\Scenarios">
       <UniqueIdentifier>{430ece39-6e97-4c27-8789-16f62e817b20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\ActorSystem\ActorInstances">
-      <UniqueIdentifier>{13c70910-8fae-40e5-a9a9-410c20b17416}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Ai">
       <UniqueIdentifier>{a5fd1180-5fcd-4ae7-8edf-fa0955af004f}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Traits">
       <UniqueIdentifier>{00847ed3-8314-4939-bc4f-1eb00fb1bd09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ActorSystem\Organism">
+      <UniqueIdentifier>{7122e8b5-a623-4e61-89c2-ae019873b1b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ActorSystem\Food">
+      <UniqueIdentifier>{d9e306ae-c9e2-4f14-b6ac-c65f332466a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +105,6 @@
     <ClCompile Include="Scenario_Basic.cpp">
       <Filter>src\ScenarioSystem\Scenarios</Filter>
     </ClCompile>
-    <ClCompile Include="Organism.cpp">
-      <Filter>src\ActorSystem\ActorInstances</Filter>
-    </ClCompile>
     <ClCompile Include="Actor_Base.cpp">
       <Filter>src\ActorSystem</Filter>
     </ClCompile>
@@ -117,9 +117,6 @@
     <ClCompile Include="PerlinNoise.cpp">
       <Filter>src\PerlinNoise</Filter>
     </ClCompile>
-    <ClCompile Include="Food.cpp">
-      <Filter>src\ActorSystem\ActorInstances</Filter>
-    </ClCompile>
     <ClCompile Include="TraitCollection.cpp">
       <Filter>src\Traits</Filter>
     </ClCompile>
@@ -128,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="HSLColor.cpp">
       <Filter>src\Utitlities</Filter>
+    </ClCompile>
+    <ClCompile Include="Organism.cpp">
+      <Filter>src\ActorSystem\Organism</Filter>
+    </ClCompile>
+    <ClCompile Include="Food.cpp">
+      <Filter>src\ActorSystem\Food</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,14 +185,8 @@
     <ClInclude Include="Scenario_Basic.h">
       <Filter>src\ScenarioSystem\Scenarios</Filter>
     </ClInclude>
-    <ClInclude Include="Organism.h">
-      <Filter>src\ActorSystem\ActorInstances</Filter>
-    </ClInclude>
     <ClInclude Include="Actor_Base.h">
       <Filter>src\ActorSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Food.h">
-      <Filter>src\ActorSystem\ActorInstances</Filter>
     </ClInclude>
     <ClInclude Include="Ai._Base.h">
       <Filter>src\Ai</Filter>
@@ -212,8 +209,11 @@
     <ClInclude Include="HSLColor.h">
       <Filter>src\Utitlities</Filter>
     </ClInclude>
-    <ClInclude Include="ActorPresets.h">
-      <Filter>src\ActorSystem\ActorInstances</Filter>
+    <ClInclude Include="Organism.h">
+      <Filter>src\ActorSystem\Organism</Filter>
+    </ClInclude>
+    <ClInclude Include="Food.h">
+      <Filter>src\ActorSystem\Food</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -45,12 +45,12 @@ public:
 	void setSprite(const std::string& t_texture, const sf::IntRect t_spriteRect = sf::IntRect());
 	bool getIsSpriteVisible()const;
 	void setIsSpriteVisible(bool t_visible);
-	std::string getTextString()const;
-	void setTextSring(const std::string& t_str);
 	bool isTextVisible()const;
 	void setIsTextVisible(bool t_visible);
 	bool shouldBeDestroyed()const;
 	void setShouldBeDestroyed(bool t_destroy);
+	void setTextString(const std::string& t_str);
+	std::string getTextString()const;
 	SharedContext& getContext();
 	const SharedContext& getContext() const;
 
