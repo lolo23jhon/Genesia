@@ -24,7 +24,6 @@ void Ai_Organism::Task_Idle(Actor_Base* t_owner, const float& t_elapsed) {
 
 ////////////////////////////////////////////////////////////
 void Ai_Organism::update(Actor_Base* t_owner, const float& t_elapsed) {
-	auto owner{ static_cast<Organism*>(t_owner) };
 	pollTasks();
-	executeTask(*m_currentTask, t_owner, t_elapsed);
+	executeTask(*m_currentTask, static_cast<Organism*>(t_owner), t_elapsed);
 }

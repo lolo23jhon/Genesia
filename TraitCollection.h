@@ -44,6 +44,8 @@ public:
 	const Trait_Base* getTrait(const TraitId& t_id)const;
 	Trait_Base* getTrait(const TraitId& t_id);
 
+	void purge();
+
 	void onOrganismConstruction(Organism* t_owner, const float& t_elapsed); // Calls the update methods of construction based traits (mainly value setters)
 	void update(Organism* t_owner, const float& t_elapsed); // Calls the update function every trait
 	TraitCollectionPtr clone(); // Retrns perfect copy of the set of traits

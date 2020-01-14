@@ -64,13 +64,24 @@ void Engine::init() {
 
 ////////////////////////////////////////////////////////////
 void Engine::update() {
-	const float elapsed{m_elapsed.asSeconds()};
+	const float elapsed{ m_elapsed.asSeconds() };
 	if (m_state == EngineState::Paused) { return; }
-	for (auto& actor : m_actors) {
-		actor->update(elapsed);
-	}
+	// Update actors and delete the wasted ones
+	{auto it{ m_actors.begin() };
+	while (it != m_actors.end()) {
+		auto& actor{ *it->get() };
+		if (actor.shouldBeDestroyed()) {
+			actor.onDestruction(m_context);
+			it = m_actors.erase(it);
+		}
+		else {
+			it->get()->update(elapsed);
+			it++;
+		}
+	}}
 	m_scenario->update(elapsed);
 }
+
 
 ////////////////////////////////////////////////////////////
 const EngineState& Engine::getState()const { return m_state; }
@@ -98,7 +109,6 @@ void Engine::run() {
 		render();
 	}
 }
-
 
 ////////////////////////////////////////////////////////////
 void Engine::pollEvents() {

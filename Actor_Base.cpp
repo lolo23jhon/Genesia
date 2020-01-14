@@ -163,4 +163,4 @@ ActorPtr Actor_Base::clone() {
 }
 
 ////////////////////////////////////////////////////////////
- void Actor_Base::onDestruction(SharedContext* t_context) {}
+ void Actor_Base::onDestruction(SharedContext& t_context) {}

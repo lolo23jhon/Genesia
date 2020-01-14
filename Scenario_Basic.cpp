@@ -9,8 +9,7 @@ Scenario_Basic::Scenario_Basic(SharedContext& t_context, const unsigned& t_maxNu
 	Scenario_Base(t_context, t_maxNumActors, t_initialNumOrganisms,t_width, t_height),
 	m_firstOrganism{ nullptr }
 {
-	
-	m_firstOrganism = std::make_unique<Organism>(m_context, "Organism", sf::Vector2f(0.f, 0.f), 0.f, 0.f);
+	m_firstOrganism = std::move(Organism::makeDefaultClone(m_context, "Organism", sf::Vector2f(0.f, 0.f), 0.f, 0.f));
 }
 
 ////////////////////////////////////////////////////////////

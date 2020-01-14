@@ -208,7 +208,10 @@ Trait_Base* TraitCollection::getTrait(const TraitId& t_id) {
 }
 
 ////////////////////////////////////////////////////////////
-TraitCollectionPtr TraitCollection::clone() { 
+void TraitCollection::purge() { m_traits.clear(); }
+
+////////////////////////////////////////////////////////////
+TraitCollectionPtr TraitCollection::clone() {
 	auto copy{ std::make_unique<TraitCollection>() };
 	for (const auto& et_it : m_traits) {
 		for (const auto& id_it : et_it.second) {

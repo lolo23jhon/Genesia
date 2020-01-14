@@ -121,9 +121,9 @@ const TraitSet  Trait_Base::s_vitalTraits{
 	TraitId::RestingMetabolicRate,
 	TraitId::MovementSpeed,
 	TraitId::TurningSpeed,
-	TraitId::FoodDetectionRange,
 	TraitId::Lifespan,
-	TraitId::Size
+	TraitId::Color,
+	TraitId::Size,
 };
 
 ////////////////////////////////////////////////////////////
@@ -158,6 +158,7 @@ const TraitTable Trait_Base::s_traitNamesAndCallbacks{
 
 ////////////////////////////////////////////////////////////
 
+static const sf::Color S_WHITE{ 0,0,255,255 };
 
 ////////////////////////////////////////////////////////////
 const TraitMap Trait_Base::s_defaultTraits{ []() {
@@ -167,10 +168,10 @@ const TraitMap Trait_Base::s_defaultTraits{ []() {
 	tmp.emplace(TID::DigestiveEfficiency,	MF(TID::DigestiveEfficiency,	ACTIVE_TRAIT, ALWAYS_INHERITED, 0.5f));
 	tmp.emplace(TID::RestingMetabolicRate,	MF(TID::RestingMetabolicRate,	ACTIVE_TRAIT, ALWAYS_INHERITED, 1.f));
 	tmp.emplace(TID::MovementSpeed,			MF(TID::MovementSpeed,			ACTIVE_TRAIT, ALWAYS_INHERITED, 20.f));
-	tmp.emplace(TID::TurningSpeed,			MF(TID::TurningSpeed,			ACTIVE_TRAIT, ALWAYS_INHERITED, 5.f));
-	tmp.emplace(TID::Lifespan,				MF(TID::Lifespan,				ACTIVE_TRAIT, ALWAYS_INHERITED, 100.f));
+	tmp.emplace(TID::TurningSpeed,			MF(TID::TurningSpeed,			ACTIVE_TRAIT, ALWAYS_INHERITED, 20.f));
+	tmp.emplace(TID::Lifespan,				MF(TID::Lifespan,				ACTIVE_TRAIT, ALWAYS_INHERITED, 30.f));
 	tmp.emplace(TID::Size,					MF(TID::Size,					ACTIVE_TRAIT, ALWAYS_INHERITED, 1.f));
-	tmp.emplace(TID::Color,					MC(TID::Color,					ACTIVE_TRAIT, ALWAYS_INHERITED, SFC::White));
+	tmp.emplace(TID::Color,					MC(TID::Color,					ACTIVE_TRAIT, ALWAYS_INHERITED, S_WHITE));
 	return std::move(tmp);
 }() }; // Initialized with a lambda because of unique_ptr
 
@@ -273,7 +274,7 @@ void Trait_Base::TraitFn_Size(Trait_Base* t_trait, Organism* t_organism, const f
 
 ////////////////////////////////////////////////////////////
 void Trait_Base::TraitFn_Color(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed) {
-	t_organism->m_color = dynamic_cast<Trait_Color*>(t_trait)->getColor();
+	t_organism->setColor(dynamic_cast<Trait_Color*>(t_trait)->getColor());
 }
 
 // ------------------------------------------------------------- traits' implementation ------------------------------------------------------------------
