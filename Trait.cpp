@@ -4,7 +4,6 @@
 #include "SharedContext.h"
 #include "RandomGenerator.h"
 
-Trait_
 
 static TraitCallback bind(TraitFunctor t_functor) { return std::bind(t_functor, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3); }
 
@@ -173,19 +172,16 @@ const TraitMap Trait_Base::s_defaultTraits{ []() {
 	tmp.emplace(TID::Size,					MF(TID::Size,					ACTIVE_TRAIT, ALWAYS_INHERITED, 1.f));
 	tmp.emplace(TID::Color,					MC(TID::Color,					ACTIVE_TRAIT, ALWAYS_INHERITED, SFC::White));
 	return std::move(tmp);
-} };
+}() }; // Initialized with a lambda because of unique_ptr
 
-//--- -------------------------------------- Trait_Float ----------------------------------------------------------  
-//  key						    id							isActive		inheritChance	    value
-
-
-
-// ----------------------------------------- Trait_Color ----------------------------------------------------------
-	//  key						   id							isActive		inheritChance		color
-// ---------- static members ---------- 
 
 // ------------------------------------------------------- trait base --------------------------------------------------------
 // ------------------------------------------------------- TRAIT FLOAT ------------------------------------------------------- 
+
+////////////////////////////////////////////////////////////
+Trait_Float::Trait_Float(const TraitId& t_id, bool t_isActive, const float& t_inheritChance, const float& t_value) :
+	Trait_Base(t_id, t_isActive, t_inheritChance), m_value{t_value}
+{}
 
 ////////////////////////////////////////////////////////////
 TraitPtr Trait_Float::clone() const { return std::make_unique<Trait_Float>(m_id, m_isActive, m_inheritChance, m_value); }
@@ -207,7 +203,7 @@ void Trait_Float::setValue(const float& t_value) { m_value = t_value; }
 
 ////////////////////////////////////////////////////////////
 Trait_Color::Trait_Color(const TraitId& t_id, bool t_isActive, const float& t_inheritChance, const sf::Color& t_color) :
-	Trait_Base(t_id, t_isActive, m_inheritChance),
+	Trait_Base(t_id, t_isActive, t_inheritChance),
 	m_color{ t_color }
 {}
 

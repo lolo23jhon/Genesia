@@ -15,9 +15,6 @@ using TraitsContainer = std::unordered_map<TraitEffectTime, TraitsMap>; // Subdi
 
 class TraitCollection {
 
-
-
-
 	TraitsContainer m_traits;
 
 public:

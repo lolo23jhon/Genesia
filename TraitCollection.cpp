@@ -51,16 +51,19 @@ void TraitCollection::removeTrait(const TraitId& t_id) {
 
 ////////////////////////////////////////////////////////////
 void TraitCollection::addTrait(TraitPtr t_trait) {
-	auto traitTime_it{ m_traits.find(t_trait->getEffectTime()) };
+	auto id{ t_trait->getId() };
+	auto et{ t_trait->getEffectTime() };
+
+	auto traitTime_it{ m_traits.find(et) };
 	if (traitTime_it == m_traits.end()) {
-		TraitsMap tmp;
-		tmp.emplace(t_trait->getId(), std::move(t_trait));
-		m_traits.emplace(std::move(tmp));
+		TraitMap tmp;
+		tmp.emplace(id, std::move(t_trait));
+		m_traits.emplace(et, std::move(tmp));
 		return;
 	}
-	auto trait_it{ traitTime_it->second.find(t_trait->getId()) };
+	auto trait_it{ traitTime_it->second.find(id) };
 	if (trait_it == traitTime_it->second.end()) {
-		traitTime_it->second.emplace(t_trait->getId(), std::move(t_trait));
+		traitTime_it->second.emplace(id, std::move(t_trait));
 		return;
 	}
 	trait_it->second = std::move(t_trait);
@@ -94,6 +97,7 @@ bool TraitCollection::getTraitValue(const TraitId& t_id, float& t_out_value)cons
 	return false;
 }
 
+////////////////////////////////////////////////////////////
 bool TraitCollection::setTraitColor(const TraitId& t_id, const sf::Color& t_color) {
 	for (auto& traitTime_it : m_traits) {
 		auto trait_it{ traitTime_it.second.find(t_id) };
@@ -106,6 +110,8 @@ bool TraitCollection::setTraitColor(const TraitId& t_id, const sf::Color& t_colo
 	}
 	return false;
 }
+
+////////////////////////////////////////////////////////////
 bool TraitCollection::getTraitColor(const TraitId& t_id, sf::Color& t_out_color)const {
 	for (auto& traitTime_it : m_traits) {
 		auto trait_it{ traitTime_it.second.find(t_id) };
@@ -202,20 +208,29 @@ Trait_Base* TraitCollection::getTrait(const TraitId& t_id) {
 }
 
 ////////////////////////////////////////////////////////////
-TraitCollectionPtr TraitCollection::clone() { return std::make_unique<TraitCollection>(*this); }
+TraitCollectionPtr TraitCollection::clone() { 
+	auto copy{ std::make_unique<TraitCollection>() };
+	for (const auto& et_it : m_traits) {
+		for (const auto& id_it : et_it.second) {
+			copy->addTrait(std::move(id_it.second->clone()));
+		}
+	}
+	return std::move(copy);
+}
 
 
-////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 TraitCollectionPtr TraitCollection::reproduce(SharedContext& t_context) {
-	auto copy{ std::make_unique<TraitCollection>(*this) };
+	auto copy{ std::make_unique<TraitCollection>() };
 	for (const auto& traitTime_it : m_traits) {
 		for (const auto& trait_it : traitTime_it.second) {
 			float pctChance{ trait_it.second->getInheritChance() };
 			if (pctChance >= 1.f || pctChance > t_context.m_rng->generate(0.f, 1.f)) {
-				copy->addTrait(trait_it.second->reproduce(t_context));
+				copy->addTrait(std::move(trait_it.second->reproduce(t_context)));
 			}
 		}
 	}
+	return std::move(copy);
 }
 
 
