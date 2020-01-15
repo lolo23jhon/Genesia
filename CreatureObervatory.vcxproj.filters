@@ -58,6 +58,9 @@
     <Filter Include="src\Engine\EventProcessing">
       <UniqueIdentifier>{ad4c2479-511a-4c5b-aaa4-eb67dfb9de87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Quadtree">
+      <UniqueIdentifier>{b995991b-d63e-4ddf-8ab0-c95e076d592d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -131,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="Food.cpp">
       <Filter>src\ActorSystem\Food</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>src\Quadtree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="Food.h">
       <Filter>src\ActorSystem\Food</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>src\Quadtree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

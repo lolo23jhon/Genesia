@@ -31,6 +31,7 @@
     <ClCompile Include="HSLColor.cpp" />
     <ClCompile Include="MathHelpers.cpp" />
     <ClCompile Include="Organism.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="ResourceHolder.cpp" />
     <ClCompile Include="Scenario_Base.cpp" />
     <ClCompile Include="Scenario_Basic.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="Ai._Base.h" />
     <ClInclude Include="Ai_Organism.h" />
     <ClInclude Include="HSLColor.h" />
+    <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Trait.h" />
     <ClInclude Include="unordered_bimap.h" />
     <ClInclude Include="BoundKeys.h" />
