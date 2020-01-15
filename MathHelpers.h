@@ -1,11 +1,11 @@
-#ifndef MATH_HELPERS_HPP
-#define MATH_HEMPLERS_HPP
+#ifndef MATH_HELPERS_H
+#define MATH_HELPERS_H
 
 #include <SFML/System/Vector2.hpp>
 
 namespace mat {
 
-	float lerp(const float& t_a, const float& t_b, const float& t_f, const bool& t_clamp = true);
+	float lerp(const float& t_a, const float& t_b, const float& t_f, bool t_clamp = true);
 
 	float midPoint(const float& t_a, const float& t_b);
 

@@ -4,7 +4,9 @@
 #include "MathHelpers.h"
 #include "Utilities.h"
 #include "SharedContext.h"
+#include "MathHelpers.h"
 #include "Engine.h"
+#include "PreprocessorDirectves.h"
 
 static const float S_TIME_ZERO{ 0.f };
 static const std::string S_DEFAULT_TEXTURE{ "Texture_organism" };
@@ -102,10 +104,41 @@ const std::string& Organism::getName()const { return m_name; }
 void Organism::setName(const std::string& t_name) { m_name = t_name; }
 
 ////////////////////////////////////////////////////////////
+void Organism::setEnergy(const float& t_energy) { m_energy = t_energy; }
+
+////////////////////////////////////////////////////////////
+void Organism::addEnergy(const float& t_energy) { m_energy += t_energy; if (m_energy >= m_trait_maxEnergy) { m_energy = m_trait_maxEnergy; } }
+
+////////////////////////////////////////////////////////////
+const float& Organism::getEnergy()const { return m_energy; }
+
+////////////////////////////////////////////////////////////
+const float& Organism::getMass()const { return m_mass; }
+
+////////////////////////////////////////////////////////////
+const float Organism::getRestingMetabolicRate()const { return m_trait_restingMetabolicRate * m_mass; }
+
+////////////////////////////////////////////////////////////
+void Organism::move(const float& t_dx, const float& t_dy) {
+	m_energy -= std::sqrtf(t_dx * t_dx + t_dy * t_dy) * m_mass; // Movement costs energy: diplacement * mass
+	Actor_Base::move(t_dx, t_dy);
+}
+
+////////////////////////////////////////////////////////////
+void Organism::rotate(const float& t_deg) {
+	m_energy -= std::fabs(mat::toRadians(t_deg)) * m_mass;
+	Actor_Base::rotate(t_deg);
+}
+
+////////////////////////////////////////////////////////////
 void Organism::update(const float& t_elapsed) {
 	// Update the organism's age
 	m_age += t_elapsed;
-	if (m_age >= m_trait_lifespan && !m_isDead) { die(); }
+
+	// Decrease the organism's energy based on its metabolic rate
+	m_energy -= m_trait_restingMetabolicRate * t_elapsed;
+
+	if ((m_age >= m_trait_lifespan || m_energy <= 0.f) && !m_isDead) { die(); }
 	if (m_isDead) {
 		if (m_destructionDelay <= 0.f) { m_destroy = true; }
 		m_destructionDelay -= t_elapsed;
@@ -117,6 +150,14 @@ void Organism::update(const float& t_elapsed) {
 
 	// Update the organim's ai
 	m_ai->update(this, t_elapsed);
+
+#if defined(_DEBUG) && IS_DISPLAY_ORGNAISMS_DEBUG_TEXT == 1
+	setTextString(m_name +
+		"\nEnergy:\t" + std::to_string(static_cast<unsigned>(m_energy >= 0.f ? m_energy : 0.f)) +
+		"\nSize:\t" + std::to_string(m_trait_size) +
+		"\nMass:\t" + std::to_string(m_mass) +
+		"\nRMR: " + std::to_string(m_rmr));
+#endif // defined(_DEBUG) && IS_DISPLAY_ORGNAISMS_DEBUG_TEXT == 1
 
 	// Lower level update (position, rotation ...)
 	Actor_Base::update(t_elapsed);

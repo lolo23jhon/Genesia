@@ -22,14 +22,8 @@
     <Filter Include="src\InputSystem">
       <UniqueIdentifier>{9bf7143e-e1f5-44d4-91f1-71a3fbb3d853}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\EngineSystem">
-      <UniqueIdentifier>{a40d7180-c60f-416d-aa8f-ad0449b2783a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Utitlities">
       <UniqueIdentifier>{3cc8c446-ecf3-4c3e-a54c-09669002d9f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\EngineSystem\EventProcessing">
-      <UniqueIdentifier>{ad4c2479-511a-4c5b-aaa4-eb67dfb9de87}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\MapSystem">
       <UniqueIdentifier>{d0919efc-85b4-4611-89f0-ed2a9813710b}</UniqueIdentifier>
@@ -58,6 +52,12 @@
     <Filter Include="src\ActorSystem\Food">
       <UniqueIdentifier>{d9e306ae-c9e2-4f14-b6ac-c65f332466a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Engine">
+      <UniqueIdentifier>{a40d7180-c60f-416d-aa8f-ad0449b2783a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Engine\EventProcessing">
+      <UniqueIdentifier>{ad4c2479-511a-4c5b-aaa4-eb67dfb9de87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -67,7 +67,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp">
-      <Filter>src\EngineSystem</Filter>
+      <Filter>src\Engine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\file_io.cpp">
       <Filter>src\Utitlities</Filter>
@@ -79,7 +79,7 @@
       <Filter>src\InputSystem</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.cpp">
-      <Filter>src\EngineSystem\EventProcessing</Filter>
+      <Filter>src\Engine\EventProcessing</Filter>
     </ClCompile>
     <ClCompile Include="dep_main.cpp">
       <Filter>src\Utitlities</Filter>
@@ -138,7 +138,7 @@
       <Filter>src\InputSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.h">
-      <Filter>src\EngineSystem</Filter>
+      <Filter>src\Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\RandomGenerator.h">
       <Filter>src\Utitlities</Filter>
@@ -153,13 +153,13 @@
       <Filter>src\InputSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\EventHandler.h">
-      <Filter>src\EngineSystem\EventProcessing</Filter>
+      <Filter>src\Engine\EventProcessing</Filter>
     </ClInclude>
     <ClInclude Include="PreprocessorDirectves.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="EngineTypes.h">
-      <Filter>src\EngineSystem</Filter>
+      <Filter>src\Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.h">
       <Filter>src\MapSystem</Filter>
@@ -171,7 +171,7 @@
       <Filter>src\MapSystem</Filter>
     </ClInclude>
     <ClInclude Include="SharedContext.h">
-      <Filter>src\EngineSystem</Filter>
+      <Filter>src\Engine</Filter>
     </ClInclude>
     <ClInclude Include="ResourceHolder.h">
       <Filter>src\Resources</Filter>

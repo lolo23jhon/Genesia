@@ -5,29 +5,33 @@
 
 class Food : public Actor_Base {
 
-	float m_energy;
-	float m_nutrition;
+	static unsigned s_numFood;
+
+	static const unsigned& getNumFood();
+
+	float m_energy; // Energy granted to the eater
 	float m_age;
+	float m_duration;
 
 public:
 	Food(SharedContext& t_context,
 		const sf::Vector2f& t_position,
 		const float& t_rotation,
-		const sf::Color& t_color,
-		const std::string& t_texture,
-		const sf::IntRect& t_spriteRect,
 		const float& t_energy,
-		const float& t_nutrition,
+		const float& t_duration,
 		bool t_isSpriteVisible = true,
 		bool t_isTextVisible = true);
 
 	const float& getEnergy()const;
 	void setEnergy(const float& t_energy);
-	const float& getNutrition()const;
-	void setNutrition(const float& t_nutrition);
 	const float& getAge()const;
 	void setAge(const float& t_age);
+	const float& getDuration()const;
+	void setDuration(const float& t_duration);
 
+	void update(const float& t_elapsed);
+
+	ActorPtr clone(SharedContext& t_context);
 };
 
 #endif // !FOOD_H

@@ -54,8 +54,8 @@ public:
 	SharedContext& getContext();
 	const SharedContext& getContext() const;
 
-	void move(const float& t_dx, const float& t_dy);
-	void rotate(const float& t_deg);
+	virtual void move(const float& t_dx, const float& t_dy);
+	virtual void rotate(const float& t_deg);
 
 	virtual void update(const float& t_elapsed);
 	virtual void draw();

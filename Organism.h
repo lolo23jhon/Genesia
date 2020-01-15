@@ -1,5 +1,5 @@
 #ifndef ORGANISM_H
-#define ORGANIS_H
+#define ORGANISM_H
 
 #include <memory>
 #include <string>
@@ -12,6 +12,8 @@
 #include "Ai_Organism.h"
 #include "TraitCollection.h"
 #include "Trait.h"
+
+class Organism;
 
 using OrganismPtr = std::unique_ptr<Organism>;
 
@@ -28,6 +30,8 @@ protected:
 	float m_destructionDelay; // Time after death the organism's physical body remains after it has remerged with inifite conciousness
 
 	float m_energy; // Expended on every activity; Death when <= 0
+	float m_mass; // Energy expending body mass
+	float m_rmr; // Resting metabolic rate = mass * trait_based_rmr_coefficient
 
 	// ------------------------------ Traits ------------------------------
 	TraitCollection m_traits;
@@ -81,8 +85,11 @@ public:
 	const float& getEnergy()const;
 	void setEnergy(const float& t_energy);
 	void addEnergy(const float& t_energy);
-	const float& getRestingMetabolicRate()const;
-	void setRestingMetabolicRate(const float& t_rmr);
+	const float& getMass()const;
+	const float getRestingMetabolicRate()const;
+
+	void move(const float& t_dx, const float& t_dy); // Decrease in internal energy
+	void rotate(const float& t_deg); // Decrease in internal energy
 
 	void update(const float& t_elapsed);
 

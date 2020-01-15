@@ -2,16 +2,27 @@
 #define SCENARIO_BASIC_H
 
 #include "Scenario_Base.h"
-#include "Actor_Base.h"
+#include "Organism.h"
+#include "Food.h"
 
-class Organism;
 
 class Scenario_Basic : public Scenario_Base {
 
 	std::unique_ptr<Organism> m_firstOrganism;
+	std::unique_ptr<Food> m_food;
+	unsigned m_initialNumOrganisms;
+	unsigned m_maxNumOrganisms;
+	unsigned m_initialNumFood;
+	unsigned m_maxNumFood;
 
 public:
-	Scenario_Basic(SharedContext& t_context, const unsigned& t_maxNumActors, const unsigned& t_initialNumOrganisms, const float& t_width = 1000.f, const float& t_height= 1000.f);
+	Scenario_Basic(SharedContext& t_context, 
+		const unsigned& t_initialNumOrganisms,
+		const unsigned& t_maxNumOrganisms,
+		const unsigned& t_initialNumFood,
+		const unsigned& t_maxNumFood, 
+		const float& t_width = 3000.f, 
+		const float& t_height = 3000.f);
 	void init();
 
 

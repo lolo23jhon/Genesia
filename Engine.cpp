@@ -8,7 +8,8 @@
 
 static const sf::Color S_BG_COLOR{ 240,240,240 };
 static const unsigned S_FPS{ 30 };
-static const unsigned S_NUM_ACTORS{ 10U };
+static const unsigned S_NUM_FOOD{ 10U };
+static const unsigned S_NUM_ORGANISMS{ 10U };
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
@@ -57,7 +58,7 @@ void Engine::init() {
 	m_resourceHolder.init();
 
 	// Initialize simulation scenario
-	m_scenario = std::make_unique<Scenario_Basic>(m_context, 100U, S_NUM_ACTORS);
+	m_scenario = std::make_unique<Scenario_Basic>(m_context, S_NUM_ORGANISMS, 100U, S_NUM_FOOD, S_NUM_FOOD);
 	m_scenario->init();
 
 }

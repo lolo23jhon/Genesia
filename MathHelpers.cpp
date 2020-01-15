@@ -1,5 +1,5 @@
+#include "MathHelpers.h"
 #include <cmath>
-#include <SFML/System/Vector2.hpp>
 
 namespace mat {
 
@@ -9,7 +9,7 @@ namespace mat {
 
 
 	////////////////////////////////////////////////////////////
-	float lerp(const float& t_a, const float& t_b, const float& t_f, const bool& t_clamp = true) {
+	float lerp(const float& t_a, const float& t_b, const float& t_f, bool t_clamp) {
 		if (t_clamp) {
 			if (t_f <= 0) { return t_a; }
 			if (t_f >= 1) { return t_b; }

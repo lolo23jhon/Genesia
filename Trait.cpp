@@ -158,20 +158,20 @@ const TraitTable Trait_Base::s_traitNamesAndCallbacks{
 
 ////////////////////////////////////////////////////////////
 
-static const sf::Color S_WHITE{ 0,255,0,255 };
+static const sf::Color S_GREEN{ 0,255,0,255 };
 
 ////////////////////////////////////////////////////////////
 const TraitMap Trait_Base::s_defaultTraits{ []() {
 	TraitMap tmp;
 	//				 key						id							isActive	 inheritChance		value
-	tmp.emplace(TID::MaxEnergy,				MF(TID::MaxEnergy,				ACTIVE_TRAIT, ALWAYS_INHERITED, 100.f));
+	tmp.emplace(TID::MaxEnergy,				MF(TID::MaxEnergy,				ACTIVE_TRAIT, ALWAYS_INHERITED, 1000.f));
 	tmp.emplace(TID::DigestiveEfficiency,	MF(TID::DigestiveEfficiency,	ACTIVE_TRAIT, ALWAYS_INHERITED, 0.5f));
 	tmp.emplace(TID::RestingMetabolicRate,	MF(TID::RestingMetabolicRate,	ACTIVE_TRAIT, ALWAYS_INHERITED, 1.f));
 	tmp.emplace(TID::MovementSpeed,			MF(TID::MovementSpeed,			ACTIVE_TRAIT, ALWAYS_INHERITED, 20.f));
 	tmp.emplace(TID::TurningSpeed,			MF(TID::TurningSpeed,			ACTIVE_TRAIT, ALWAYS_INHERITED, 20.f));
-	tmp.emplace(TID::Lifespan,				MF(TID::Lifespan,				ACTIVE_TRAIT, ALWAYS_INHERITED, 30.f));
+	tmp.emplace(TID::Lifespan,				MF(TID::Lifespan,				ACTIVE_TRAIT, ALWAYS_INHERITED, 60.f));
 	tmp.emplace(TID::Size,					MF(TID::Size,					ACTIVE_TRAIT, ALWAYS_INHERITED, 1.f));
-	tmp.emplace(TID::Color,					MC(TID::Color,					ACTIVE_TRAIT, ALWAYS_INHERITED, S_WHITE));
+	tmp.emplace(TID::Color,					MC(TID::Color,					ACTIVE_TRAIT, ALWAYS_INHERITED, S_GREEN));
 	return std::move(tmp);
 }() }; // Initialized with a lambda because of unique_ptr
 
@@ -181,7 +181,7 @@ const TraitMap Trait_Base::s_defaultTraits{ []() {
 
 ////////////////////////////////////////////////////////////
 Trait_Float::Trait_Float(const TraitId& t_id, bool t_isActive, const float& t_inheritChance, const float& t_value) :
-	Trait_Base(t_id, t_isActive, t_inheritChance), m_value{t_value}
+	Trait_Base(t_id, t_isActive, t_inheritChance), m_value{ t_value }
 {}
 
 ////////////////////////////////////////////////////////////
@@ -239,7 +239,9 @@ void Trait_Color::setColor(const sf::Color& t_color) { m_color = t_color; }
 
 ////////////////////////////////////////////////////////////
 void Trait_Base::TraitFn_MaxEnergy(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed) {
-	t_organism->m_trait_maxEnergy = dynamic_cast<Trait_Float*>(t_trait)->getValue();
+	float e{ dynamic_cast<Trait_Float*>(t_trait)->getValue() };
+	t_organism->m_trait_maxEnergy = e;
+	t_organism->m_energy = e;
 }
 
 ////////////////////////////////////////////////////////////
@@ -250,6 +252,7 @@ void Trait_Base::TraitFn_DigestiveEfficiency(Trait_Base* t_trait, Organism* t_or
 ////////////////////////////////////////////////////////////
 void Trait_Base::TraitFn_RestingMetabolicRate(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed) {
 	t_organism->m_trait_restingMetabolicRate = dynamic_cast<Trait_Float*>(t_trait)->getValue();
+	t_organism->m_rmr = t_organism->m_mass * t_organism->m_trait_restingMetabolicRate; // Also included in size trait to not enforce a loading order
 }
 
 ////////////////////////////////////////////////////////////
@@ -270,6 +273,8 @@ void Trait_Base::TraitFn_Lifespan(Trait_Base* t_trait, Organism* t_organism, con
 ////////////////////////////////////////////////////////////
 void Trait_Base::TraitFn_Size(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed) {
 	t_organism->m_trait_size = dynamic_cast<Trait_Float*>(t_trait)->getValue();
+	t_organism->m_mass = 4.1887902f * t_organism->m_trait_size * t_organism->m_trait_size * t_organism->m_trait_size; // Mass : Volume
+	t_organism->m_rmr = t_organism->m_mass * t_organism->m_trait_restingMetabolicRate;
 }
 
 ////////////////////////////////////////////////////////////
