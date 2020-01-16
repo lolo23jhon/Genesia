@@ -2,6 +2,7 @@
 #include <exception>
 #include "SharedContext.h"
 #include "ResourceHolder.h"
+#include "CollisionManager.h"
 
 static const std::string S_FOOD_TEXTURE{ "Texture_food" };
 static const sf::Color S_FOOD_COLOR{ 255,255,255,255 };
@@ -55,6 +56,13 @@ void Food::update(const float& t_elapsed) {
 	}
 	Actor_Base::update(t_elapsed);
 }
+
+////////////////////////////////////////////////////////////
+void Food::updateCollider() {
+	auto spriteBounds{ m_sprite.getGlobalBounds() };
+	m_collider.update(m_position.x, m_position.y, spriteBounds.width, spriteBounds.height, spriteBounds.width * 0.5f);
+}
+
 
 ////////////////////////////////////////////////////////////
 ActorPtr Food::clone(SharedContext& t_context) {

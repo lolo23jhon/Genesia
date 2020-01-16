@@ -64,6 +64,7 @@ public:
 	virtual void rotate(const float& t_deg);
 
 	virtual void update(const float& t_elapsed);
+	virtual void updateCollider() = 0;
 	virtual void draw();
 
 	virtual ActorPtr clone();

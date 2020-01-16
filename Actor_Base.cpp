@@ -128,9 +128,6 @@ void Actor_Base::draw() {
 }
 
 void Actor_Base::update(const float& t_elapsed) {
-	// Update collider
-	m_collider.update(this);
-	
 	// Update sprite
 	m_sprite.setRotation(m_rotation);
 	m_sprite.setPosition(m_position);

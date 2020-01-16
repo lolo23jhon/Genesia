@@ -93,6 +93,7 @@ public:
 	void rotate(const float& t_deg); // Decrease in internal energy
 
 	void update(const float& t_elapsed);
+	void updateCollider();
 
 	ActorPtr clone();
 	ActorPtr reproduce(SharedContext& t_context);

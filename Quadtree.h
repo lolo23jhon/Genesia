@@ -6,13 +6,12 @@
 #include <vector>
 #include <SFML/Graphics/Rect.hpp>
 
+
 struct Collider;
 class QuadTree;
 
 using Objects = std::vector<Collider*>; // Non-data-owning ptrs
 using Nodes = std::array<std::unique_ptr<QuadTree>, 4U>;
-
-struct Collidable {};
 
 class QuadTree {
 	static const unsigned S_MAX_LEVELS;

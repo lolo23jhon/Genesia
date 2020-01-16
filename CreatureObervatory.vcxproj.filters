@@ -230,5 +230,8 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>src\CollisionDetection</Filter>
     </ClInclude>
+    <ClInclude Include="unordered_pair_hash.hpp">
+      <Filter>src\Utitlities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

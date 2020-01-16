@@ -146,6 +146,9 @@ void Organism::update(const float& t_elapsed) {
 		return;
 	}// Dead organisms do not move, they just wait to decompose.
 
+	// Update the collider component
+	updateCollider();
+
 	// Update all the traits' effects
 	m_traits.update(this, t_elapsed);
 
@@ -192,4 +195,8 @@ void Organism::eat(Food* t_food) {
 	if (t_food->shouldBeDestroyed()) { return; } // Trying to eat ghost food doesn't work at this level of conciousness.
 	m_energy += t_food->getEnergy() * m_trait_digestiveEfficiency; // Get the energy boost affected by digestive efficiency
 	t_food->setShouldBeDestroyed(true); // Tell the engine the food no longer exists (ha)
+}
+
+void Organism::updateCollider() {
+	m_collider.update(m_position.x, m_position.y, m_trait_size, m_trait_size, m_trait_size * 0.5f);
 }

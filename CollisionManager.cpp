@@ -1,8 +1,9 @@
 #include "CollisionManager.h"
+#include <algorithm>
+#include "Engine.h"
 #include "Organism.h"
 #include "Food.h"
 #include "MathHelpers.h"
-#include <algorithm>
 
 ////////////////////////////////////////////////////////////
 static CollisionCallback bind(CollisionFunctor t_functor) { return std::bind(t_functor, std::placeholders::_1, std::placeholders::_2); }
@@ -61,7 +62,7 @@ void CollisionManager::solveCollision(Collider* t_obj1, Collider* t_obj2) {
 
 ////////////////////////////////////////////////////////////
 void CollisionManager::update(Engine* t_engine) {
-	m_root.clear; // Reset quad tree
+	m_root.clear(); // Reset quad tree
 
 	// Insert all the actors' colliders in to the machine
 	t_engine->actorsForEach(

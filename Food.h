@@ -30,6 +30,7 @@ public:
 	void setDuration(const float& t_duration);
 
 	void update(const float& t_elapsed);
+	void updateCollider();
 
 	ActorPtr clone(SharedContext& t_context);
 };

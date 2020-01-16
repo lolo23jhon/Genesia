@@ -4,15 +4,18 @@
 #include <functional>
 #include <unordered_map>
 #include "QuadTree.h"
-#include "Engine.h"
+#include "unordered_pair_hash.hpp"
 
+class Engine;
 class Actor_Base;
 enum class ColliderType;
+struct PairHash;
 
 using CollisionFunctor = void(*)(Actor_Base*, Actor_Base*);
 using CollisionCallback = std::function<void(Actor_Base*, Actor_Base*)>; // Every combination of collidable actor types get a collision solving callback
-using CollisionPair = std::unordered_set<ColliderType>; // Used for its relational operator. Meant to serve as keys in the collision solver hashmap.
-using CollisionSolver = std::unordered_map<CollisionPair, CollisionCallback>;
+using CollisionPair = std::pair<ColliderType, ColliderType>; // Used for its relational operator. Meant to serve as keys in the collision solver hashmap.
+using CollisionSolver = std::unordered_map<CollisionPair, CollisionCallback, utilities::UnorderedEqual>;
+
 
 enum class ColliderType {
 	Organism,
@@ -32,24 +35,22 @@ struct Collider {
 	const float& get_y()const;
 	float getWidth()const;
 	float getHeight()const;
-	
-	
+
+
 };
 
 
 class CollisionManager {
-	
+
 	QuadTree m_root;
 	Engine* m_engine;
-	
+
 	static const CollisionSolver s_collisions;
 	CollisionManager(Engine* t_owner);
 
 	bool checkCollision(const Collider* t_obj1, const Collider* t_obj2);
-	void solveCollision(Collider* t_obj1,  Collider*  t_obj2);
+	void solveCollision(Collider* t_obj1, Collider* t_obj2);
 	void update(Engine* t_engine);
-
-
 
 };
 

@@ -76,6 +76,7 @@
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\RandomGenerator.h" />
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Utilities.h" />
     <ClInclude Include="TraitCollection.h" />
+    <ClInclude Include="unordered_pair_hash.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

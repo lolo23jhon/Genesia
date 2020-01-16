@@ -273,7 +273,7 @@ void Trait_Base::TraitFn_Lifespan(Trait_Base* t_trait, Organism* t_organism, con
 ////////////////////////////////////////////////////////////
 void Trait_Base::TraitFn_Size(Trait_Base* t_trait, Organism* t_organism, const float& t_elapsed) {
 	t_organism->m_trait_size = dynamic_cast<Trait_Float*>(t_trait)->getValue();
-	t_organism->m_mass = 4.1887902f * t_organism->m_trait_size * t_organism->m_trait_size * t_organism->m_trait_size; // Mass : Volume
+	t_organism->m_mass = 4.1887902f * std::powf(t_organism->m_trait_size * 0.5f,3.f); // mass : volume = (4/3)pi * (diameter/2)^3
 	t_organism->m_rmr = t_organism->m_mass * t_organism->m_trait_restingMetabolicRate;
 }
 
