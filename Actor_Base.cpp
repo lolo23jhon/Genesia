@@ -50,7 +50,7 @@ Actor_Base::Actor_Base(
 	m_text.setFillColor(S_DEFAULT_TEXT_FILL_COLOR);
 	m_text.setOutlineColor(S_DEFAILT_TEXT_OUTILINE_COLOR);
 
-	update(0.f); // Set sprite and text position
+	update(0.f); // Set sprite, text position, and collider aabb
 }
 
 ////////////////////////////////////////////////////////////
@@ -110,6 +110,12 @@ SharedContext& Actor_Base::getContext() {return m_context;}
 ////////////////////////////////////////////////////////////
 const SharedContext& Actor_Base::getContext() const { return m_context; }
 
+////////////////////////////////////////////////////////////
+Collider& Actor_Base::getCollider() { return m_collider; }
+
+////////////////////////////////////////////////////////////
+const Collider& Actor_Base::getCollider()const { return m_collider; }
+
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::draw() {
@@ -122,6 +128,9 @@ void Actor_Base::draw() {
 }
 
 void Actor_Base::update(const float& t_elapsed) {
+	// Update collider
+	m_collider.update(this);
+	
 	// Update sprite
 	m_sprite.setRotation(m_rotation);
 	m_sprite.setPosition(m_position);

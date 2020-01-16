@@ -14,6 +14,7 @@
 #include "Trait.h"
 
 class Organism;
+class Food;
 
 using OrganismPtr = std::unique_ptr<Organism>;
 
@@ -95,6 +96,8 @@ public:
 
 	ActorPtr clone();
 	ActorPtr reproduce(SharedContext& t_context);
+
+	void eat(Food* t_food);
 
 	void die();
 

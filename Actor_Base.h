@@ -5,6 +5,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include "CollisionManager.h"
 
 struct SharedContext;
 class Actor_Base;
@@ -18,9 +19,12 @@ protected:
 	sf::Sprite m_sprite;
 	sf::Color m_color;
 	sf::Text m_text;
+	Collider m_collider;
 	SharedContext& m_context;
 	bool m_isSpriteVisible;
 	bool m_isTextVisible;
+
+
 
 	bool m_destroy; // If the actor shold be removed from the system on the nect tick
 
@@ -53,6 +57,8 @@ public:
 	std::string getTextString()const;
 	SharedContext& getContext();
 	const SharedContext& getContext() const;
+	Collider& getCollider();
+	const Collider& getCollider()const;
 
 	virtual void move(const float& t_dx, const float& t_dy);
 	virtual void rotate(const float& t_deg);

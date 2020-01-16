@@ -76,6 +76,7 @@ public:
 	unsigned getMaxFramerate()const;
 	void setMaxFramerate(const unsigned& t_fps);
 	sf::Time getElapsed()const;
+	const sf::FloatRect& getSimulationRect()const;
 	void spawnActor(ActorPtr t_actor);
 	void resetView();
 

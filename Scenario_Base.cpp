@@ -24,6 +24,10 @@ void Scenario_Base::setMaxNumActors(const unsigned& t_num) { m_maxNumActors = t_
 const unsigned& Scenario_Base::getInitialNumOrganisms()const { return m_initialNumOrganisms; }
 
 ////////////////////////////////////////////////////////////
+const sf::FloatRect& Scenario_Base::getSimulationRect()const { return m_simulationRectangle; }
+
+
+////////////////////////////////////////////////////////////
 void Scenario_Base::update(const float& t_elapsed) {
 
 	// Keep all the actors within the boudaries of the simation; Loo´p around when outside it

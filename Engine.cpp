@@ -96,6 +96,8 @@ bool Engine::executeAction(const ActionId& t_id, const EventInfo& t_info) {
 ////////////////////////////////////////////////////////////
 sf::Time Engine::getElapsed()const { return m_elapsed; }
 
+////////////////////////////////////////////////////////////
+const sf::FloatRect& Engine::getSimulationRect()const { m_scenario->getSimulationRect(); }
 
 ////////////////////////////////////////////////////////////
 void Engine::run() {

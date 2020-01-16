@@ -21,6 +21,7 @@ public:
 	const unsigned& getMaxNumActors()const;
 	void setMaxNumActors(const unsigned& t_num);
 	const unsigned& getInitialNumOrganisms()const;
+	const sf::FloatRect& getSimulationRect()const;
 
 
 	virtual void init() = 0; // Anything that happens when the simulation begins, like spawning the first characters

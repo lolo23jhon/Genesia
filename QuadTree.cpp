@@ -1,60 +1,98 @@
 #include "Quadtree.h"
+#include "CollisionManager.h"
+#include <cassert>
 
-Collidable::Collidable(const sf::FloatRect& t_bound, Actor_Base* t_owner) : m_bound{ t_bound } {}
+const unsigned QuadTree::S_MAX_LEVELS{ 5U };
+const unsigned QuadTree::S_MAX_OBJECTS{ 10U };
 
+////////////////////////////////////////////////////////////
+QuadTree::QuadTree(const unsigned& t_level, const sf::FloatRect& t_bounds) :
+	m_level{ t_level }, m_bounds{ t_bounds }, m_objects{}, m_nodes{}
+{}
 
-void QuadTree::subdivide() {
-	float w{ m_bounds.width * 0.5f };
-	float h{ m_bounds.height * 0.5f };
-	float x{ 0.f };
-	float y{ 0.f };
-
+////////////////////////////////////////////////////////////
+void QuadTree::clear() {
+	m_objects.clear();
 	for (unsigned i{ 0U }; i < 4U; i++) {
-		switch (i) {
-		case 0U: x = m_bounds.left * w;		y = m_bounds.top;		break; // Top right
-		case 1U: x = m_bounds.left;			y = m_bounds.top;		break; // Top left
-		case 2U: x = m_bounds.left;			y = m_bounds.top * h;	break; // Bottom left
-		case 3U: x = m_bounds.left * w;		y = m_bounds.top * h;	break; // Bottom right
+		if (m_nodes[i]) {
+			m_nodes[i].reset();
 		}
-		m_children[i] = std::make_unique<QuadTree>({ x, y, w, h }, m_capacity, m_maxLevel);
-		m_children[i]->m_level = m_level + 1;
-		m_children[i]->m_parent = this;
-	}
-	m_isLeaf = false;
-}
-
-void QuadTree::discardEmptyBuckets() {
-	if (!m_objects.empty()) { return; }
-	if (!m_isLeaf) {
-		for (const auto& child : m_children) {
-			if (!child->m_isLeaf || !child->m_objects.empty()) { return; }
-		}
-	}
-	if (clear(), !m_parent) {
-		m_parent->discardEmptyBuckets();
 	}
 }
 
-QuadTree* QuadTree::getLeaf(const sf::FloatRect& t_bound) {
-	if (!m_isLeaf) {
-		if (QuadTree * child{ getChild(m_bounds) }) {
-			return child->getLeaf(m_bounds);
-		}
-	}
-	return this;
+////////////////////////////////////////////////////////////
+void QuadTree::subdivide() {
+	float sub_w{ m_bounds.width / 2.f };
+	float sub_h{ m_bounds.height / 2.f };
+	float x{ m_bounds.left };
+	float y{ m_bounds.top };
+
+	// (In SFML +y is down)
+	m_nodes[0] = std::make_unique<QuadTree>(m_level + 1, sf::FloatRect(x + sub_w, y, sub_w, sub_h)); // Top right corner
+	m_nodes[1] = std::make_unique<QuadTree>(m_level + 1, sf::FloatRect(x, y, sub_w, sub_h)); // Top left corner
+	m_nodes[2] = std::make_unique<QuadTree>(m_level + 1, sf::FloatRect(x + sub_w, y + sub_h, sub_w, sub_h)); // Bottom right corner
+	m_nodes[3] = std::make_unique<QuadTree>(m_level + 1, sf::FloatRect(x, y + sub_h, sub_w, sub_h)); // Bottom left corner
 }
 
-QuadTree* QuadTree::getChild(const sf::FloatRect& t_bound)const {
-	bool left{m_bounds.left + m_bounds.width < m_};
+////////////////////////////////////////////////////////////
+int QuadTree::getIndex(const Collider* t_obj) {
+	int index{ -1 };
+	// Midpoints
+	float vert_mp{ m_bounds.left + (m_bounds.width / 2.f) };
+	float hori_mp{ m_bounds.top + (m_bounds.height / 2.f) };
+
+
+	bool top_quad{ t_obj->get_x() < hori_mp && t_obj->get_y() + t_obj->getHeight() < hori_mp }; // Fit on top quadrant
+	bool bot_quad{ t_obj->get_x() > hori_mp }; // Fit on bottom quadrant
+
+	// Object fits on left side
+	if (t_obj->get_x() < vert_mp && t_obj->get_x() + t_obj->getWidth() < vert_mp) {
+		if (top_quad) { index = 1; }
+		else if (bot_quad) { index = 2; }
+	}
+
+	// Object fits on right side
+	else if (t_obj->get_x() > vert_mp) {
+		if (top_quad) { index = 0; }
+		else if (bot_quad) { index = 3; }
+	}
+
+	return static_cast<unsigned>(index);
 }
-bool QuadTree::insert(Collidable* t_collidable);
-bool QuadTree::remove(Collidable* t_collidable);
-bool QuadTree::update(Collidable* t_collidable);
-void QuadTree::draw(SharedContext& t_context);
-void QuadTree::clear();
-unsigned QuadTree::totalChildren()const;
-unsigned QuadTree::totalObjects()const;
-std::vector<Collidable*>& getObjectsInBound_unchecked(const sf::FloatRect& t_bound);
-QuadTree::QuadTree(const sf::FloatRect& t_bound, const unsigned& t_capacity, const unsigned& t_maxLevel);
-QuadTree::QuadTree(const QuadTree& t_rhs);
-QuadTree::QuadTree();
+
+////////////////////////////////////////////////////////////
+void QuadTree::insert(const Collider* t_obj) {
+	if (m_nodes[0]) {
+		int index{ getIndex(t_obj) };
+		if (index != -1) {
+			m_nodes[index]->insert(t_obj);
+			return;
+		}
+	}
+
+	m_objects.emplace_back(t_obj);
+	if (m_objects.size() > S_MAX_OBJECTS&& m_level < S_MAX_LEVELS) {
+		if (!m_nodes[0]) { subdivide(); }
+
+
+		for (unsigned i{ 0U }; i < m_objects.size();) {
+			int index{ getIndex(m_objects.at(i)) };
+			if (index != -1) {
+				auto it{ m_objects.begin() + i };
+				Collider* ptr{ *it };
+				m_objects.erase(it);
+				m_nodes[index]->insert(ptr);
+			}
+			else { i++; }
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////
+void QuadTree::retrieve(Objects& t_out_objects, const Collider* t_obj) {
+	int index{ getIndex(t_obj) };
+	if (index != -1 && m_nodes[0]) {
+		m_nodes[index]->retrieve(t_out_objects, t_obj);
+	}
+	t_out_objects.insert(t_out_objects.end(), m_objects.cbegin(), m_objects.cend());
+}

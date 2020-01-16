@@ -1,6 +1,7 @@
 #include <exception>
 #include "Actor_Base.h"
 #include "Organism.h"
+#include "Food.h"
 #include "MathHelpers.h"
 #include "Utilities.h"
 #include "SharedContext.h"
@@ -184,4 +185,11 @@ void Organism::die() {
 	m_isDead = true;
 	m_name += " (dead)";
 	setTextString(m_name);
+}
+
+////////////////////////////////////////////////////////////
+void Organism::eat(Food* t_food) {
+	if (t_food->shouldBeDestroyed()) { return; } // Trying to eat ghost food doesn't work at this level of conciousness.
+	m_energy += t_food->getEnergy() * m_trait_digestiveEfficiency; // Get the energy boost affected by digestive efficiency
+	t_food->setShouldBeDestroyed(true); // Tell the engine the food no longer exists (ha)
 }

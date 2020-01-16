@@ -58,7 +58,7 @@
     <Filter Include="src\Engine\EventProcessing">
       <UniqueIdentifier>{ad4c2479-511a-4c5b-aaa4-eb67dfb9de87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Quadtree">
+    <Filter Include="src\CollisionDetection">
       <UniqueIdentifier>{b995991b-d63e-4ddf-8ab0-c95e076d592d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -136,7 +136,10 @@
       <Filter>src\ActorSystem\Food</Filter>
     </ClCompile>
     <ClCompile Include="QuadTree.cpp">
-      <Filter>src\Quadtree</Filter>
+      <Filter>src\CollisionDetection</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>src\CollisionDetection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -222,7 +225,10 @@
       <Filter>src\ActorSystem\Food</Filter>
     </ClInclude>
     <ClInclude Include="Quadtree.h">
-      <Filter>src\Quadtree</Filter>
+      <Filter>src\CollisionDetection</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>src\CollisionDetection</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
