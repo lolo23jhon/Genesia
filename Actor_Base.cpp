@@ -127,6 +127,7 @@ void Actor_Base::draw() {
 	}
 }
 
+////////////////////////////////////////////////////////////
 void Actor_Base::update(const float& t_elapsed) {
 	// Update sprite
 	m_sprite.setRotation(m_rotation);
@@ -139,6 +140,10 @@ void Actor_Base::update(const float& t_elapsed) {
 	// Put text above sprite (-y = up; +y = down):
 	m_text.setPosition(m_position.x, m_position.y - (m_sprite.getGlobalBounds().height*1.4f + utilities::getSFMLTextMaxHeight(m_text))/2); // 
 }
+
+////////////////////////////////////////////////////////////
+void Actor_Base::updateCollider() {}
+
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::move(const float& t_dx, const float& t_dy) {

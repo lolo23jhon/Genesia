@@ -14,8 +14,7 @@ struct PairHash;
 using CollisionFunctor = void(*)(Actor_Base*, Actor_Base*);
 using CollisionCallback = std::function<void(Actor_Base*, Actor_Base*)>; // Every combination of collidable actor types get a collision solving callback
 using CollisionPair = std::pair<ColliderType, ColliderType>; // Used for its relational operator. Meant to serve as keys in the collision solver hashmap.
-using CollisionSolver = std::unordered_map<CollisionPair, CollisionCallback, utilities::UnorderedEqual>;
-
+using CollisionSolver = std::unordered_map<CollisionPair, CollisionCallback, std::hash<std::pair<ColliderType, ColliderType>>, utilities::UnorderedEqual>;
 
 enum class ColliderType {
 	Organism,
