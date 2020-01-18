@@ -29,7 +29,7 @@ struct Collider {
 	float m_x;
 	float m_y;
 
-	void update(const float& t_x, const float t_y, const float& t_w, const float& t_h, const float& t_radius);
+	void update(Actor_Base* t_owner, const float& t_x, const float t_y, const float& t_w, const float& t_h, const float& t_radius);
 	const float& get_x()const;
 	const float& get_y()const;
 	float getWidth()const;
@@ -45,11 +45,15 @@ class CollisionManager {
 	Engine* m_engine;
 
 	static const CollisionSolver s_collisions;
-	CollisionManager(Engine* t_owner);
+	CollisionManager(const CollisionManager& t_rhs) = delete;
 
-	bool checkCollision(const Collider* t_obj1, const Collider* t_obj2);
-	void solveCollision(Collider* t_obj1, Collider* t_obj2);
-	void update(Engine* t_engine);
+public:
+	CollisionManager(Engine* t_owner);
+	void setQuadTreeBounds(const sf::FloatRect& t_bounds);
+	bool checkCollision(const Collider& t_obj1, const Collider& t_obj2);
+	void solveCollision(Collider& t_obj1, Collider& t_obj2);
+	void update();
+	void draw(sf::RenderTarget& t_window);
 
 };
 

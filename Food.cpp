@@ -60,7 +60,7 @@ void Food::update(const float& t_elapsed) {
 ////////////////////////////////////////////////////////////
 void Food::updateCollider() {
 	auto spriteBounds{ m_sprite.getGlobalBounds() };
-	m_collider.update(m_position.x, m_position.y, spriteBounds.width, spriteBounds.height, spriteBounds.width * 0.5f);
+	m_collider.update(this, m_position.x, m_position.y, spriteBounds.width, spriteBounds.height, spriteBounds.width * 0.5f);
 }
 
 

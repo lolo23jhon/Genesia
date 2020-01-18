@@ -26,14 +26,12 @@ Scenario_Basic::Scenario_Basic(SharedContext& t_context,
 ////////////////////////////////////////////////////////////
 void Scenario_Basic::init() {
 
-
 	auto& rng{ *m_context.m_rng };
-	auto simSize{ m_context.m_window->getSize() };
 
 	// Create and spanw the organisms
 	for (unsigned i{ 0U }; i < m_initialNumOrganisms; i++) {
-		float x{ rng(0.f, (float)simSize.x) };
-		float y{ rng(0.f, (float)simSize.y) };
+		float x{ rng(m_simulationRectangle.width , m_simulationRectangle.left) };
+		float y{ rng(m_simulationRectangle.height , m_simulationRectangle.top) };
 		float rot{ rng(0.f, 359.9999999f) };
 
 
@@ -45,13 +43,13 @@ void Scenario_Basic::init() {
 
 	// Create and spawn food
 	for (unsigned i{ 0U }; i < m_initialNumFood; i++) {
-		float x{ rng(0.f, (float)simSize.x) };
-		float y{ rng(0.f, (float)simSize.y) };
+		float x{ rng(m_simulationRectangle.width , m_simulationRectangle.left) };
+		float y{ rng(m_simulationRectangle.height , m_simulationRectangle.top) };
 		float rot{ rng(0.f, 359.9999999f) };
 
 		auto food{ std::move(m_food->clone(m_context)) };
 		food->setPosition({ x,y });
-		food->setRotation({ rot });
+		food->setRotation(rot);
 		m_context.m_engine->spawnActor(std::move(food));
 	}
 }

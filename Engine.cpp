@@ -10,6 +10,8 @@ static const sf::Color S_BG_COLOR{ 240,240,240 };
 static const unsigned S_FPS{ 30 };
 static const unsigned S_NUM_FOOD{ 10U };
 static const unsigned S_NUM_ORGANISMS{ 10U };
+static const float S_SIMULATION_WIDTH{ 1000.f };
+static const float S_SIMULATION_HEIGHT{ 800.f };
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
@@ -22,7 +24,8 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_rng{},
 	m_resourceHolder{},
 	m_context{},
-	m_maxFramerate{ S_FPS }
+	m_maxFramerate{ S_FPS },
+	m_collisionManager{ this }
 {
 	m_context.m_engine = this;
 	m_context.m_resourceHolder = &m_resourceHolder;
@@ -58,15 +61,18 @@ void Engine::init() {
 	m_resourceHolder.init();
 
 	// Initialize simulation scenario
-	m_scenario = std::make_unique<Scenario_Basic>(m_context, S_NUM_ORGANISMS, 100U, S_NUM_FOOD, S_NUM_FOOD);
+	m_scenario = std::make_unique<Scenario_Basic>(m_context, S_NUM_ORGANISMS, 100U, S_NUM_FOOD, S_NUM_FOOD, S_SIMULATION_WIDTH, S_SIMULATION_HEIGHT);
 	m_scenario->init();
 
+	// Set the size of the quadtree root
+	m_collisionManager.setQuadTreeBounds(m_scenario->getSimulationRect());
 }
 
 ////////////////////////////////////////////////////////////
 void Engine::update() {
 	const float elapsed{ m_elapsed.asSeconds() };
 	if (m_state == EngineState::Paused) { return; }
+
 	// Update actors and delete the wasted ones
 	{auto it{ m_actors.begin() };
 	while (it != m_actors.end()) {
@@ -80,7 +86,11 @@ void Engine::update() {
 			it++;
 		}
 	}}
+
 	m_scenario->update(elapsed);
+
+	// Build the collision quadtree
+	m_collisionManager.update();
 }
 
 
@@ -171,11 +181,14 @@ void Engine::render() {
 	// Draw any scenery placed by the scenario
 	m_scenario->draw();
 
+#if defined(_DEBUG) && IS_DRAW_COLLISION_QUADTREE == 1
+	m_collisionManager.draw(m_window); // Draw the collision quadtree (debug)
+#endif // defined(_DEBUG) && IS_DRAW_COLLISION_QUADTREE == 1
+
 	// Draw the actors
 	for (auto& actor : m_actors) {
 		actor->draw();
 	}
-
 
 	m_window.display();
 }

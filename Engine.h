@@ -16,6 +16,7 @@
 #include "ResourceHolder.h"
 #include "Actor_Base.h"
 #include "Scenario_Base.h"
+#include "CollisionManager.h"
 
 using ActorPtr = std::unique_ptr<Actor_Base>;
 using Actors = std::vector<ActorPtr>; // contains all the actors in the current simulation
@@ -35,6 +36,7 @@ private:
 	unsigned m_fpsLimit;
 
 	Actors  m_actors;
+	CollisionManager m_collisionManager;
 	SharedContext m_context;
 
 	float m_viewSpeed;

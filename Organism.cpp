@@ -146,9 +146,6 @@ void Organism::update(const float& t_elapsed) {
 		return;
 	}// Dead organisms do not move, they just wait to decompose.
 
-	// Update the collider component
-	updateCollider();
-
 	// Update all the traits' effects
 	m_traits.update(this, t_elapsed);
 
@@ -165,6 +162,9 @@ void Organism::update(const float& t_elapsed) {
 
 	// Lower level update (position, rotation ...)
 	Actor_Base::update(t_elapsed);
+
+	// Update the collider component
+	updateCollider();
 }
 
 ////////////////////////////////////////////////////////////
@@ -197,6 +197,7 @@ void Organism::eat(Food* t_food) {
 	t_food->setShouldBeDestroyed(true); // Tell the engine the food no longer exists (ha)
 }
 
+////////////////////////////////////////////////////////////
 void Organism::updateCollider() {
-	m_collider.update(m_position.x, m_position.y, m_trait_size, m_trait_size, m_trait_size * 0.5f);
+	m_collider.update(this ,m_position.x, m_position.y, m_trait_size, m_trait_size, m_trait_size * 0.5f);
 }
