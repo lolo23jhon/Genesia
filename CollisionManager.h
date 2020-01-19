@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <unordered_map>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include "QuadTree.h"
 #include "unordered_pair_hash.hpp"
 
@@ -29,7 +30,7 @@ struct Collider {
 	float m_x;
 	float m_y;
 
-	void update(Actor_Base* t_owner, const float& t_x, const float t_y, const float& t_w, const float& t_h, const float& t_radius);
+	void update(const ColliderType& y_type, Actor_Base* t_owner, const float& t_x, const float t_y, const float& t_w, const float& t_h, const float& t_radius);
 	const float& get_x()const;
 	const float& get_y()const;
 	float getWidth()const;
@@ -53,7 +54,7 @@ public:
 	bool checkCollision(const Collider& t_obj1, const Collider& t_obj2);
 	void solveCollision(Collider& t_obj1, Collider& t_obj2);
 	void update();
-	void draw(sf::RenderTarget& t_window);
+	void draw(sf::RenderWindow& t_window);
 
 };
 

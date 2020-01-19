@@ -8,10 +8,10 @@
 
 static const sf::Color S_BG_COLOR{ 240,240,240 };
 static const unsigned S_FPS{ 30 };
-static const unsigned S_NUM_FOOD{ 10U };
-static const unsigned S_NUM_ORGANISMS{ 10U };
-static const float S_SIMULATION_WIDTH{ 1000.f };
-static const float S_SIMULATION_HEIGHT{ 800.f };
+static const unsigned S_NUM_FOOD{ 100U };
+static const unsigned S_NUM_ORGANISMS{ 3U };
+static const float S_SIMULATION_WIDTH{ 2000.f };
+static const float S_SIMULATION_HEIGHT{ 2000.f };
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :

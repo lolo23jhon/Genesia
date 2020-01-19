@@ -4,8 +4,10 @@
 #include <array>
 #include <memory>
 #include <vector>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 struct Collider;
 class QuadTree;
@@ -33,7 +35,10 @@ public:
 	void retrieve(Objects& t_out_objs, const Collider& t_obj); // Retrieves all the objects that could collide with the objcext
 
 	unsigned i{ 0U };
-	void draw(sf::RenderTarget& t_window);
+	void draw(sf::RenderWindow& t_window);
+
+private:
+	void getDrawablesFromChildren(std::vector<sf::RectangleShape>& t_rects, std::vector<sf::Text>& t_tags, std::vector<sf::RectangleShape>& t_aabbs)const;
 };
 
 #endif // !QUADTREE_H

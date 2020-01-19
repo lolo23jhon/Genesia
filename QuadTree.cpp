@@ -7,8 +7,8 @@
 #include "PreprocessorDirectves.h"
 
 const unsigned QuadTree::S_MAX_LEVELS{ 5U };
-const unsigned QuadTree::S_MAX_OBJECTS{ 10U };
-static const sf::Color S_FILL_COLOR{ 255, 255, 255, 20 }; 
+const unsigned QuadTree::S_MAX_OBJECTS{ 2U };
+static const sf::Color S_FILL_COLOR{ 255, 255, 255, 20 };
 static const sf::Color S_BORDER_COLOR{ 0,0,255,255 }; // Solid blue
 static const unsigned S_TEXT_SIZE{ 10U };
 
@@ -44,8 +44,8 @@ void QuadTree::clear() {
 
 ////////////////////////////////////////////////////////////
 void QuadTree::subdivide() {
-	float sub_w{ m_bounds.width / 2.f };
-	float sub_h{ m_bounds.height / 2.f };
+	float sub_w{ m_bounds.width * 0.5f };
+	float sub_h{ m_bounds.height * 0.5f };
 	float x{ m_bounds.left };
 	float y{ m_bounds.top };
 
@@ -104,7 +104,7 @@ void QuadTree::insert(Collider& t_obj) {
 			if (index != -1) {
 				// Hand the object to child
 				Collider* obj{ *it };
-				assert(obj->m_owner && "QuadTree::insert(Collider&): Collider component owner is nullptr!");
+				assert(obj->m_owner != nullptr && "QuadTree::insert(Collider&): Collider component owner is nullptr!");
 				it = m_objects.erase(it);
 				m_nodes[index]->insert(*obj);
 			}
@@ -124,27 +124,57 @@ void QuadTree::retrieve(Objects& t_out_objects, const Collider& t_obj) {
 }
 
 ////////////////////////////////////////////////////////////
-void QuadTree::draw(sf::RenderTarget& t_window) {
+void QuadTree::getDrawablesFromChildren(std::vector<sf::RectangleShape>& t_rects, std::vector<sf::Text>& t_tags, std::vector<sf::RectangleShape>& t_aabbs)const {
+
+	// Only the most derived children get to pass the info
+	if (m_nodes[0]) {
+		for (unsigned i{ 0U }; i < 4U; i++) {
+			m_nodes[i]->getDrawablesFromChildren(t_rects, t_tags, t_aabbs);
+		}
+	}
+	else {
+		sf::RectangleShape bounds({ m_bounds.width, m_bounds.height });
+		bounds.setPosition(m_bounds.left, m_bounds.top);
+		bounds.setFillColor({ 0,0,0,20 });
+		bounds.setOutlineColor({ 255,255,255,255 });
+		bounds.setOutlineThickness(2.f);
+		t_rects.emplace_back(bounds);
+
+		sf::Text text;
+		text.setFont(font());
+		text.setString(std::to_string(m_level));
+		text.setPosition(m_bounds.left, m_bounds.top);
+		text.setFillColor(S_BORDER_COLOR);
+		text.setOutlineColor(S_BORDER_COLOR);
+		text.setCharacterSize(S_TEXT_SIZE);
+		t_tags.emplace_back(text);
+	}
+
+	for (auto&& obj : m_objects) {
+		sf::RectangleShape aabb({ obj->getWidth(), obj->getHeight() });
+		aabb.setOrigin({ obj->getWidth() * 0.5f, obj->getHeight() * 0.5f }); // Origin at rectangle center
+		aabb.setPosition({ obj->get_x(), obj->get_y() });
+		aabb.setFillColor({0,255,0,30}); 
+		aabb.setOutlineColor({0,255,100,100}); 
+		aabb.setOutlineThickness(2.f);
+		t_aabbs.emplace_back(aabb);
+	}
+}
+
+////////////////////////////////////////////////////////////
+void QuadTree::draw(sf::RenderWindow& t_window) {
+	// The function has an empty body on Realase settings
 #if defined(_DEBUG) &&  IS_DRAW_COLLISION_QUADTREE == 1 
 
-	// Draw the children nodes (if any)
-	if (m_level < S_MAX_LEVELS && !m_nodes.empty()) {
-		for (const auto& n : m_nodes) { if (n) { n->draw(t_window); } }
-	}
- 	sf::Text text;
-	text.setFont(font());
-	text.setString(std::string(m_level,' ') + std::to_string(m_level));
-	text.setPosition(m_bounds.left, m_bounds.top);
-	text.setFillColor(S_BORDER_COLOR);
-	text.setOutlineColor(S_BORDER_COLOR);
-	text.setCharacterSize(S_TEXT_SIZE);
-	sf::RectangleShape rectangle({ m_bounds.width, m_bounds.height });
-	rectangle.setFillColor(S_FILL_COLOR); // Transparent green fill
-	rectangle.setOutlineColor(S_BORDER_COLOR); // Blue borders
-	rectangle.setOutlineThickness(2.f);
-	rectangle.setPosition({ m_bounds.left, m_bounds.top });
-	t_window.draw(rectangle);
-	t_window.draw(text);
+	std::vector<sf::RectangleShape> rects;
+	std::vector<sf::Text> tags;
+	std::vector<sf::RectangleShape> aabbs;
+
+	getDrawablesFromChildren(rects, tags, aabbs);
+
+	for (auto&& rect : rects) { t_window.draw(rect); }
+	for (auto&& tag : tags) { t_window.draw(tag); }
+	for (auto&& aabb : aabbs) { t_window.draw(aabb); }
 
 #endif // defined(_DEBUG) &&  IS_DRAW_COLLISION_QUADTREE == 1 
 }

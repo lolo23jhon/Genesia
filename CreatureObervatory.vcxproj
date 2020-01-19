@@ -27,6 +27,7 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="DebugObject.cpp" />
     <ClCompile Include="dep_main.cpp" />
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="HSLColor.cpp" />
@@ -52,6 +53,7 @@
     <ClInclude Include="Ai._Base.h" />
     <ClInclude Include="Ai_Organism.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="DebugObject.h" />
     <ClInclude Include="HSLColor.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Trait.h" />

@@ -13,6 +13,8 @@ class Food : public Actor_Base {
 	float m_age;
 	float m_duration;
 
+	bool m_hasUnlimitedDuration;
+
 public:
 	Food(SharedContext& t_context,
 		const sf::Vector2f& t_position,

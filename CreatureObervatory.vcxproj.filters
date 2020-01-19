@@ -141,6 +141,9 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>src\CollisionDetection</Filter>
     </ClCompile>
+    <ClCompile Include="DebugObject.cpp">
+      <Filter>src\Utitlities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.h">
@@ -231,6 +234,9 @@
       <Filter>src\CollisionDetection</Filter>
     </ClInclude>
     <ClInclude Include="unordered_pair_hash.hpp">
+      <Filter>src\Utitlities</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugObject.h">
       <Filter>src\Utitlities</Filter>
     </ClInclude>
   </ItemGroup>

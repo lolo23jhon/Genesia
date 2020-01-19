@@ -4,7 +4,7 @@
 
 
 static const float S_FOOD_ENERGY{ 400.f };
-static const float S_FOOD_DURATION{ 15.f };
+static const float S_FOOD_DURATION{ INFINITY };
 
 
 Scenario_Basic::Scenario_Basic(SharedContext& t_context,

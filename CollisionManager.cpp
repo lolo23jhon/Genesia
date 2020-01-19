@@ -4,6 +4,7 @@
 #include "Organism.h"
 #include "Food.h"
 #include "MathHelpers.h"
+#include "DebugObject.h"
 
 ////////////////////////////////////////////////////////////
 static CollisionCallback bind(CollisionFunctor t_functor) { return std::bind(t_functor, std::placeholders::_1, std::placeholders::_2); }
@@ -27,12 +28,13 @@ const CollisionSolver CollisionManager::s_collisions{
 void CollisionManager::setQuadTreeBounds(const sf::FloatRect& t_bounds) { m_root.setBounds(t_bounds); }
 
 ////////////////////////////////////////////////////////////
-void Collider::update(Actor_Base* t_owner, const float& t_x, const float t_y, const float& t_w, const float& t_h, const float& t_radius) {
+void Collider::update(const ColliderType& t_type, Actor_Base* t_owner, const float& t_x, const float t_y, const float& t_w, const float& t_h, const float& t_radius) {
+	m_type = t_type;
 	m_owner = t_owner;
 	m_x = t_x;
 	m_y = t_y;
 	m_radius = t_radius;
-	m_aabb = sf::FloatRect(m_x - t_w / 2.f, m_y - t_h / 2.f, t_w, t_h); // Transform from center-based x and y to top left corner
+	m_aabb = sf::FloatRect(m_x - t_w * 0.5f, m_y - t_h * 0.5f, t_w, t_h); // Transform from center-based x and y to top left corner
 }
 
 
@@ -54,7 +56,8 @@ float Collider::getHeight()const { return m_aabb.height; }
 
 ////////////////////////////////////////////////////////////
 bool CollisionManager::checkCollision(const Collider& t_obj1, const Collider& t_obj2) {
-	return mat::distance(t_obj1.m_x, t_obj1.m_y, t_obj2.m_x, t_obj2.m_y) < t_obj1.m_radius + t_obj2.m_radius;
+	float dist{ mat::distance(t_obj1.m_x, t_obj1.m_y, t_obj2.m_x, t_obj2.m_y) };
+	return  dist < (t_obj1.m_radius + t_obj2.m_radius);
 }
 
 
@@ -79,19 +82,21 @@ void CollisionManager::update() {
 	m_engine->actorsForEach(
 		[&objects, this](ActorPtr& t_actor) {
 			objects.clear();
+			Collider& obj1{ t_actor->getCollider() };
 
 			// Get the objects in potential of collision for each single actor
-			m_root.retrieve(objects, t_actor->getCollider());
+			m_root.retrieve(objects, obj1);
 
-			Collider* obj1{ &t_actor->getCollider() };
 			for (auto& obj2 : objects) {
- 				if (checkCollision(*obj1, *obj2)) { solveCollision(*obj1, *obj2); }
+				if (checkCollision(obj1, *obj2)) {
+					solveCollision(obj1, *obj2);
+				}
 			}
 		}
 	);
 }
 
 ////////////////////////////////////////////////////////////
-void CollisionManager::draw(sf::RenderTarget& t_window) {
+void CollisionManager::draw(sf::RenderWindow& t_window) {
 	m_root.draw(t_window);
 }

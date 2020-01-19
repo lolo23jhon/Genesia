@@ -192,12 +192,15 @@ void Organism::die() {
 
 ////////////////////////////////////////////////////////////
 void Organism::eat(Food* t_food) {
-	if (t_food->shouldBeDestroyed()) { return; } // Trying to eat ghost food doesn't work at this level of conciousness.
+	if (!t_food || t_food->shouldBeDestroyed()) { return; } // Trying to eat ghost food doesn't work at this level of conciousness.
+	if (m_energy > 0.8f * m_trait_maxEnergy) { return; } // Ogranisms at and over 80% of energy are not experiencing hunger
 	m_energy += t_food->getEnergy() * m_trait_digestiveEfficiency; // Get the energy boost affected by digestive efficiency
+	if (m_energy > m_trait_maxEnergy) { m_energy = m_trait_maxEnergy; }
 	t_food->setShouldBeDestroyed(true); // Tell the engine the food no longer exists (ha)
 }
 
 ////////////////////////////////////////////////////////////
 void Organism::updateCollider() {
-	m_collider.update(this ,m_position.x, m_position.y, m_trait_size, m_trait_size, m_trait_size * 0.5f);
+	auto aabb{ m_sprite.getLocalBounds() };
+	m_collider.update(ColliderType::Organism, this, m_position.x, m_position.y, aabb.width, aabb.height, aabb.width * 5.f);
 }
