@@ -21,9 +21,10 @@ public:
 		const unsigned& t_maxNumOrganisms,
 		const unsigned& t_initialNumFood,
 		const unsigned& t_maxNumFood, 
-		const float& t_width = 3000.f, 
-		const float& t_height = 3000.f);
+		const float& t_width, 
+		const float& t_height);
 	void init();
+	void update(const float& t_elapsed);
 
 
 };

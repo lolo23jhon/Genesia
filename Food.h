@@ -8,8 +8,6 @@ class Food : public Actor_Base {
 
 	static unsigned s_numFood;
 
-	static const unsigned& getNumFood();
-
 	float m_energy; // Energy granted to the eater
 	float m_age;
 	float m_duration;
@@ -31,6 +29,8 @@ public:
 	void setAge(const float& t_age);
 	const float& getDuration()const;
 	void setDuration(const float& t_duration);
+
+	static unsigned getNumFood();
 
 	void update(const float& t_elapsed);
 	void updateCollider();

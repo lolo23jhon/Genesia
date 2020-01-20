@@ -12,7 +12,7 @@ static const float S_INFINITY{ INFINITY };
 unsigned Food::s_numFood{ 0U };
 
 ////////////////////////////////////////////////////////////
-const unsigned& Food::getNumFood() { return s_numFood; }
+unsigned Food::getNumFood() { return s_numFood; }
 
 ////////////////////////////////////////////////////////////
 Food::Food(SharedContext& t_context,

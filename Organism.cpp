@@ -156,12 +156,12 @@ void Organism::update(const float& t_elapsed) {
 #if defined(_DEBUG) && IS_DISPLAY_ORGNAISMS_DEBUG_TEXT == 1
 	setTextString(m_name +
 		"\nEnergy: " + std::to_string(static_cast<unsigned>(m_energy >= 0.f ? m_energy : 0.f)) + " / " + std::to_string(static_cast<unsigned>(m_trait_maxEnergy)) +
-		"\nAge:    " + std::to_string(static_cast<unsigned>(m_age)) + " / " + std::to_string(static_cast<unsigned>(m_trait_lifespan)) +
-		"\nSize:   " + std::to_string(m_trait_size) +
-		"\nMass:   " + std::to_string(m_mass) +
-		"\nRMR:    " + std::to_string(m_rmr) +
-		"\nMovSp:  " + std::to_string(m_trait_movementSpeed) +
-		"\nRotSp:  " + std::to_string(m_trait_turningSpeed) +
+		"\nAge   : " + std::to_string(static_cast<unsigned>(m_age)) + " / " + std::to_string(static_cast<unsigned>(m_trait_lifespan)) +
+		"\nSize  : " + std::to_string(m_trait_size) +
+		"\nMass  : " + std::to_string(m_mass) +
+		"\nRMR   : " + std::to_string(m_rmr) +
+		"\nMovSp : " + std::to_string(m_trait_movementSpeed) +
+		"\nRotSp : " + std::to_string(m_trait_turningSpeed) +
 		"\nDigEff: " + std::to_string(m_trait_digestiveEfficiency));
 #endif // defined(_DEBUG) && IS_DISPLAY_ORGNAISMS_DEBUG_TEXT == 1
 
