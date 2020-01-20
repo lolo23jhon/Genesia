@@ -6,10 +6,17 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include "CollisionManager.h"
+#include "Collider.h"
 
 struct SharedContext;
 class Actor_Base;
 using ActorPtr = std::unique_ptr<Actor_Base>;
+
+enum class ActorType {
+	Base,
+	Organism,
+	Food
+};
 
 class Actor_Base {
 
@@ -19,11 +26,11 @@ protected:
 	sf::Sprite m_sprite;
 	sf::Color m_color;
 	sf::Text m_text;
-	Collider m_collider;
+	std::unique_ptr<Collider> m_collider;
 	SharedContext& m_context;
 	bool m_isSpriteVisible;
 	bool m_isTextVisible;
-
+	ActorType m_actorType; // Saves a lot of RTTI hustle
 
 
 	bool m_destroy; // If the actor shold be removed from the system on the nect tick
@@ -59,6 +66,7 @@ public:
 	const SharedContext& getContext() const;
 	Collider& getCollider();
 	const Collider& getCollider()const;
+	const ActorType& getActorType()const;
 
 	virtual void move(const float& t_dx, const float& t_dy);
 	virtual void rotate(const float& t_deg);

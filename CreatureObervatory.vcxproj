@@ -26,6 +26,8 @@
     <ClCompile Include="BoundKeys.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Keyboard.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\ColorMap.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Collider_Circle.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DebugObject.cpp" />
     <ClCompile Include="dep_main.cpp" />
@@ -33,7 +35,7 @@
     <ClCompile Include="HSLColor.cpp" />
     <ClCompile Include="MathHelpers.cpp" />
     <ClCompile Include="Organism.cpp" />
-    <ClCompile Include="QuadTree.cpp" />
+    <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="ResourceHolder.cpp" />
     <ClCompile Include="Scenario_Base.cpp" />
     <ClCompile Include="Scenario_Basic.cpp" />
@@ -52,6 +54,8 @@
     <ClInclude Include="Actor_Base.h" />
     <ClInclude Include="Ai._Base.h" />
     <ClInclude Include="Ai_Organism.h" />
+    <ClInclude Include="Collider.h" />
+    <ClInclude Include="Collider_Circle.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DebugObject.h" />
     <ClInclude Include="HSLColor.h" />

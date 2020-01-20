@@ -7,11 +7,13 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "Actor_Base.h"
 #include "HSLColor.h"
 #include "ResourceHolder.h"
 #include "Ai_Organism.h"
 #include "TraitCollection.h"
 #include "Trait.h"
+#include "Collider.h"
 
 class Organism;
 class Food;

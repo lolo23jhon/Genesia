@@ -9,7 +9,7 @@
 static const sf::Color S_BG_COLOR{ 240,240,240 };
 static const unsigned S_FPS{ 30 };
 static const unsigned S_NUM_FOOD{ 100U };
-static const unsigned S_NUM_ORGANISMS{ 3U };
+static const unsigned S_NUM_ORGANISMS{ 15U };
 static const float S_SIMULATION_WIDTH{ 2000.f };
 static const float S_SIMULATION_HEIGHT{ 2000.f };
 
@@ -25,7 +25,7 @@ Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName
 	m_resourceHolder{},
 	m_context{},
 	m_maxFramerate{ S_FPS },
-	m_collisionManager{ this }
+	m_collisionManager{ this, sf::FloatRect() }
 {
 	m_context.m_engine = this;
 	m_context.m_resourceHolder = &m_resourceHolder;
@@ -65,7 +65,7 @@ void Engine::init() {
 	m_scenario->init();
 
 	// Set the size of the quadtree root
-	m_collisionManager.setQuadTreeBounds(m_scenario->getSimulationRect());
+	m_collisionManager.setBounds(m_scenario->getSimulationRect());
 }
 
 ////////////////////////////////////////////////////////////
@@ -184,10 +184,12 @@ void Engine::render() {
 #if defined(_DEBUG) && IS_DRAW_COLLISION_QUADTREE == 1
 	m_collisionManager.draw(m_window); // Draw the collision quadtree (debug)
 #endif // defined(_DEBUG) && IS_DRAW_COLLISION_QUADTREE == 1
-
 	// Draw the actors
 	for (auto& actor : m_actors) {
 		actor->draw();
+#if defined(_DEBUG) && IS_DRAW_ACTOR_AABB == 1
+		actor->getCollider().draw(m_window);
+#endif // defined(_DEBUG) && IS_DRAW_ACTOR_AABB == 1
 	}
 
 	m_window.display();

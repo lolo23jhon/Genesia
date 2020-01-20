@@ -1,5 +1,4 @@
 #include <exception>
-#include "Actor_Base.h"
 #include "Organism.h"
 #include "Food.h"
 #include "MathHelpers.h"
@@ -29,6 +28,7 @@ Organism::Organism(
 	m_ai{ nullptr },
 	m_destructionDelay{ S_DEFAULT_DESTRUCTION_DELAY }
 {
+	m_actorType = ActorType::Organism;
 	setTextString(m_name);
 	setColorRGB(m_color); //Also write the HSL color
 	m_ai = std::make_unique<Ai_Organism>(this);
@@ -202,5 +202,5 @@ void Organism::eat(Food* t_food) {
 ////////////////////////////////////////////////////////////
 void Organism::updateCollider() {
 	auto aabb{ m_sprite.getLocalBounds() };
-	m_collider.update(ColliderType::Organism, this, m_position.x, m_position.y, aabb.width, aabb.height, aabb.width * 5.f);
+	m_collider->update(this, m_position, { aabb.width * m_trait_size, aabb.height * m_trait_size });
 }

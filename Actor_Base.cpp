@@ -25,7 +25,9 @@ Actor_Base::Actor_Base(
 	m_rotation{ t_rotation },
 	m_color{ t_color },
 	m_isSpriteVisible{ t_isSpriteVisible },
-	m_isTextVisible{ t_isTextVisible }
+	m_isTextVisible{ t_isTextVisible },
+	m_actorType{ ActorType::Base },
+	m_collider{ std::make_unique<Collider>(this, t_position, sf::Vector2f(0.f,0.f)) }
 {
 
 	// Initialize texture
@@ -33,7 +35,7 @@ Actor_Base::Actor_Base(
 	if (!texture_resource) {
 		throw(std::runtime_error(std::string("Organism::Organims: Texture " + t_texture + " was nullptr!")));
 	}
-	m_sprite.setTexture(std::get<sf::Texture>(*texture_resource),true);
+	m_sprite.setTexture(std::get<sf::Texture>(*texture_resource), true);
 	if (t_spriteRect.width && t_spriteRect.height) {
 		m_sprite.setTextureRect(t_spriteRect);
 
@@ -105,16 +107,16 @@ bool Actor_Base::isTextVisible()const { return m_isTextVisible; }
 void Actor_Base::setIsTextVisible(bool t_visible) { m_isTextVisible = t_visible; }
 
 ////////////////////////////////////////////////////////////
-SharedContext& Actor_Base::getContext() {return m_context;}
+SharedContext& Actor_Base::getContext() { return m_context; }
 
 ////////////////////////////////////////////////////////////
 const SharedContext& Actor_Base::getContext() const { return m_context; }
 
 ////////////////////////////////////////////////////////////
-Collider& Actor_Base::getCollider() { return m_collider; }
+Collider& Actor_Base::getCollider() { return *m_collider.get(); }
 
 ////////////////////////////////////////////////////////////
-const Collider& Actor_Base::getCollider()const { return m_collider; }
+const Collider& Actor_Base::getCollider()const { return *m_collider.get(); }
 
 
 ////////////////////////////////////////////////////////////
@@ -128,6 +130,10 @@ void Actor_Base::draw() {
 }
 
 ////////////////////////////////////////////////////////////
+const ActorType& Actor_Base::getActorType()const { return m_actorType; }
+
+
+////////////////////////////////////////////////////////////
 void Actor_Base::update(const float& t_elapsed) {
 	// Update sprite
 	m_sprite.setRotation(m_rotation);
@@ -138,7 +144,7 @@ void Actor_Base::update(const float& t_elapsed) {
 	utilities::centerSFMLText(m_text);
 
 	// Put text above sprite (-y = up; +y = down):
-	m_text.setPosition(m_position.x, m_position.y - (m_sprite.getGlobalBounds().height*1.4f + utilities::getSFMLTextMaxHeight(m_text))/2); // 
+	m_text.setPosition(m_position.x, m_position.y - (m_sprite.getGlobalBounds().height * 1.4f + utilities::getSFMLTextMaxHeight(m_text)) / 2); // 
 }
 
 ////////////////////////////////////////////////////////////
@@ -169,9 +175,7 @@ void Actor_Base::setTextString(const std::string& t_str) { m_text.setString(t_st
 std::string Actor_Base::getTextString()const { return m_text.getString(); }
 
 ////////////////////////////////////////////////////////////
-ActorPtr Actor_Base::clone() {
-	return std::make_unique<Actor_Base>(*this);
-}
+ActorPtr Actor_Base::clone() { return nullptr; } // Why would you want to copy and empty dummy at runtime?
 
 ////////////////////////////////////////////////////////////
- void Actor_Base::onDestruction(SharedContext& t_context) {}
+void Actor_Base::onDestruction(SharedContext& t_context) {}

@@ -29,6 +29,7 @@ Food::Food(SharedContext& t_context,
 	m_age{ 0.f }
 {
 	s_numFood++;
+	m_actorType = ActorType::Food;
 	setTextString("Food: " + std::to_string(static_cast<int>(m_energy)));
 	updateCollider();
 }
@@ -64,7 +65,7 @@ void Food::update(const float& t_elapsed) {
 ////////////////////////////////////////////////////////////
 void Food::updateCollider() {
 	auto aabb{ m_sprite.getLocalBounds() };
-	m_collider.update(ColliderType::Food, this, m_position.x, m_position.y, aabb.width, aabb.height, aabb.width * 0.5f);
+	m_collider->update(this, m_position, {aabb.width, aabb.height});
 }
 
 
