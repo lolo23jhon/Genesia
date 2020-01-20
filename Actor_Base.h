@@ -77,5 +77,6 @@ public:
 
 	virtual ActorPtr clone();
 	virtual void onDestruction(SharedContext& t_context); // Anything that happens when the actor is aihiated i. g. spawning something
+	virtual float getRadius()const;
 };
 #endif // !ACTOR_BASE_H

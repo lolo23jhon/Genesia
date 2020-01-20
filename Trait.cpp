@@ -164,7 +164,7 @@ static const sf::Color S_GREEN{ 0,255,0,255 };
 const TraitMap Trait_Base::s_defaultTraits{ []() {
 	TraitMap tmp;
 	//				 key						id							isActive	 inheritChance		value
-	tmp.emplace(TID::MaxEnergy,				MF(TID::MaxEnergy,				ACTIVE_TRAIT, ALWAYS_INHERITED, 1000.f));
+	tmp.emplace(TID::MaxEnergy,				MF(TID::MaxEnergy,				ACTIVE_TRAIT, ALWAYS_INHERITED, 500.f));
 	tmp.emplace(TID::DigestiveEfficiency,	MF(TID::DigestiveEfficiency,	ACTIVE_TRAIT, ALWAYS_INHERITED, 0.5f));
 	tmp.emplace(TID::RestingMetabolicRate,	MF(TID::RestingMetabolicRate,	ACTIVE_TRAIT, ALWAYS_INHERITED, 1.f));
 	tmp.emplace(TID::MovementSpeed,			MF(TID::MovementSpeed,			ACTIVE_TRAIT, ALWAYS_INHERITED, 20.f));

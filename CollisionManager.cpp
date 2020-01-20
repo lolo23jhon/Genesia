@@ -33,7 +33,7 @@ const CollisionSolver CollisionManager::s_collisions{
 bool CollisionManager::checkCollision(const Collider* t_obj1, const Collider* t_obj2) {
 	// For the sake of simplicity, all colliders are assumed to be circles
 	if (t_obj1->getOwner() == t_obj2->getOwner()) { return false; } // Same object
-	return (mat::distance(t_obj1->getCenterPos(), t_obj2->getCenterPos()) < ((t_obj1->getAABB().width, t_obj2->getAABB().width) * 0.5f));
+	return (mat::distance(t_obj1->getCenterPos(), t_obj2->getCenterPos()) < (t_obj1->getOwner()->getRadius() + t_obj2->getOwner()->getRadius()));
 }
 
 

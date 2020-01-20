@@ -4,7 +4,7 @@
 #include "Utilities.h"
 #include "ResourceHolder.h"
 
-static const std::string S_DEFAULT_FONT{ "Font_helvetica" };
+static const std::string S_DEFAULT_FONT{ "Font_consola" };
 static const sf::Color S_DEFAULT_TEXT_FILL_COLOR{ 25,25,25 };
 static const sf::Color S_DEFAILT_TEXT_OUTILINE_COLOR{ 250,250,250 };
 static const unsigned S_DEFAULT_TEXT_SIZE{ 2U };
@@ -179,3 +179,6 @@ ActorPtr Actor_Base::clone() { return nullptr; } // Why would you want to copy a
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::onDestruction(SharedContext& t_context) {}
+
+////////////////////////////////////////////////////////////
+float Actor_Base::getRadius()const { return m_sprite.getLocalBounds().width*0.5f; }

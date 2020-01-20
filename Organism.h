@@ -104,5 +104,6 @@ public:
 
 	void die();
 
+	float getRadius()const;
 };
 #endif // !ORGANISM_H

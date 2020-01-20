@@ -2,7 +2,7 @@
 #include "Collider.h"
 #include "PreprocessorDirectves.h"
 const unsigned Quadtree::S_MAX_LEVELS{ 5U };
-const unsigned Quadtree::S_MAX_OBJECTS{ 2U };
+const unsigned Quadtree::S_MAX_OBJECTS{ 5U };
 
 
 ////////////////////////////////////////////////////////////

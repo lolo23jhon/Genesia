@@ -29,6 +29,7 @@ Organism::Organism(
 	m_destructionDelay{ S_DEFAULT_DESTRUCTION_DELAY }
 {
 	m_actorType = ActorType::Organism;
+	m_text.setCharacterSize(10U);
 	setTextString(m_name);
 	setColorRGB(m_color); //Also write the HSL color
 	m_ai = std::make_unique<Ai_Organism>(this);
@@ -154,10 +155,14 @@ void Organism::update(const float& t_elapsed) {
 
 #if defined(_DEBUG) && IS_DISPLAY_ORGNAISMS_DEBUG_TEXT == 1
 	setTextString(m_name +
-		"\nEnergy:\t" + std::to_string(static_cast<unsigned>(m_energy >= 0.f ? m_energy : 0.f)) +
-		"\nSize:\t" + std::to_string(m_trait_size) +
-		"\nMass:\t" + std::to_string(m_mass) +
-		"\nRMR: " + std::to_string(m_rmr));
+		"\nEnergy: " + std::to_string(static_cast<unsigned>(m_energy >= 0.f ? m_energy : 0.f)) + " / " + std::to_string(static_cast<unsigned>(m_trait_maxEnergy)) +
+		"\nAge:    " + std::to_string(static_cast<unsigned>(m_age)) + " / " + std::to_string(static_cast<unsigned>(m_trait_lifespan)) +
+		"\nSize:   " + std::to_string(m_trait_size) +
+		"\nMass:   " + std::to_string(m_mass) +
+		"\nRMR:    " + std::to_string(m_rmr) +
+		"\nMovSp:  " + std::to_string(m_trait_movementSpeed) +
+		"\nRotSp:  " + std::to_string(m_trait_turningSpeed) +
+		"\nDigEff: " + std::to_string(m_trait_digestiveEfficiency));
 #endif // defined(_DEBUG) && IS_DISPLAY_ORGNAISMS_DEBUG_TEXT == 1
 
 	// Lower level update (position, rotation ...)
@@ -204,3 +209,6 @@ void Organism::updateCollider() {
 	auto aabb{ m_sprite.getLocalBounds() };
 	m_collider->update(this, m_position, { aabb.width * m_trait_size, aabb.height * m_trait_size });
 }
+
+////////////////////////////////////////////////////////////
+float Organism::getRadius()const { return Actor_Base::getRadius() * m_trait_size; }
