@@ -15,6 +15,7 @@ protected:
 	float m_noiseIncrement; // Random value calculated at contstruction used to create a distinct perlin noise siganture for every organism instance
 
 	void Task_Idle(Actor_Base* t_owner, const float& t_elapsed);
+	void Task_Reproduce(Actor_Base* t_owner, const float& t_elapsed);
 };
 
 #endif // !AI_ORGANISM_H

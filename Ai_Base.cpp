@@ -22,6 +22,8 @@ bool Ai_Base::executeTask(const std::string& t_taskName, Actor_Base* t_owner, co
 
 ////////////////////////////////////////////////////////////
 void Ai_Base::pollTasks() {
+
+
 	if (m_waitCoundown < 0) {
 		m_waitCoundown = 0.f;
 	}
@@ -30,15 +32,16 @@ void Ai_Base::pollTasks() {
 		return;
 	}
 
-	if (m_isDone) { return; }
 	// Current task is at front always
-	m_taskQueue.pop();
 	if (m_taskQueue.empty()) {
 		m_currentTask = &S_TASK_IDLE;
 		return;
 	}
+	else if (m_isDone) {
+		m_taskQueue.pop();
+	}
 	m_currentTask = &m_taskQueue.front();
-	m_isDone = false;
+
 }
 
 ////////////////////////////////////////////////////////////
@@ -60,7 +63,7 @@ bool Ai_Base::getIsDone()const { return m_isDone; }
 ////////////////////////////////////////////////////////////
 void Ai_Base::update(Actor_Base* t_owner, const float& t_elapsed) {
 	pollTasks();
-	executeTask(*m_currentTask,t_owner, t_elapsed);
+	executeTask(*m_currentTask, t_owner, t_elapsed);
 }
 
 ////////////////////////////////////////////////////////////

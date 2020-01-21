@@ -7,7 +7,12 @@
 
 ////////////////////////////////////////////////////////////
 Ai_Organism::Ai_Organism(Actor_Base* t_owner) : Ai_Base(), m_noiseIncrement{ t_owner->getContext().m_engine->getRandom(0.f, 1000000.f) }{
-	registerTask<Ai_Organism>("Idle", &Ai_Organism::Task_Idle);
+	static bool first{ true };
+	if (first) {
+		registerTask<Ai_Organism>("Idle", &Ai_Organism::Task_Idle);
+		registerTask<Ai_Organism>("Organism_Reproduce", &Ai_Organism::Task_Reproduce);
+		first = false;
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -23,7 +28,23 @@ void Ai_Organism::Task_Idle(Actor_Base* t_owner, const float& t_elapsed) {
 }
 
 ////////////////////////////////////////////////////////////
+void Ai_Organism::Task_Reproduce(Actor_Base* t_owner, const float& t_elapsed) {
+	auto owner{ static_cast<Organism*>(t_owner) };
+	auto offspring{ owner->reproduce(t_owner->getContext()) };
+	owner->addEnergyPct(-3.f);
+	t_owner->getContext().m_engine->spawnActor(std::move(offspring));
+	m_isDone = true;
+}
+
+
+////////////////////////////////////////////////////////////
 void Ai_Organism::update(Actor_Base* t_owner, const float& t_elapsed) {
+	auto owner{static_cast<Organism*>(t_owner)};
+	if (owner->getEnergyPct() > 0.7) { 
+		m_taskQueue.emplace("Organism_Reproduce");
+		m_isDone = false;
+	}
+
 	pollTasks();
 	executeTask(*m_currentTask, static_cast<Organism*>(t_owner), t_elapsed);
 }

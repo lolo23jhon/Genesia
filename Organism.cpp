@@ -121,6 +121,23 @@ const float& Organism::getMass()const { return m_mass; }
 const float Organism::getRestingMetabolicRate()const { return m_trait_restingMetabolicRate * m_mass; }
 
 ////////////////////////////////////////////////////////////
+float Organism::getEnergyPct()const { return m_energy / m_trait_maxEnergy; }
+
+////////////////////////////////////////////////////////////
+void Organism::setEnergyPct(const float& t_pct) {
+	m_energy = m_trait_maxEnergy * t_pct;
+	if (m_energy > m_trait_maxEnergy) { m_energy = m_trait_maxEnergy; }
+	else if (m_energy < 0.f) { m_energy = 0.f; }
+}
+
+////////////////////////////////////////////////////////////
+void Organism::addEnergyPct(const float& t_pct) {
+	m_energy += m_trait_maxEnergy * t_pct;
+	if (m_energy > m_trait_maxEnergy) { m_energy = m_trait_maxEnergy; }
+	else if (m_energy < 0.f) { m_energy = 0.f; }
+}
+
+////////////////////////////////////////////////////////////
 void Organism::move(const float& t_dx, const float& t_dy) {
 	m_energy -= std::sqrtf(t_dx * t_dx + t_dy * t_dy) * m_mass; // Movement costs energy: diplacement * mass
 	Actor_Base::move(t_dx, t_dy);

@@ -16,11 +16,8 @@ class Actor_Base;
 
 template <class TDerived>
 using TaskFunctor = void(TDerived::*)(Actor_Base*, const float& );
-
 using TaskCallback = std::function<void(Actor_Base *, const float&)>;
-
 using TaskQueue = std::queue<std::string>;
-
 using TaskMap = std::unordered_map<std::string, TaskCallback>;
 
 class Ai_Base {

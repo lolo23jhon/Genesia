@@ -90,6 +90,9 @@ public:
 	void addEnergy(const float& t_energy);
 	const float& getMass()const;
 	const float getRestingMetabolicRate()const;
+	float getEnergyPct()const;
+	void setEnergyPct(const float& t_pct);
+	void addEnergyPct(const float& t_pct);
 
 	void move(const float& t_dx, const float& t_dy); // Decrease in internal energy
 	void rotate(const float& t_deg); // Decrease in internal energy
