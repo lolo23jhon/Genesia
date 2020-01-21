@@ -15,8 +15,8 @@
 class Actor_Base;
 
 template <class TDerived>
-using TaskFunctor = void(TDerived::*)(Actor_Base*, const float& );
-using TaskCallback = std::function<void(Actor_Base *, const float&)>;
+using TaskFunctor = void(TDerived::*)(Actor_Base*, const float&);
+using TaskCallback = std::function<void(Actor_Base*, const float&)>;
 using TaskQueue = std::queue<std::string>;
 using TaskMap = std::unordered_map<std::string, TaskCallback>;
 
@@ -34,7 +34,7 @@ public:
 	template <class TDerived> void registerTask(const std::string& t_taskId, TaskFunctor<TDerived> t_functor) {
 		m_taskMap[t_taskId] = std::bind(t_functor, dynamic_cast<TDerived*>(this), std::placeholders::_1, std::placeholders::_2);
 	}
-	
+
 	bool executeTask(const std::string& t_taskName, Actor_Base* t_owner, const float& t_elapsed);		// Return false if task does not exist
 	void pollTasks();							// Checks if the current task is finished. If so, pops a task from the queue and makes the current goal
 	const float& getWaitCountDown()const;
@@ -43,13 +43,12 @@ public:
 	bool hasTask(const std::string& t_taskName)const;
 	bool getIsDone()const;
 
-	
+
 	virtual void update(Actor_Base* t_owner, const float& t_elapsed); // Called from Actor_Base::update; this is bridge of the Ai with the system
 
 protected:
 	virtual void Task_Idle(Actor_Base* t_owner, const float& t_elapsed); // Special task: default of no actions in queue and no wait timer
 	virtual void Task_Waiting(Actor_Base* t_owner, const float& t_elapsed); // Special task: the actor is freezed until the countdown reaches 0; decreased on update
 };
-
 
 #endif // !AI_BASE_H

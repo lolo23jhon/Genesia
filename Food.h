@@ -32,6 +32,9 @@ public:
 
 	static unsigned getNumFood();
 
+	void onSpawn(SharedContext& t_context);
+	void onDestruction(SharedContext& t_context);
+
 	void update(const float& t_elapsed);
 	void updateCollider();
 

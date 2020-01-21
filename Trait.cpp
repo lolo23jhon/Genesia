@@ -169,7 +169,7 @@ const TraitMap Trait_Base::s_defaultTraits{ []() {
 	tmp.emplace(TID::RestingMetabolicRate,	MF(TID::RestingMetabolicRate,	ACTIVE_TRAIT, ALWAYS_INHERITED, 1.f));
 	tmp.emplace(TID::MovementSpeed,			MF(TID::MovementSpeed,			ACTIVE_TRAIT, ALWAYS_INHERITED, 20.f));
 	tmp.emplace(TID::TurningSpeed,			MF(TID::TurningSpeed,			ACTIVE_TRAIT, ALWAYS_INHERITED, 20.f));
-	tmp.emplace(TID::Lifespan,				MF(TID::Lifespan,				ACTIVE_TRAIT, ALWAYS_INHERITED, 60.f));
+	tmp.emplace(TID::Lifespan,				MF(TID::Lifespan,				ACTIVE_TRAIT, ALWAYS_INHERITED, 200.f));
 	tmp.emplace(TID::Size,					MF(TID::Size,					ACTIVE_TRAIT, ALWAYS_INHERITED, 1.f));
 	tmp.emplace(TID::Color,					MC(TID::Color,					ACTIVE_TRAIT, ALWAYS_INHERITED, S_GREEN));
 	return std::move(tmp);

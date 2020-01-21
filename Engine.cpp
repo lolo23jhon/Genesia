@@ -8,10 +8,10 @@
 
 static const sf::Color S_BG_COLOR{ 240,240,240 };
 static const unsigned S_FPS{ 30 };
-static const unsigned S_NUM_FOOD{ 100U };
+static const unsigned S_NUM_FOOD{ 200U };
 static const unsigned S_NUM_ORGANISMS{ 15U };
-static const float S_SIMULATION_WIDTH{ 2000.f };
-static const float S_SIMULATION_HEIGHT{ 2000.f };
+static const float S_SIMULATION_WIDTH{ 3000.f };
+static const float S_SIMULATION_HEIGHT{ 3000.f };
 
 ////////////////////////////////////////////////////////////
 Engine::Engine(const sf::Vector2u& t_windowSize, const std::string& t_windowName) :
@@ -73,19 +73,23 @@ void Engine::update() {
 	const float elapsed{ m_elapsed.asSeconds() };
 	if (m_state == EngineState::Paused) { return; }
 
+	// Spanwn actors from spawn list
+	for (auto& toSpawn : m_spawnList) { toSpawn->onSpawn(m_context); }
+	m_actors.insert(m_actors.end(), std::make_move_iterator(m_spawnList.begin()), std::make_move_iterator(m_spawnList.end()));
+	m_spawnList.clear();
+
 	// Update actors and delete the wasted ones
-	{auto it{ m_actors.begin() };
-	while (it != m_actors.end()) {
+	for (auto it{m_actors.begin()}; it < m_actors.end();) {
 		auto& actor{ *it->get() };
 		if (actor.shouldBeDestroyed()) {
 			actor.onDestruction(m_context);
 			it = m_actors.erase(it);
 		}
 		else {
-			it->get()->update(elapsed);
+			actor.update(elapsed);
 			it++;
 		}
-	}}
+	}
 
 	m_scenario->update(elapsed);
 
@@ -265,9 +269,8 @@ void Engine::resetView() {
 	m_view.setCenter(static_cast<float>(m_windowSize.x) / 2, static_cast<float>(m_windowSize.y) / 2);
 }
 
-
 ////////////////////////////////////////////////////////////
-void Engine::spawnActor(ActorPtr t_actor) { m_actors.emplace_back(std::move(t_actor)); }
+void Engine::spawnActor(ActorPtr t_actor) { m_spawnList.emplace_back(std::move(t_actor)); }
 
 
 static const std::string S_EMPTY_STR{ "" };

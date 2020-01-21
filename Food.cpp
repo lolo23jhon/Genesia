@@ -15,6 +15,12 @@ unsigned Food::s_numFood{ 0U };
 unsigned Food::getNumFood() { return s_numFood; }
 
 ////////////////////////////////////////////////////////////
+void Food::onSpawn(SharedContext& t_context) { s_numFood++; }
+
+////////////////////////////////////////////////////////////
+void Food::onDestruction(SharedContext& t_context) { s_numFood--; }
+
+////////////////////////////////////////////////////////////
 Food::Food(SharedContext& t_context,
 	const sf::Vector2f& t_position,
 	const float& t_rotation,
@@ -28,7 +34,6 @@ Food::Food(SharedContext& t_context,
 	m_hasUnlimitedDuration{ !static_cast<bool>(t_duration) },
 	m_age{ 0.f }
 {
-	s_numFood++;
 	m_actorType = ActorType::Food;
 	setTextString("Food: " + std::to_string(static_cast<int>(m_energy)));
 	updateCollider();

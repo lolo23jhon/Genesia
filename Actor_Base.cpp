@@ -53,6 +53,10 @@ Actor_Base::Actor_Base(
 	m_text.setOutlineColor(S_DEFAILT_TEXT_OUTILINE_COLOR);
 
 	update(0.f); // Set sprite, text position, and collider aabb
+
+#if IS_DISPLAY_ACTOR_TAGS == 0
+	m_isTextVisible = false;
+#endif// IS_DISPLAY_ACTOR_TAGS == 0
 }
 
 ////////////////////////////////////////////////////////////
@@ -176,6 +180,9 @@ std::string Actor_Base::getTextString()const { return m_text.getString(); }
 
 ////////////////////////////////////////////////////////////
 ActorPtr Actor_Base::clone() { return nullptr; } // Why would you want to copy and empty dummy at runtime?
+
+////////////////////////////////////////////////////////////
+void Actor_Base::onSpawn(SharedContext& t_context){}
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::onDestruction(SharedContext& t_context) {}

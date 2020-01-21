@@ -1,28 +1,9 @@
 #include <iostream>
 #include "Engine.h"
 
-
-
-
-/*
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-TODO:
-	- Finish the trait callback system <-
-	- Finish the trait inhertiance system <-
-	- Implement food generation
-	- Implement energy system
-	- Tweak inheritance system to create engaging narrative
-	- Flesh out test cases
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-*/
-
-
-
 int main() {
 
-	Engine engine{ sf::Vector2u(800,600),"Test" };
+	Engine engine{ sf::Vector2u(1080,1080),"Test" };
 	engine.run();
 
 #ifdef _DEBUG

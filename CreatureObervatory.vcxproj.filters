@@ -64,6 +64,9 @@
     <Filter Include="src\CollisionDetection\Colliders">
       <UniqueIdentifier>{65776009-49b4-4449-bbb5-34eba2551877}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Ai\Deprecated">
+      <UniqueIdentifier>{fc6e8933-9b08-4f3d-bca0-29945db59962}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
@@ -114,12 +117,6 @@
     <ClCompile Include="Actor_Base.cpp">
       <Filter>src\ActorSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Ai_Base.cpp">
-      <Filter>src\Ai</Filter>
-    </ClCompile>
-    <ClCompile Include="Ai_Organism.cpp">
-      <Filter>src\Ai</Filter>
-    </ClCompile>
     <ClCompile Include="PerlinNoise.cpp">
       <Filter>src\PerlinNoise</Filter>
     </ClCompile>
@@ -152,6 +149,15 @@
     </ClCompile>
     <ClCompile Include="Quadtree.cpp">
       <Filter>src\CollisionDetection</Filter>
+    </ClCompile>
+    <ClCompile Include="DEPRECATED_Ai_Base.cpp">
+      <Filter>src\Ai\Deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="DEPRECATED_Ai_Organism.cpp">
+      <Filter>src\Ai\Deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="Ai_Organism.cpp">
+      <Filter>src\Ai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,12 +215,6 @@
     <ClInclude Include="Actor_Base.h">
       <Filter>src\ActorSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Ai._Base.h">
-      <Filter>src\Ai</Filter>
-    </ClInclude>
-    <ClInclude Include="Ai_Organism.h">
-      <Filter>src\Ai</Filter>
-    </ClInclude>
     <ClInclude Include="PerlinNoise.h">
       <Filter>src\PerlinNoise</Filter>
     </ClInclude>
@@ -253,6 +253,18 @@
     </ClInclude>
     <ClInclude Include="Collider_Circle.h">
       <Filter>src\CollisionDetection\Colliders</Filter>
+    </ClInclude>
+    <ClInclude Include="DEPRECATED_Ai._Base.h">
+      <Filter>src\Ai\Deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="DEPRECATED_Ai_Organism.h">
+      <Filter>src\Ai\Deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="Ai_Base.h">
+      <Filter>src\Ai</Filter>
+    </ClInclude>
+    <ClInclude Include="Ai_Organism.h">
+      <Filter>src\Ai</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

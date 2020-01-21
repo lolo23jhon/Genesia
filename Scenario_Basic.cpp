@@ -3,7 +3,7 @@
 #include "SharedContext.h"
 
 
-static const float S_FOOD_ENERGY{ 400.f };
+static const float S_FOOD_ENERGY{ 300.f };
 static const float S_FOOD_DURATION{ INFINITY };
 
 Scenario_Basic::Scenario_Basic(SharedContext& t_context,
@@ -59,8 +59,8 @@ void Scenario_Basic::init() {
 ////////////////////////////////////////////////////////////
 void Scenario_Basic::update(const float& t_elapsed) {
 	// Spawn in more food if necessary
-	if (Food::getNumFood()  < m_initialNumFood) {
-		auto& rng{ *m_context.m_rng };
+	auto& rng{ *m_context.m_rng };
+	for (unsigned i{ Food::getNumFood() }; i < m_initialNumFood; i++) {
 
 		float x{ rng(m_simulationRectangle.width , m_simulationRectangle.left) };
 		float y{ rng(m_simulationRectangle.height , m_simulationRectangle.top) };

@@ -1,21 +1,19 @@
 #ifndef AI_ORGANISM_H
 #define AI_ORGANISM_H
 
-#include "Ai._Base.h"
+#include "Ai_Base.h"
 
-// To createa a credible movement pattern, the organism's determine their 
-//  idle rotation on perlin noise
+class Actor_Base;
+struct SharedContext;
 
 class Ai_Organism : public Ai_Base {
+
+	float m_noiseIncrement;
+
 public:
-	Ai_Organism(Actor_Base* t_owner);
+	Ai_Organism(SharedContext& t_context);
 	void update(Actor_Base* t_owner, const float& t_elapsed);
 
-protected:
-	float m_noiseIncrement; // Random value calculated at contstruction used to create a distinct perlin noise siganture for every organism instance
-
-	void Task_Idle(Actor_Base* t_owner, const float& t_elapsed);
-	void Task_Reproduce(Actor_Base* t_owner, const float& t_elapsed);
 };
 
 #endif // !AI_ORGANISM_H

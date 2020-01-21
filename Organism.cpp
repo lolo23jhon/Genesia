@@ -25,14 +25,13 @@ Organism::Organism(
 	Actor_Base(t_context, t_position, t_rotation, S_DEFAULT_COLOR, S_DEFAULT_TEXTURE, sf::IntRect(), true, true),
 	m_name{ t_name },
 	m_age{ t_age },
-	m_ai{ nullptr },
+	m_ai{ std::make_unique<Ai_Organism>(t_context) },
 	m_destructionDelay{ S_DEFAULT_DESTRUCTION_DELAY }
 {
 	m_actorType = ActorType::Organism;
 	m_text.setCharacterSize(10U);
 	setTextString(m_name);
 	setColorRGB(m_color); //Also write the HSL color
-	m_ai = std::make_unique<Ai_Organism>(this);
 }
 
 ////////////////////////////////////////////////////////////

@@ -36,6 +36,7 @@ private:
 	unsigned m_fpsLimit;
 
 	Actors  m_actors;
+	Actors  m_spawnList;
 	CollisionManager m_collisionManager;
 	SharedContext m_context;
 
