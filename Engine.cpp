@@ -9,6 +9,7 @@
 static const sf::Color S_BG_COLOR{ 240,240,240 };
 static const unsigned S_FPS{ 30 };
 static const unsigned S_NUM_FOOD{ 200U };
+static const float S_ENERGY{ 300000 };
 static const unsigned S_NUM_ORGANISMS{ 15U };
 static const float S_SIMULATION_WIDTH{ 3000.f };
 static const float S_SIMULATION_HEIGHT{ 3000.f };
@@ -61,7 +62,7 @@ void Engine::init() {
 	m_resourceHolder.init();
 
 	// Initialize simulation scenario
-	m_scenario = std::make_unique<Scenario_Basic>(m_context, S_NUM_ORGANISMS, 100U, S_NUM_FOOD, S_NUM_FOOD, S_SIMULATION_WIDTH, S_SIMULATION_HEIGHT);
+	m_scenario = std::make_unique<Scenario_Basic>(m_context, S_ENERGY,S_NUM_ORGANISMS, 100U, S_NUM_FOOD, S_NUM_FOOD, S_SIMULATION_WIDTH, S_SIMULATION_HEIGHT);
 	m_scenario->init();
 
 	// Set the size of the quadtree root
@@ -74,12 +75,22 @@ void Engine::update() {
 	if (m_state == EngineState::Paused) { return; }
 
 	// Spanwn actors from spawn list
-	for (auto& toSpawn : m_spawnList) { toSpawn->onSpawn(m_context); }
-	m_actors.insert(m_actors.end(), std::make_move_iterator(m_spawnList.begin()), std::make_move_iterator(m_spawnList.end()));
-	m_spawnList.clear();
+	for (auto actor_it{ m_spawnList.begin() }; actor_it != m_spawnList.end();) {
+
+		// Check if the actor is able to spawn given the conditions of the simulation
+		if ((*actor_it)->canSpawn(m_context)) { 
+			// Move them to the spawned actors list
+			m_actors.emplace_back(std::move(*actor_it));
+			actor_it = m_spawnList.erase(actor_it);
+			
+			// Apply their spawn effect
+			m_actors.back()->onSpawn(m_context);
+		}
+		else { actor_it++; }
+	}
 
 	// Update actors and delete the wasted ones
-	for (auto it{m_actors.begin()}; it < m_actors.end();) {
+	for (auto it{ m_actors.begin() }; it < m_actors.end();) {
 		auto& actor{ *it->get() };
 		if (actor.shouldBeDestroyed()) {
 			actor.onDestruction(m_context);
@@ -266,11 +277,18 @@ void Engine::setMaxFramerate(const unsigned& t_fps) {
 ////////////////////////////////////////////////////////////
 void Engine::resetView() {
 	m_view = sf::View();
-	m_view.setCenter(static_cast<float>(m_windowSize.x) / 2, static_cast<float>(m_windowSize.y) / 2);
+	m_view.setCenter(static_cast<float>(S_SIMULATION_WIDTH) * 0.5f, static_cast<float>(S_SIMULATION_HEIGHT) * 0.5f);
 }
 
 ////////////////////////////////////////////////////////////
-void Engine::spawnActor(ActorPtr t_actor) { m_spawnList.emplace_back(std::move(t_actor)); }
+const Scenario_Basic& Engine::getScenario() const { return *m_scenario.get(); }
+
+////////////////////////////////////////////////////////////
+Scenario_Basic& Engine::getScenario() { return *m_scenario.get(); }
+
+////////////////////////////////////////////////////////////
+void Engine::spawnActor(ActorPtr t_actor) { 
+	m_spawnList.emplace_back(std::move(t_actor)); }
 
 
 static const std::string S_EMPTY_STR{ "" };
@@ -449,8 +467,7 @@ void Engine::Action_ResetView(const EventInfo& t_info) {
 
 ////////////////////////////////////////////////////////////
 void Engine::Action_ResetView_Paused(const EventInfo& t_info) {
-	m_view = sf::View();
-	m_view.setCenter(static_cast<float>(m_windowSize.x) / 2, static_cast<float>(m_windowSize.y) / 2);
+	resetView();
 
 #if defined(_DEBUG) && IS_PRINT_TRIGGERED_ACTIONS_TO_CONSOLE == 1
 	std::cout << "> ACTION\tResetView_Paused" << std::endl;

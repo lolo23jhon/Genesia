@@ -3,6 +3,7 @@
 #include "SharedContext.h"
 #include "Utilities.h"
 #include "ResourceHolder.h"
+#include "PreprocessorDirectves.h"
 
 static const std::string S_DEFAULT_FONT{ "Font_consola" };
 static const sf::Color S_DEFAULT_TEXT_FILL_COLOR{ 25,25,25 };
@@ -177,6 +178,9 @@ void Actor_Base::setTextString(const std::string& t_str) { m_text.setString(t_st
 
 ////////////////////////////////////////////////////////////
 std::string Actor_Base::getTextString()const { return m_text.getString(); }
+
+////////////////////////////////////////////////////////////
+bool Actor_Base::canSpawn(SharedContext& t_context) const{ return true;}
 
 ////////////////////////////////////////////////////////////
 ActorPtr Actor_Base::clone() { return nullptr; } // Why would you want to copy and empty dummy at runtime?

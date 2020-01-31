@@ -3,17 +3,20 @@
 #include "SharedContext.h"
 
 
-static const float S_FOOD_ENERGY{ 300.f };
+static const float S_FOOD_ENERGY{ 500.f };
 static const float S_FOOD_DURATION{ INFINITY };
 
 Scenario_Basic::Scenario_Basic(SharedContext& t_context,
+	const float& t_energyPool,
 	const unsigned& t_initialNumOrganisms,
 	const unsigned& t_maxNumOrganisms,
 	const unsigned& t_initialNumFood,
 	const unsigned& t_maxNumFood,
 	const float& t_width,
 	const float& t_height) :
-	Scenario_Base(t_context, t_maxNumOrganisms + t_maxNumFood, t_initialNumOrganisms, t_width, t_height),
+	Scenario_Base{ t_context, t_maxNumOrganisms + t_maxNumFood, t_initialNumOrganisms, t_width, t_height },
+	m_energyPool{t_energyPool},
+	m_maxEnergy{t_energyPool},
 	m_maxNumOrganisms{ t_maxNumOrganisms },
 	m_initialNumOrganisms{ t_initialNumOrganisms },
 	m_maxNumFood{ t_maxNumOrganisms },
@@ -45,7 +48,7 @@ void Scenario_Basic::init() {
 		float x{ rng(m_simulationRectangle.width , m_simulationRectangle.left) };
 		float y{ rng(m_simulationRectangle.height , m_simulationRectangle.top) };
 		float rot{ rng(0.f, 359.9999999f) };
-		float energyFactor{ m_context.m_rng->normalDisttribution(1.f, 0.4f) };
+		float energyFactor{ m_context.m_rng->normalDisttribution(1.f, 0.2f) };
 
 		auto food{ std::move(m_food->clone(m_context)) };
 		food->setPosition({ x,y });
@@ -65,7 +68,7 @@ void Scenario_Basic::update(const float& t_elapsed) {
 		float x{ rng(m_simulationRectangle.width , m_simulationRectangle.left) };
 		float y{ rng(m_simulationRectangle.height , m_simulationRectangle.top) };
 		float rot{ rng(0.f, 359.9999999f) };
-		float energyFactor{ m_context.m_rng->normalDisttribution(1.f, 0.4f) };
+		float energyFactor{ m_context.m_rng->normalDisttribution(1.f, 0.2f) };
 
 		auto food{ std::move(m_food->clone(m_context)) };
 		food->setPosition({ x,y });
@@ -76,3 +79,9 @@ void Scenario_Basic::update(const float& t_elapsed) {
 	}
 	Scenario_Base::update(t_elapsed);
 }
+
+////////////////////////////////////////////////////////////
+void Scenario_Basic::addEnergy(const float& t_e) { m_energyPool += t_e; if (m_energyPool > m_maxEnergy) { m_energyPool = m_maxEnergy; } }
+
+////////////////////////////////////////////////////////////
+const float& Scenario_Basic::getEnergy() const { return m_energyPool; }

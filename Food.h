@@ -13,6 +13,7 @@ class Food : public Actor_Base {
 	float m_duration;
 
 	bool m_hasUnlimitedDuration;
+	bool m_wasEaten; // Used to discern the energy responsibility. If it was eaten nothing happens, else it returns the energy on destruction.
 
 public:
 	Food(SharedContext& t_context,
@@ -29,9 +30,11 @@ public:
 	void setAge(const float& t_age);
 	const float& getDuration()const;
 	void setDuration(const float& t_duration);
+	void setWasEaten(bool t_wasEaten);
 
 	static unsigned getNumFood();
 
+	bool canSpawn(SharedContext& t_context)const;
 	void onSpawn(SharedContext& t_context);
 	void onDestruction(SharedContext& t_context);
 

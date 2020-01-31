@@ -75,6 +75,7 @@ public:
 	virtual void updateCollider();
 	virtual void draw();
 
+	virtual bool canSpawn(SharedContext& t_context)const;
 	virtual ActorPtr clone();
 	virtual void onSpawn(SharedContext& t_context);
 	virtual void onDestruction(SharedContext& t_context); // Anything that happens when the actor is aihiated i. g. spawning something

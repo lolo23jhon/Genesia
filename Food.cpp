@@ -3,6 +3,8 @@
 #include "SharedContext.h"
 #include "ResourceHolder.h"
 #include "CollisionManager.h"
+#include "Engine.h"
+#include "Scenario_Basic.h"
 
 static const std::string S_FOOD_TEXTURE{ "Texture_food" };
 static const sf::Color S_FOOD_COLOR{ 255,255,255,255 };
@@ -15,10 +17,23 @@ unsigned Food::s_numFood{ 0U };
 unsigned Food::getNumFood() { return s_numFood; }
 
 ////////////////////////////////////////////////////////////
-void Food::onSpawn(SharedContext& t_context) { s_numFood++; }
+bool Food::canSpawn(SharedContext& t_context) const { return t_context.m_engine->getScenario().getEnergy() >= m_energy; } // Check if there is enough energy in the environment to spawn
 
 ////////////////////////////////////////////////////////////
-void Food::onDestruction(SharedContext& t_context) { s_numFood--; }
+void Food::onSpawn(SharedContext& t_context) {
+	s_numFood++;
+
+	// Subtract energy from the environment to spawn
+	t_context.m_engine->getScenario().addEnergy(-m_energy);
+}
+
+////////////////////////////////////////////////////////////
+void Food::onDestruction(SharedContext& t_context) {
+	s_numFood--;
+
+	// If the food was eaten, the organism is responsible of returning the energy, else the food is.
+	if (!m_wasEaten) { t_context.m_engine->getScenario().addEnergy(m_energy); }
+}
 
 ////////////////////////////////////////////////////////////
 Food::Food(SharedContext& t_context,
@@ -32,10 +47,12 @@ Food::Food(SharedContext& t_context,
 	m_energy{ t_energy },
 	m_duration{ t_duration },
 	m_hasUnlimitedDuration{ !static_cast<bool>(t_duration) },
-	m_age{ 0.f }
+	m_age{ 0.f },
+	m_wasEaten{ false }
 {
 	m_actorType = ActorType::Food;
 	setTextString("Food: " + std::to_string(static_cast<int>(m_energy)));
+	m_text.setCharacterSize(10U);
 	updateCollider();
 }
 
@@ -58,6 +75,9 @@ const float& Food::getDuration()const { return m_hasUnlimitedDuration ? S_INFINI
 void Food::setDuration(const float& t_duration) { m_duration = t_duration; if (!m_duration) { m_hasUnlimitedDuration = false; } }
 
 ////////////////////////////////////////////////////////////
+void Food::setWasEaten(bool t_wasEaten) { m_wasEaten = t_wasEaten; }
+
+////////////////////////////////////////////////////////////
 void Food::update(const float& t_elapsed) {
 	m_age += t_elapsed;
 	if (m_age >= m_duration && !m_hasUnlimitedDuration) {
@@ -70,7 +90,7 @@ void Food::update(const float& t_elapsed) {
 ////////////////////////////////////////////////////////////
 void Food::updateCollider() {
 	auto aabb{ m_sprite.getLocalBounds() };
-	m_collider->update(this, m_position, {aabb.width, aabb.height});
+	m_collider->update(this, m_position, { aabb.width, aabb.height });
 }
 
 

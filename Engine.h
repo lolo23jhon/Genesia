@@ -15,7 +15,7 @@
 #include "RandomGenerator.h"
 #include "ResourceHolder.h"
 #include "Actor_Base.h"
-#include "Scenario_Base.h"
+#include "Scenario_Basic.h"
 #include "CollisionManager.h"
 
 using ActorPtr = std::unique_ptr<Actor_Base>;
@@ -54,7 +54,7 @@ private:
 	RandomGenerator m_rng;
 	ResourceHolder m_resourceHolder;
 
-	std::unique_ptr<Scenario_Base> m_scenario;
+	std::unique_ptr<Scenario_Basic> m_scenario;
 
 	static const ActionFactory s_actions;
 	static const StateNames s_stateNames; // Map for engine states string names and ids
@@ -83,13 +83,15 @@ public:
 	void spawnActor(ActorPtr t_actor);
 	void resetView();
 
+	const Scenario_Basic& getScenario()const;
+	Scenario_Basic& getScenario();
+
 	sf::RenderWindow& getWindow();
 	const EngineState& getState()const;
 
 	void pollEvents();
 	void render();
 	void update();
-	void draw();
 
 	bool executeAction(const ActionId& t_id, const EventInfo& t_info); // Umbrella for all the actions
 	ActionCallback getActionCallback(const EngineState& t_state, const ActionId& t_id); // * See coment bellow

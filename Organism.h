@@ -17,6 +17,7 @@
 
 class Organism;
 class Food;
+class Scenario_Basic;
 
 using OrganismPtr = std::unique_ptr<Organism>;
 
@@ -50,6 +51,8 @@ protected:
 	float m_trait_size;
 
 	std::unique_ptr<Ai_Organism> m_ai;
+
+	Scenario_Basic* m_scenario; // Non-owning data ptr, used to return energy to the environment
 
 public:
 
@@ -108,5 +111,9 @@ public:
 	void die();
 
 	float getRadius()const;
+
+	bool canSpawn(SharedContext& t_context)const;
+	void onSpawn();
+	void onDestruction(SharedContext& t_context); // Return the energy to the environment
 };
 #endif // !ORGANISM_H

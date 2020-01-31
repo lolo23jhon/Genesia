@@ -6,6 +6,7 @@
 #include "SharedContext.h"
 #include "MathHelpers.h"
 #include "Engine.h"
+#include "Scenario_Basic.h"
 #include "PreprocessorDirectves.h"
 
 static const float S_TIME_ZERO{ 0.f };
@@ -26,7 +27,8 @@ Organism::Organism(
 	m_name{ t_name },
 	m_age{ t_age },
 	m_ai{ std::make_unique<Ai_Organism>(t_context) },
-	m_destructionDelay{ S_DEFAULT_DESTRUCTION_DELAY }
+	m_destructionDelay{ S_DEFAULT_DESTRUCTION_DELAY },
+	m_scenario{ &t_context.m_engine->getScenario() }
 {
 	m_actorType = ActorType::Organism;
 	m_text.setCharacterSize(10U);
@@ -138,13 +140,17 @@ void Organism::addEnergyPct(const float& t_pct) {
 
 ////////////////////////////////////////////////////////////
 void Organism::move(const float& t_dx, const float& t_dy) {
-	m_energy -= std::sqrtf(t_dx * t_dx + t_dy * t_dy) * m_mass; // Movement costs energy: diplacement * mass
+	float energyExpediture{ std::sqrtf(t_dx * t_dx + t_dy * t_dy) * m_mass };
+	m_energy -= energyExpediture; // Movement costs energy: diplacement * mass
+	m_scenario->addEnergy(energyExpediture); // Return heat energy to environment
 	Actor_Base::move(t_dx, t_dy);
 }
 
 ////////////////////////////////////////////////////////////
 void Organism::rotate(const float& t_deg) {
-	m_energy -= std::fabs(mat::toRadians(t_deg)) * m_mass;
+	float energyExpediture{ std::fabs(mat::toRadians(t_deg)) * m_mass };
+	m_energy -= energyExpediture;
+	m_scenario->addEnergy(energyExpediture); // Return heat energy to environment
 	Actor_Base::rotate(t_deg);
 }
 
@@ -153,8 +159,11 @@ void Organism::update(const float& t_elapsed) {
 	// Update the organism's age
 	m_age += t_elapsed;
 
+
 	// Decrease the organism's energy based on its metabolic rate
-	m_energy -= m_trait_restingMetabolicRate * t_elapsed;
+	float energyExpediture{ m_trait_restingMetabolicRate * t_elapsed };
+	m_energy -= energyExpediture;
+	m_scenario->addEnergy(energyExpediture); // Return heat energy to environment
 
 	if ((m_age >= m_trait_lifespan || m_energy <= 0.f) && !m_isDead) { die(); }
 	if (m_isDead) {
@@ -215,8 +224,18 @@ void Organism::die() {
 void Organism::eat(Food* t_food) {
 	if (!t_food || t_food->shouldBeDestroyed()) { return; } // Trying to eat ghost food doesn't work at this level of conciousness.
 	if (m_energy > 0.8f * m_trait_maxEnergy) { return; } // Ogranisms at and over 80% of energy are not experiencing hunger
-	m_energy += t_food->getEnergy() * m_trait_digestiveEfficiency; // Get the energy boost affected by digestive efficiency
-	if (m_energy > m_trait_maxEnergy) { m_energy = m_trait_maxEnergy; }
+
+	float foodEnergy{ t_food->getEnergy() };
+	float energyDelta{ foodEnergy * m_trait_digestiveEfficiency }; // Get the energy boost affected by digestive efficiency
+
+	m_energy += energyDelta;
+	m_scenario->addEnergy(foodEnergy - energyDelta); // Return the energy to the rest of the energy to the environment
+
+	if (m_energy > m_trait_maxEnergy) {
+		m_scenario->addEnergy(m_energy - m_trait_maxEnergy); // Return aswell any energy from overeating
+		m_energy = m_trait_maxEnergy;
+	}
+	t_food->setWasEaten(true); // State that the food was eaten, so that it does not try to return its energy itelf, its the organism's task now.
 	t_food->setShouldBeDestroyed(true); // Tell the engine the food no longer exists (ha)
 }
 
@@ -228,3 +247,16 @@ void Organism::updateCollider() {
 
 ////////////////////////////////////////////////////////////
 float Organism::getRadius()const { return Actor_Base::getRadius() * m_trait_size; }
+
+////////////////////////////////////////////////////////////
+bool Organism::canSpawn(SharedContext& t_context)const {
+	return m_scenario->getEnergy() >= m_energy; // Make sure there is enough energy in the environment for it to spawn
+}
+////////////////////////////////////////////////////////////
+void Organism::onSpawn() {m_scenario->addEnergy(-m_energy); } // Capture energy from the environment
+
+////////////////////////////////////////////////////////////
+void Organism::onDestruction(SharedContext& t_context) {
+	m_scenario->addEnergy(m_energy); // Return the energy to the environment
+	Actor_Base::onDestruction(t_context);
+}
