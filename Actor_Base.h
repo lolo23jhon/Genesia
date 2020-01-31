@@ -50,7 +50,7 @@ public:
 	const float& getRotation()const;
 	void setRotation(const float& t_rotation);
 	const sf::Color& getColor()const;
-	void setColor(const sf::Color& t_color);
+	virtual void setColor(const sf::Color& t_color);
 	const sf::Sprite& getSprite()const;
 	void setSprite(const sf::Sprite& t_sprite);
 	void setSprite(const std::string& t_texture, const sf::IntRect t_spriteRect = sf::IntRect());

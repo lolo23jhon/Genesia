@@ -22,10 +22,51 @@ static void CollisionFn_Organism_Food(Actor_Base* t_o, Actor_Base* t_f) { // The
 	dynamic_cast<Organism*>(t_o)->eat(dynamic_cast<Food*>(t_f));
 }
 
+////////////////////////////////////////////////////////////
+static void CollisionFn_Organism_Organism(Actor_Base* t_o1, Actor_Base* t_o2) {
+
+	auto o1{ dynamic_cast<Organism*>(t_o1) };
+	auto o2{ dynamic_cast<Organism*>(t_o2) };
+
+	bool o1_alive{ o1->isAlive() };
+	bool o2_alive{ o1->isAlive() };
+
+
+	// Living organisms can eat dead ones, but if both are dead it wont work
+	// Parent and child protection grace period
+	const float gracePeriod{ 10.f };
+	if ((!o1_alive && !o2_alive) || o1->getAge() < gracePeriod || o2->getAge() < gracePeriod) { return; }
+
+	Organism* predator{ nullptr };
+	Organism* prey{ nullptr };
+
+	// The larges organism is the predator, or the one that is alive
+	if (o1_alive && o2_alive) {
+		if (o1->getSize() > o2->getSize()) {
+			predator = o1;
+			prey = o2;
+		}
+		else {
+			predator = o2;
+			prey = o1;
+		}
+	}
+	else if (o1_alive && !o2_alive) {
+		predator = o1;
+		prey = o2;
+	}
+	else if (!o1_alive && o2_alive) {
+		predator = o2;
+		prey = o1;
+	}
+
+	predator->eat(prey);
+}
 
 ////////////////////////////////////////////////////////////
 const CollisionSolver CollisionManager::s_collisions{
-	{{ActorType::Organism, ActorType::Food}, bind(&CollisionFn_Organism_Food) }
+	{{ActorType::Organism, ActorType::Food}, bind(&CollisionFn_Organism_Food) },
+	{{ActorType::Organism,ActorType::Organism}, bind(&CollisionFn_Organism_Organism)}
 };
 
 
@@ -61,7 +102,7 @@ void CollisionManager::update() {
 			Collider* obj1{ &t_actor->getCollider() };
 
 			// Get the objects in potential of collision for each single actor
-			m_root.getPotentialOverlaps(objects,obj1);
+			m_root.getPotentialOverlaps(objects, obj1);
 
 			for (auto& obj2 : objects) {
 				if (checkCollision(obj1, obj2)) {

@@ -15,7 +15,7 @@ static const float S_TEXT_OFFSET_FACTOR{ 1.1f };
 static const sf::Color S_DEFAULT_COLOR{ 255,255,255,255 };
 static const float S_DEFAULT_SIZE{ 1.f };
 static const float S_DEFAULT_DESTRUCTION_DELAY{ 10.f };
-static const sf::Color S_DEATH_COLOR{70,60,50};
+static const sf::Color S_DEATH_COLOR{ 70,60,50 };
 
 ////////////////////////////////////////////////////////////
 Organism::Organism(
@@ -28,13 +28,13 @@ Organism::Organism(
 	m_name{ t_name },
 	m_age{ t_age },
 	m_ai{ std::make_unique<Ai_Organism>(t_context) },
+	m_wasEaten{ false },
 	m_destructionDelay{ S_DEFAULT_DESTRUCTION_DELAY },
 	m_scenario{ &t_context.m_engine->getScenario() }
 {
 	m_actorType = ActorType::Organism;
 	m_text.setCharacterSize(10U);
 	setTextString(m_name);
-	setColorRGB(m_color); //Also write the HSL color
 }
 
 ////////////////////////////////////////////////////////////
@@ -78,6 +78,9 @@ void Organism::setColorRGB(const sf::Color& t_color) {
 }
 
 ////////////////////////////////////////////////////////////
+void Organism::setColor(const sf::Color& t_color) { setColorRGB(t_color); }
+
+////////////////////////////////////////////////////////////
 const float& Organism::getMovementSpeed()const { return m_trait_movementSpeed; }
 
 ////////////////////////////////////////////////////////////
@@ -91,6 +94,9 @@ void Organism::setRotationSpeed(const float& t_rotationSpeed) { m_trait_turningS
 
 ////////////////////////////////////////////////////////////
 const float& Organism::getAge()const { return m_age; }
+
+////////////////////////////////////////////////////////////
+float Organism::getAgePct() const { return m_age / m_trait_lifespan; }
 
 ////////////////////////////////////////////////////////////
 void Organism::setAge(const float& t_age) { m_age = t_age; }
@@ -138,6 +144,12 @@ void Organism::addEnergyPct(const float& t_pct) {
 	if (m_energy > m_trait_maxEnergy) { m_energy = m_trait_maxEnergy; }
 	else if (m_energy < 0.f) { m_energy = 0.f; }
 }
+
+////////////////////////////////////////////////////////////
+bool Organism::getWasEaten() const { return m_wasEaten; }
+
+////////////////////////////////////////////////////////////
+void Organism::setWasEaten(bool t_wasEaten) { m_wasEaten = t_wasEaten; }
 
 ////////////////////////////////////////////////////////////
 void Organism::move(const float& t_dx, const float& t_dy) {
@@ -194,6 +206,14 @@ void Organism::update(const float& t_elapsed) {
 	// Lower level update (position, rotation ...)
 	Actor_Base::update(t_elapsed);
 
+	// Dynamic color that changes with age
+	auto agePct{ getAgePct() };
+	if (!m_isDead && agePct >= 0.f && agePct <= 0.7f) {
+		auto colorHSL{ getColorHSL() };
+		colorHSL.Luminance = (1.f - agePct) * 100.f;
+		m_sprite.setColor(colorHSL.TurnToRGB());
+	}
+
 	// Update the collider component
 	updateCollider();
 }
@@ -224,15 +244,18 @@ void Organism::die() {
 }
 
 ////////////////////////////////////////////////////////////
+bool Organism::isAlive() const{	return !m_isDead;}
+
+////////////////////////////////////////////////////////////
 void Organism::eat(Food* t_food) {
 	if (!t_food || t_food->shouldBeDestroyed()) { return; } // Trying to eat ghost food doesn't work at this level of conciousness.
 	if (m_energy > 0.8f * m_trait_maxEnergy) { return; } // Ogranisms at and over 80% of energy are not experiencing hunger
 
 	float foodEnergy{ t_food->getEnergy() };
-	float energyDelta{ foodEnergy * m_trait_digestiveEfficiency }; // Get the energy boost affected by digestive efficiency
+	float deltaEnergy{ foodEnergy * m_trait_digestiveEfficiency }; // Get the energy boost affected by digestive efficiency
 
-	m_energy += energyDelta;
-	m_scenario->addEnergy(foodEnergy - energyDelta); // Return the energy to the rest of the energy to the environment
+	m_energy += deltaEnergy;
+	m_scenario->addEnergy(foodEnergy - deltaEnergy); // Return the energy to the rest of the energy to the environment
 
 	if (m_energy > m_trait_maxEnergy) {
 		m_scenario->addEnergy(m_energy - m_trait_maxEnergy); // Return aswell any energy from overeating
@@ -240,6 +263,25 @@ void Organism::eat(Food* t_food) {
 	}
 	t_food->setWasEaten(true); // State that the food was eaten, so that it does not try to return its energy itelf, its the organism's task now.
 	t_food->setShouldBeDestroyed(true); // Tell the engine the food no longer exists (ha)
+}
+
+////////////////////////////////////////////////////////////
+void Organism::eat(Organism* t_prey) {
+	if (!t_prey || t_prey->shouldBeDestroyed() || t_prey->m_wasEaten) { return; }
+	if (m_energy > 0.8f * m_trait_maxEnergy) { return; }
+
+	float foodEnergy{ t_prey->getEnergy() };
+	float deltaEnergy{ foodEnergy * m_trait_digestiveEfficiency };
+
+	m_energy += deltaEnergy;
+	m_scenario->addEnergy(foodEnergy - deltaEnergy);
+	if (m_energy > m_trait_maxEnergy) {
+		m_scenario->addEnergy(m_energy - m_trait_maxEnergy); // Return aswell any energy from overeating		
+		m_energy = m_trait_maxEnergy;
+	}
+	t_prey->setWasEaten(true);
+	t_prey->setShouldBeDestroyed(true);
+
 }
 
 ////////////////////////////////////////////////////////////
@@ -256,10 +298,12 @@ bool Organism::canSpawn(SharedContext& t_context)const {
 	return m_scenario->getEnergy() >= m_energy; // Make sure there is enough energy in the environment for it to spawn
 }
 ////////////////////////////////////////////////////////////
-void Organism::onSpawn() {m_scenario->addEnergy(-m_energy); } // Capture energy from the environment
+void Organism::onSpawn() { m_scenario->addEnergy(-m_energy); } // Capture energy from the environment
 
 ////////////////////////////////////////////////////////////
 void Organism::onDestruction(SharedContext& t_context) {
-	m_scenario->addEnergy(m_energy); // Return the energy to the environment
+	if (!m_wasEaten) {
+		m_scenario->addEnergy(m_energy);
+	} // Return the energy to the environment
 	Actor_Base::onDestruction(t_context);
 }

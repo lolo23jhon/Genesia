@@ -46,7 +46,6 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\HeightMap.cpp" />
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp" />
     <ClCompile Include="Trait.cpp" />
     <ClCompile Include="TraitCollection.cpp" />
   </ItemGroup>

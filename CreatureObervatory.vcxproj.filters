@@ -72,9 +72,6 @@
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\perlin_run.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\sam%27s club\source\repos\CreatureObervatory\Engine.cpp">
       <Filter>src\Engine</Filter>
     </ClCompile>

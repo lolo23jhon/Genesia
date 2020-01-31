@@ -37,6 +37,8 @@ protected:
 	float m_mass; // Energy expending body mass
 	float m_rmr; // Resting metabolic rate = mass * trait_based_rmr_coefficient
 
+	bool m_wasEaten; // Used to resolve responsibility of energy at time of destruction
+
 	// ------------------------------ Traits ------------------------------
 	TraitCollection m_traits;
 
@@ -61,7 +63,7 @@ public:
 		const sf::Vector2f& t_position,
 		const float& t_rotation,
 		const float& t_age); // Makes an organism with clones of the default traits
-	
+
 	static OrganismPtr makeDefaultOffspring(SharedContext& t_context,
 		const std::string& t_name,
 		const sf::Vector2f& t_position,
@@ -78,6 +80,7 @@ public:
 	void setColorHSL(const float& t_h, const float& t_s, const float& t_l); // Also overwrites the SFML rgb color
 	const sf::Color& getColorRGB()const;
 	void setColorRGB(const sf::Color& t_color);
+	void setColor(const sf::Color& t_color);
 	const float& getMovementSpeed()const;
 	void setMovementSpeed(const float& t_movementSpeed);
 	const float& getRotationSpeed()const;
@@ -85,6 +88,7 @@ public:
 	const std::string& getName()const;
 	void setName(const std::string& t_name);
 	const float& getAge()const;
+	float getAgePct()const;
 	void setAge(const float& t_age);
 	const float& getSize()const;
 	void setSize(const float& t_size);
@@ -96,6 +100,8 @@ public:
 	float getEnergyPct()const;
 	void setEnergyPct(const float& t_pct);
 	void addEnergyPct(const float& t_pct);
+	bool getWasEaten()const;
+	void setWasEaten(bool t_wasEaten);
 
 	void move(const float& t_dx, const float& t_dy); // Decrease in internal energy
 	void rotate(const float& t_deg); // Decrease in internal energy
@@ -107,8 +113,10 @@ public:
 	ActorPtr reproduce(SharedContext& t_context);
 
 	void eat(Food* t_food);
+	void eat(Organism* t_prey);
 
 	void die();
+	bool isAlive()const;
 
 	float getRadius()const;
 

@@ -8,7 +8,7 @@
 
 static const sf::Color S_BG_COLOR{ 240,240,240 };
 static const unsigned S_FPS{ 30 };
-static const unsigned S_NUM_FOOD{ 200U };
+static const unsigned S_NUM_FOOD{ 300U };
 static const float S_ENERGY{ 300000 };
 static const unsigned S_NUM_ORGANISMS{ 15U };
 static const float S_SIMULATION_WIDTH{ 3000.f };
@@ -62,27 +62,34 @@ void Engine::init() {
 	m_resourceHolder.init();
 
 	// Initialize simulation scenario
-	m_scenario = std::make_unique<Scenario_Basic>(m_context, S_ENERGY,S_NUM_ORGANISMS, 100U, S_NUM_FOOD, S_NUM_FOOD, S_SIMULATION_WIDTH, S_SIMULATION_HEIGHT);
+	m_scenario = std::make_unique<Scenario_Basic>(m_context, S_ENERGY, S_NUM_ORGANISMS, 100U, S_NUM_FOOD, S_NUM_FOOD, S_SIMULATION_WIDTH, S_SIMULATION_HEIGHT);
 	m_scenario->init();
 
 	// Set the size of the quadtree root
 	m_collisionManager.setBounds(m_scenario->getSimulationRect());
 }
 
+static const float spawnTimeout{ 5.0f };
+static float spawnClock{ spawnTimeout };
+
 ////////////////////////////////////////////////////////////
 void Engine::update() {
 	const float elapsed{ m_elapsed.asSeconds() };
+
+	spawnClock -= elapsed;
+	if (spawnClock < 0.f) { spawnClock = spawnTimeout; m_spawnList.clear(); }
+
 	if (m_state == EngineState::Paused) { return; }
 
 	// Spanwn actors from spawn list
 	for (auto actor_it{ m_spawnList.begin() }; actor_it != m_spawnList.end();) {
 
 		// Check if the actor is able to spawn given the conditions of the simulation
-		if ((*actor_it)->canSpawn(m_context)) { 
+		if ((*actor_it)->canSpawn(m_context)) {
 			// Move them to the spawned actors list
 			m_actors.emplace_back(std::move(*actor_it));
 			actor_it = m_spawnList.erase(actor_it);
-			
+
 			// Apply their spawn effect
 			m_actors.back()->onSpawn(m_context);
 		}
@@ -205,7 +212,7 @@ void Engine::render() {
 #if defined(_DEBUG) && IS_DRAW_ACTOR_AABB == 1
 		actor->getCollider().draw(m_window);
 #endif // defined(_DEBUG) && IS_DRAW_ACTOR_AABB == 1
-	}
+}
 
 	m_window.display();
 }
@@ -287,8 +294,9 @@ const Scenario_Basic& Engine::getScenario() const { return *m_scenario.get(); }
 Scenario_Basic& Engine::getScenario() { return *m_scenario.get(); }
 
 ////////////////////////////////////////////////////////////
-void Engine::spawnActor(ActorPtr t_actor) { 
-	m_spawnList.emplace_back(std::move(t_actor)); }
+void Engine::spawnActor(ActorPtr t_actor) {
+	m_spawnList.emplace_back(std::move(t_actor));
+}
 
 
 static const std::string S_EMPTY_STR{ "" };
