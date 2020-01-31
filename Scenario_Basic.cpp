@@ -1,6 +1,7 @@
 #include "Scenario_Basic.h"
 #include "Engine.h"
-#include "SharedContext.h"
+#include "SharedContext.h
+#include "PerlinNoise.h"
 
 
 static const float S_FOOD_ENERGY{ 500.f };
@@ -77,6 +78,7 @@ void Scenario_Basic::update(const float& t_elapsed) {
 		food->setTextString("Food: " + std::to_string(static_cast<int>(static_cast<Food*>(food.get())->getEnergy())));
 		m_context.m_engine->spawnActor(std::move(food));
 	}
+
 	Scenario_Base::update(t_elapsed);
 }
 
