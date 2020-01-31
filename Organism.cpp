@@ -15,6 +15,7 @@ static const float S_TEXT_OFFSET_FACTOR{ 1.1f };
 static const sf::Color S_DEFAULT_COLOR{ 255,255,255,255 };
 static const float S_DEFAULT_SIZE{ 1.f };
 static const float S_DEFAULT_DESTRUCTION_DELAY{ 10.f };
+static const sf::Color S_DEATH_COLOR{70,60,50};
 
 ////////////////////////////////////////////////////////////
 Organism::Organism(
@@ -216,6 +217,8 @@ ActorPtr Organism::reproduce(SharedContext& t_context) {
 ////////////////////////////////////////////////////////////
 void Organism::die() {
 	m_isDead = true;
+	setColorRGB(S_DEATH_COLOR);
+	m_sprite.setColor(S_DEATH_COLOR);
 	m_name += " (dead)";
 	setTextString(m_name);
 }

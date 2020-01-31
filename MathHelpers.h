@@ -1,6 +1,7 @@
 #ifndef MATH_HELPERS_H
 #define MATH_HELPERS_H
 
+#include <vector>
 #include <SFML/System/Vector2.hpp>
 
 namespace mat {
@@ -15,8 +16,10 @@ namespace mat {
 
 	float normalizeAngle(const float& t_deg); // [0 360)
 
-	template <typename T>
-	T map_value_to_range(T t_min, T t_max, T t_newMin, T t_newMax, T t_n);
+	template <typename T>T map_value_to_range(T t_min, T t_max, T t_newMin, T t_newMax, T t_n);
+
+	template <typename T> void map_value_to_range(const std::vector<T>& t_vector, std::vector<T>& t_mappedVector, T t_newMin, T t_newMax);
+
 
 	float vec2d_magnitude(const float& t_i, const float& t_j);
 
@@ -58,5 +61,23 @@ namespace mat {
 	float distance(const sf::Vector2f& t_pos1, const sf::Vector2f& t_pos2);
 
 };
+
+////////////////////////////////////////////////////////////
+template <typename T> T mat::map_value_to_range(T t_min, T t_max, T t_newMin, T t_newMax, T t_n) { return t_newMin + (t_n - t_min) * (t_newMax - t_newMin) / (t_max - t_min); }
+
+////////////////////////////////////////////////////////////
+template <typename T> void mat::map_value_to_range(const std::vector<T>& t_vector, std::vector<T>& t_mappedVector, T t_newMin, T t_newMax) {
+	T min{ std::numeric_limits<T>::infinity() };
+	T max{ -std::numeric_limits<T>::infinity() };
+	for (const auto& n : t_vector) {
+		if (max < n) { max = n; }
+		if (min > n) { min = n; }
+	}
+
+	t_mappedVector.clear();
+	for (const auto& n : t_vector) {
+		t_mappedVector.emplace_back(t_newMin + (n - min) * (t_newMax - t_newMin) / (max - min));
+	}
+}
 
 #endif // !MATH_HELPERS_H

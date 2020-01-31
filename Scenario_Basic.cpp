@@ -1,8 +1,8 @@
 #include "Scenario_Basic.h"
 #include "Engine.h"
-#include "SharedContext.h
+#include "SharedContext.h"
 #include "PerlinNoise.h"
-
+#include "MathHelpers.h"
 
 static const float S_FOOD_ENERGY{ 500.f };
 static const float S_FOOD_DURATION{ INFINITY };
@@ -46,8 +46,8 @@ void Scenario_Basic::init() {
 
 	// Create and spawn food
 	for (unsigned i{ 0U }; i < m_initialNumFood; i++) {
-		float x{ rng(m_simulationRectangle.width , m_simulationRectangle.left) };
-		float y{ rng(m_simulationRectangle.height , m_simulationRectangle.top) };
+		float x{ rng(0.f, m_simulationRectangle.width)};
+		float y{ rng(0.f, m_simulationRectangle.height) };
 		float rot{ rng(0.f, 359.9999999f) };
 		float energyFactor{ m_context.m_rng->normalDisttribution(1.f, 0.2f) };
 
@@ -66,8 +66,8 @@ void Scenario_Basic::update(const float& t_elapsed) {
 	auto& rng{ *m_context.m_rng };
 	for (unsigned i{ Food::getNumFood() }; i < m_initialNumFood; i++) {
 
-		float x{ rng(m_simulationRectangle.width , m_simulationRectangle.left) };
-		float y{ rng(m_simulationRectangle.height , m_simulationRectangle.top) };
+		float x{ rng(0.f, m_simulationRectangle.width) };
+		float y{ rng(0.f, m_simulationRectangle.height) };
 		float rot{ rng(0.f, 359.9999999f) };
 		float energyFactor{ m_context.m_rng->normalDisttribution(1.f, 0.2f) };
 
