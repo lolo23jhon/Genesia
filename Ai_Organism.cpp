@@ -16,20 +16,22 @@ void Ai_Organism::update(Actor_Base* t_owner, const float& t_elapsed) {
 	// Reproduction is expensive, so the organism will make sure it has got plenty of energy 
 	// Organisms reach sexual maturity at 20% of their lifespan
 	if (owner->getEnergyPct() >= 0.8f && owner->getAgePct() >= 0.2f) {
-		float expendedEnergyPct{ 0.65f };
+		float energyCostPct{ 0.65f };
 		float efficiency{ 0.7f };
 
-		float maxEnergy{ 100 * owner->getEnergy() / owner->getEnergyPct() };
+		float maxEnergy{ owner->getEnergy() / owner->getEnergyPct() };
 
 		// Make the actor and make an organism ptr to it
 		auto offspringPtr{ owner->reproduce(owner->getContext()) };
 		auto offspring{ static_cast<Organism*>(offspringPtr.get()) };
 	
 		// All the energy from the birth goes to the environment. The offspring gets an "energy check" that it itself cashes on spawn
-		owner->getScenario().addEnergy(-maxEnergy * expendedEnergyPct);
+		owner->addEnergy(-maxEnergy * energyCostPct);
+		owner->getScenario().addEnergy(maxEnergy * energyCostPct);
 		
-		// Give the offspring an energy check minus an efficiency penalty due to birth labor 
-		offspring->addEnergy(maxEnergy * expendedEnergyPct * efficiency);
+		// Give the offspring an energy check minus an efficiency penalty due to birth labor
+		offspring->setEnergy(0.f);
+		offspring->addEnergy(maxEnergy * energyCostPct * efficiency);
 
 		// Set a random rotation
 		offspring->setRotation(t_owner->getContext().m_rng->generate(0.f, 359.9999999f));
