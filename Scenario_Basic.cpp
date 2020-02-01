@@ -4,8 +4,8 @@
 #include "PerlinNoise.h"
 #include "MathHelpers.h"
 
-static const float S_FOOD_ENERGY{ 500.f };
 static const float S_FOOD_DURATION{ INFINITY };
+static const sf::Color S_BACKGROUND_COLOR{ 155, 225, 243, 255 };
 
 Scenario_Basic::Scenario_Basic(SharedContext& t_context,
 	const float& t_energyPool,
@@ -23,8 +23,10 @@ Scenario_Basic::Scenario_Basic(SharedContext& t_context,
 	m_maxNumFood{ t_maxNumOrganisms },
 	m_initialNumFood{ t_initialNumFood },
 	m_firstOrganism{ std::move(Organism::makeDefaultOffspring(m_context, "Organism", sf::Vector2f(0.f, 0.f), 0.f, 0.f)) },
-	m_food{ std::make_unique<Food>(t_context, sf::Vector2f(0.f,0.f), 0.f, S_FOOD_ENERGY, S_FOOD_DURATION) }
-{}
+	m_food{ std::make_unique<Food>(t_context, sf::Vector2f(0.f,0.f), 0.f, Food::S_BASE_ENERGY, S_FOOD_DURATION) }
+{
+	m_simulationBackground.setFillColor(S_BACKGROUND_COLOR);
+}
 
 ////////////////////////////////////////////////////////////
 void Scenario_Basic::init() {
@@ -54,7 +56,7 @@ void Scenario_Basic::init() {
 		auto food{ std::move(m_food->clone(m_context)) };
 		food->setPosition({ x,y });
 		food->setRotation(rot);
-		static_cast<Food*>(food.get())->setEnergy(energyFactor * S_FOOD_ENERGY);
+		static_cast<Food*>(food.get())->setEnergy(energyFactor * Food::S_BASE_ENERGY);
 		food->setTextString("Food: " + std::to_string(static_cast<int>(static_cast<Food*>(food.get())->getEnergy())));
 		m_context.m_engine->spawnActor(std::move(food));
 	}
@@ -74,7 +76,7 @@ void Scenario_Basic::update(const float& t_elapsed) {
 		auto food{ std::move(m_food->clone(m_context)) };
 		food->setPosition({ x,y });
 		food->setRotation(rot);
-		static_cast<Food*>(food.get())->setEnergy(energyFactor * S_FOOD_ENERGY);
+		static_cast<Food*>(food.get())->setEnergy(energyFactor * Food::S_BASE_ENERGY);
 		food->setTextString("Food: " + std::to_string(static_cast<int>(static_cast<Food*>(food.get())->getEnergy())));
 		m_context.m_engine->spawnActor(std::move(food));
 	}

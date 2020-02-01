@@ -10,7 +10,7 @@ static const sf::Color S_BG_COLOR{ 240,240,240 };
 static const unsigned S_FPS{ 30 };
 static const unsigned S_NUM_FOOD{ 300U };
 static const float S_ENERGY{ 300000 };
-static const unsigned S_NUM_ORGANISMS{ 15U };
+static const unsigned S_NUM_ORGANISMS{ 20U };
 static const float S_SIMULATION_WIDTH{ 3000.f };
 static const float S_SIMULATION_HEIGHT{ 3000.f };
 
@@ -76,11 +76,14 @@ static float spawnClock{ spawnTimeout };
 void Engine::update() {
 	const float elapsed{ m_elapsed.asSeconds() };
 
-	spawnClock -= elapsed;
-	if (spawnClock < 0.f) { spawnClock = spawnTimeout; m_spawnList.clear(); }
-
 	if (m_state == EngineState::Paused) { return; }
-
+	
+	spawnClock -= elapsed;
+	if (spawnClock < 0.f) { 
+		spawnClock = spawnTimeout;
+		m_spawnList.clear(); 
+	}
+	
 	// Spanwn actors from spawn list
 	for (auto actor_it{ m_spawnList.begin() }; actor_it != m_spawnList.end();) {
 

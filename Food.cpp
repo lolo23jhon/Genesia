@@ -7,8 +7,11 @@
 #include "Scenario_Basic.h"
 
 static const std::string S_FOOD_TEXTURE{ "Texture_food" };
-static const sf::Color S_FOOD_COLOR{ 255,255,255,255 };
+static const sf::Color S_FOOD_COLOR{ 200,255,22,255 };
 static const float S_INFINITY{ INFINITY };
+static const float S_SPAWN_ANIM_DURATION{ 1.f };
+
+const float Food::S_BASE_ENERGY{ 500.f };
 
 ////////////////////////////////////////////////////////////
 unsigned Food::s_numFood{ 0U };
@@ -51,6 +54,8 @@ Food::Food(SharedContext& t_context,
 	m_wasEaten{ false }
 {
 	m_actorType = ActorType::Food;
+	m_sprite.setColor(S_FOOD_COLOR);
+	m_color = S_FOOD_COLOR;
 	setTextString("Food: " + std::to_string(static_cast<int>(m_energy)));
 	m_text.setCharacterSize(10U);
 	updateCollider();
@@ -60,7 +65,10 @@ Food::Food(SharedContext& t_context,
 const float& Food::getEnergy()const { return m_energy; }
 
 ////////////////////////////////////////////////////////////
-void Food::setEnergy(const float& t_energy) { m_energy = t_energy; }
+void Food::setEnergy(const float& t_energy) {
+	m_energy = t_energy;
+	m_sprite.setScale(m_energy / S_BASE_ENERGY, m_energy / S_BASE_ENERGY);
+}
 
 ////////////////////////////////////////////////////////////
 const float& Food::getAge()const { return m_age; }
@@ -80,6 +88,13 @@ void Food::setWasEaten(bool t_wasEaten) { m_wasEaten = t_wasEaten; }
 ////////////////////////////////////////////////////////////
 void Food::update(const float& t_elapsed) {
 	m_age += t_elapsed;
+
+	// Fade in spawn animation
+	if (m_age < S_SPAWN_ANIM_DURATION) {
+		m_sprite.setScale((m_energy / S_BASE_ENERGY) * m_age / S_SPAWN_ANIM_DURATION, (m_energy / S_BASE_ENERGY) * m_age / S_SPAWN_ANIM_DURATION);
+		m_color.a = static_cast<sf::Uint8>(255 * m_age / S_SPAWN_ANIM_DURATION);
+	}
+
 	if (m_age >= m_duration && !m_hasUnlimitedDuration) {
 		m_destroy = true; s_numFood--;
 	}

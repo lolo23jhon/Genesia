@@ -16,6 +16,9 @@ class Food : public Actor_Base {
 	bool m_wasEaten; // Used to discern the energy responsibility. If it was eaten nothing happens, else it returns the energy on destruction.
 
 public:
+	static const float S_BASE_ENERGY;
+
+
 	Food(SharedContext& t_context,
 		const sf::Vector2f& t_position,
 		const float& t_rotation,

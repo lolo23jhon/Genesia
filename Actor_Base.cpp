@@ -129,9 +129,12 @@ void Actor_Base::draw() {
 	if (m_isSpriteVisible) {
 		m_context.m_window->draw(m_sprite);
 	}
+
+#if IS_DISPLAY_ACTOR_TAGS == 1
 	if (m_isTextVisible) {
 		m_context.m_window->draw(m_text);
 	}
+#endif // IS_DISPLAY_ACTOR_TAGS == 1
 }
 
 ////////////////////////////////////////////////////////////
@@ -145,11 +148,13 @@ void Actor_Base::update(const float& t_elapsed) {
 	m_sprite.setPosition(m_position);
 	m_sprite.setColor(m_color);
 
+#if DISPLAY_ACTOR_TAGS == 1
 	// Put text origin in text's center (just in case it changes of string; remember this is a base)
 	utilities::centerSFMLText(m_text);
 
 	// Put text above sprite (-y = up; +y = down):
-	m_text.setPosition(m_position.x, m_position.y - (m_sprite.getGlobalBounds().height * 1.4f + utilities::getSFMLTextMaxHeight(m_text)) / 2); // 
+	m_text.setPosition(m_position.x, m_position.y - (m_sprite.getGlobalBounds().height * 1.4f + utilities::getSFMLTextMaxHeight(m_text)) / 2);  
+#endif // DISPLAY_ACTOR_TAGS == 1
 }
 
 ////////////////////////////////////////////////////////////
@@ -180,16 +185,16 @@ void Actor_Base::setTextString(const std::string& t_str) { m_text.setString(t_st
 std::string Actor_Base::getTextString()const { return m_text.getString(); }
 
 ////////////////////////////////////////////////////////////
-bool Actor_Base::canSpawn(SharedContext& t_context) const{ return true;}
+bool Actor_Base::canSpawn(SharedContext& t_context) const { return true; }
 
 ////////////////////////////////////////////////////////////
 ActorPtr Actor_Base::clone() { return nullptr; } // Why would you want to copy and empty dummy at runtime?
 
 ////////////////////////////////////////////////////////////
-void Actor_Base::onSpawn(SharedContext& t_context){}
+void Actor_Base::onSpawn(SharedContext& t_context) {}
 
 ////////////////////////////////////////////////////////////
 void Actor_Base::onDestruction(SharedContext& t_context) {}
 
 ////////////////////////////////////////////////////////////
-float Actor_Base::getRadius()const { return m_sprite.getLocalBounds().width*0.5f; }
+float Actor_Base::getRadius()const { return m_sprite.getLocalBounds().width * 0.5f; }

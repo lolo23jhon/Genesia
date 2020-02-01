@@ -16,6 +16,7 @@ static const sf::Color S_DEFAULT_COLOR{ 255,255,255,255 };
 static const float S_DEFAULT_SIZE{ 1.f };
 static const float S_DEFAULT_DESTRUCTION_DELAY{ 10.f };
 static const sf::Color S_DEATH_COLOR{ 70,60,50 };
+static const float S_SPANW_ANIM_DURATION{ 0.7f };
 
 ////////////////////////////////////////////////////////////
 Organism::Organism(
@@ -172,7 +173,6 @@ void Organism::update(const float& t_elapsed) {
 	// Update the organism's age
 	m_age += t_elapsed;
 
-
 	// Decrease the organism's energy based on its metabolic rate
 	float energyExpediture{ m_trait_restingMetabolicRate * t_elapsed };
 	m_energy -= energyExpediture;
@@ -191,7 +191,7 @@ void Organism::update(const float& t_elapsed) {
 	// Update the organim's ai
 	m_ai->update(this, t_elapsed);
 
-#if defined(_DEBUG) && IS_DISPLAY_ORGNAISMS_DEBUG_TEXT == 1
+#if defined(_DEBUG) && IS_DISPLAY_ACTOR_TAGS == 1 && IS_DISPLAY_ORGNAISMS_DEBUG_TEXT == 1
 	setTextString(m_name +
 		"\nEnergy: " + std::to_string(static_cast<unsigned>(m_energy >= 0.f ? m_energy : 0.f)) + " / " + std::to_string(static_cast<unsigned>(m_trait_maxEnergy)) +
 		"\nAge   : " + std::to_string(static_cast<unsigned>(m_age)) + " / " + std::to_string(static_cast<unsigned>(m_trait_lifespan)) +
@@ -214,6 +214,14 @@ void Organism::update(const float& t_elapsed) {
 		m_sprite.setColor(colorHSL.TurnToRGB());
 	}
 
+	// Spawm fade in animation
+	if (m_age < S_SPANW_ANIM_DURATION) {
+		m_sprite.setScale(m_trait_size * (m_age / S_SPANW_ANIM_DURATION), m_trait_size * (m_age / S_SPANW_ANIM_DURATION));
+		sf::Color animColor{ 255, 255, 255,  static_cast<sf::Uint8>(255 * m_age / S_SPANW_ANIM_DURATION) };
+		m_sprite.setColor(animColor);
+	}
+	
+	
 	// Update the collider component
 	updateCollider();
 }
@@ -244,7 +252,7 @@ void Organism::die() {
 }
 
 ////////////////////////////////////////////////////////////
-bool Organism::isAlive() const{	return !m_isDead;}
+bool Organism::isAlive() const { return !m_isDead; }
 
 ////////////////////////////////////////////////////////////
 void Organism::eat(Food* t_food) {
