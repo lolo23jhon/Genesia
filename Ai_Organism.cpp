@@ -26,7 +26,7 @@ void Ai_Organism::update(Actor_Base* t_owner, const float& t_elapsed) {
 		auto offspring{ static_cast<Organism*>(offspringPtr.get()) };
 	
 		// All the energy from the birth goes to the environment. The offspring gets an "energy check" that it itself cashes on spawn
-		owner->getScenario().addEnergy(maxEnergy * expendedEnergyPct);
+		owner->getScenario().addEnergy(-maxEnergy * expendedEnergyPct);
 		
 		// Give the offspring an energy check minus an efficiency penalty due to birth labor 
 		offspring->addEnergy(maxEnergy * expendedEnergyPct * efficiency);
