@@ -102,7 +102,8 @@ public:
 	void addEnergyPct(const float& t_pct);
 	bool getWasEaten()const;
 	void setWasEaten(bool t_wasEaten);
-
+	Scenario_Basic& getScenario();
+	const Scenario_Basic& getScenario()const;
 	void move(const float& t_dx, const float& t_dy); // Decrease in internal energy
 	void rotate(const float& t_deg); // Decrease in internal energy
 

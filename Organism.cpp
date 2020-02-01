@@ -153,6 +153,12 @@ bool Organism::getWasEaten() const { return m_wasEaten; }
 void Organism::setWasEaten(bool t_wasEaten) { m_wasEaten = t_wasEaten; }
 
 ////////////////////////////////////////////////////////////
+Scenario_Basic& Organism::getScenario() { return *m_scenario; }
+
+////////////////////////////////////////////////////////////
+const Scenario_Basic& Organism::getScenario()const { return *m_scenario; }
+
+////////////////////////////////////////////////////////////
 void Organism::move(const float& t_dx, const float& t_dy) {
 	float energyExpediture{ std::sqrtf(t_dx * t_dx + t_dy * t_dy) * m_mass };
 	m_energy -= energyExpediture; // Movement costs energy: diplacement * mass
@@ -220,8 +226,7 @@ void Organism::update(const float& t_elapsed) {
 		sf::Color animColor{ 255, 255, 255,  static_cast<sf::Uint8>(255 * m_age / S_SPANW_ANIM_DURATION) };
 		m_sprite.setColor(animColor);
 	}
-	
-	
+
 	// Update the collider component
 	updateCollider();
 }
